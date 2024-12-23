@@ -12,7 +12,9 @@ app.use(express.json());
 app.use(express.raw());
 app.use(express.urlencoded({ extended: true }));
 import swaggerUi from "swagger-ui-express";
+import { RegisterRoutes } from "./routes";
 
+RegisterRoutes(app);
 app.use(
   "/swagger",
   swaggerUi.serve,

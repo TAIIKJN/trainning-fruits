@@ -18,11 +18,6 @@ export interface Fruits {
   color: string;
 }
 
-// let _fruits = [
-//   { id: 1, name: "Apple", color: "green" },
-//   { id: 2, name: "Apple", color: "red" },
-// ];
-
 @Route("fruits")
 export class fruitController extends Controller {
   @Get()
