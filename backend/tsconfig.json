@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "es2016",
+      "module": "commonjs",
+  
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "experimentalDecorators": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "outDir": "dist"
+    },
+    "typedocOptions": {
+      "entryPoints": [
+        "src/lib/*.ts"
+      ],
+      "out": "dist/docs/typedoc"
+    }
+  }

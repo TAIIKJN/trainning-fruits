@@ -1,0 +1,41 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:ts": "ts-node src/app.ts",
+    "start": "node dist/app.js",
+    "build": "tsc ",
+    "docs": "typedoc",
+    "doc-spec": "cd spec && pandoc DFD_01.md DFD_02.md -f gfm --reference-doc=DFD-reference.docx --data-dir=. -o ../dist/DFD.docx",
+    "swagger": "tsoa spec",
+    "routes": "tsoa spec-and-routes",
+    "dev": "nodemon src/app.ts",
+    "build:docker": "npm run build && docker build -t docker.frappet.com/training/taii-express:$TAII_EX_VER -t docker.frappet.com/training/taii-express:latest .",
+    "push:docker": "npm run build:docker && docker push docker.frappet.com/training/taii-express:$TAII_EX_VER && docker push docker.frappet.com/training/taii-express:latest",
+    "reload:docker": "docker compose pull && docker compose up -d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.6",
+    "express": "^4.21.1",
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.5.1",
+    "typedoc": "^0.27.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/swagger-ui-express": "^4.1.7",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
