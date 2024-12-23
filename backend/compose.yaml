@@ -1,5 +1,5 @@
 services:
-  myexpress:
+  training-fruits:
     image: docker.frappet.com/training/training-fruits:latest
     container_name: training-fruits
     # image: docker.frappet.com/training/oom_be:latest
@@ -16,3 +16,7 @@ services:
     #   - "traefik.http.routers.fe.rule=Host(`fe.oom.home`)"
     # networks:
     #  - traefik
+    build:
+      context: .
+    command: >
+      sh -c "npx prisma generate && npm start"

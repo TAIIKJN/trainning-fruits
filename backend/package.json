@@ -11,8 +11,8 @@
     "swagger": "tsoa spec",
     "routes": "tsoa spec-and-routes",
     "dev": "nodemon src/app.ts",
-    "build:docker": "npm run build && docker build -t docker.frappet.com/training/taii-express:$TAII_EX_VER -t docker.frappet.com/training/taii-express:latest .",
-    "push:docker": "npm run build:docker && docker push docker.frappet.com/training/taii-express:$TAII_EX_VER && docker push docker.frappet.com/training/taii-express:latest",
+    "build:docker": "npm run build && docker build -t docker.frappet.com/training/training-fruits:$TAII_EX_VER -t docker.frappet.com/training/training-fruits:latest .",
+    "push:docker": "npm run build:docker && docker push docker.frappet.com/training/training-fruits:$TAII_EX_VER && docker push docker.frappet.com/training/training-fruits:latest",
     "reload:docker": "docker compose pull && docker compose up -d"
   },
   "keywords": [],
@@ -20,7 +20,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^6.0.1",
+    "@prisma/client": "^6.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.6",
     "express": "^4.21.1",
@@ -34,7 +34,7 @@
     "@types/node": "^22.10.2",
     "@types/swagger-ui-express": "^4.1.7",
     "nodemon": "^3.1.9",
-    "prisma": "^6.0.1",
+    "prisma": "^6.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }
