@@ -1,40 +1,78 @@
 <template>
-    <div class="login-container">
-      <a-form @submit="handleSubmit">
-        <a-form-item>
-          <a-input v-model="username" placeholder="Username" />
-        </a-form-item>
-        <a-form-item>
-          <a-input v-model="password" type="password" placeholder="Password" />
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" html-type="submit">Login</a-button>
-        </a-form-item>
-      </a-form>
+    <div class="login">
+      <h2>Login {{ Login() }}</h2>
+      <button @click="LogOut">Log Out</button>
+      <pre>Roles: {{ UserRoles()?.join(" ") }}</pre>
+      <pre>Access Token: {{ AccessToken() }}</pre>
+      <pre>Email:{{ DecodeToken()?.email }}</pre>
+      <pre>Protect API:{{protect}}</pre>
+      <pre>Decode ID Token:{{ DecodeIdToken() }}</pre>
+      <pre>Decode Access Token:{{ DecodeToken() }}</pre>
     </div>
   </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useMainStore } from '../store'
-  
-  const router = useRouter()
-  const store = useMainStore()
-  const username = ref('')
-  const password = ref('')
-  
-  const handleSubmit = (e: Event) => {
-    e.preventDefault()
-    store.isLoggedIn = true
-    router.push('/home')
-  }
-  </script>
+   <script lang="ts">
+   import { defineComponent } from "vue";
+   import KeyCloakService from "../services/KeycloakService";
+   import HttpService from "../services/HttpService";
+
+   export default defineComponent({
+     name: "Login",
+     data(){
+       return{
+         protect:"not protect yet",
+         isAdmin:false
+       }
+     },async mounted(){
+       try{
+         const res = await HttpService.getAxiosClient().get("http://localhost:3001/api/profile")
+         //console.log(res.data)
+         this.protect = JSON.stringify(res.data,null,4)
+       }catch(e){
+         console.log(e)
+         this.protect = "Can't get protected API "
+       }
+ 
+     },
+     methods: {
+       Login() {
+         return KeyCloakService.GetUserName();
+       },
+       AccessToken() {
+         return KeyCloakService.GetAccesToken();
+       },
+       DecodeToken(){
+         return KeyCloakService.GetDecodeToken()
+       },
+       DecodeIdToken(){
+         return KeyCloakService.GetDecodeIdToken()
+       },
+       LogOut() {
+         return KeyCloakService.CallLogOut();
+       },
+       UserRoles() {
+         return KeyCloakService.GetUserRoles();
+       }
+     },
+   });
+   </script>
+
   
   <style scoped>
   .login-container {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 50px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+  h3 {
+    margin: 40px 0 0;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  a {
+    color: #42b983;
   }
   </style>

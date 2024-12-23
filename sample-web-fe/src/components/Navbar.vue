@@ -1,65 +1,78 @@
 <template>
-  <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" class="p-2" />
+  <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
 </template>
+
 <script lang="ts" setup>
-import { h, ref } from 'vue';
+import { h, ref, watch } from 'vue';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue';
-import { MenuProps } from 'ant-design-vue';
-const current = ref<string[]>(['mail']);
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+
+const current = ref<string[]>([route.path.substring(1) || 'home']);
+
+// @ts-ignore
 const items = ref<MenuProps['items']>([
   {
-    key: 'mail',
+    key: 'home',
     icon: () => h(MailOutlined),
     label: 'Home',
-    title: 'Navigation One',
+    onClick: () => router.push('/home'),
   },
   {
-    key: 'app',
+    key: 'products',
     icon: () => h(AppstoreOutlined),
-    label: 'Navigation Two',
-    title: 'Navigation Two',
+    label: 'Products',
+    onClick: () => router.push('/products'),
   },
   {
-    key: 'sub1',
+    key: 'settings',
     icon: () => h(SettingOutlined),
-    label: 'Navigation Three - Submenu',
-    title: 'Navigation Three - Submenu',
+    label: 'Settings',
     children: [
       {
         type: 'group',
-        label: 'Item 1',
+        label: 'Settings Group 1',
         children: [
           {
-            label: 'Option 1',
+            label: 'Setting 1',
             key: 'setting:1',
+            onClick: () => router.push('/setting/1'),
           },
           {
-            label: 'Option 2',
+            label: 'Setting 2',
             key: 'setting:2',
+            onClick: () => router.push('/setting/2'),
           },
         ],
       },
       {
         type: 'group',
-        label: 'Item 2',
+        label: 'Settings Group 2',
         children: [
           {
-            label: 'Option 3',
+            label: 'Setting 3',
             key: 'setting:3',
+            onClick: () => router.push('/setting/3'),
           },
           {
-            label: 'Option 4',
+            label: 'Setting 4',
             key: 'setting:4',
+            onClick: () => router.push('/setting/4'),
           },
         ],
       },
     ],
   },
-  {
-    key: 'alipay',
-    label: h('a', { href: 'https://antdv.com', target: '_blank' }, 'Navigation Four - Link'),
-    title: 'Navigation Four - Link',
-  },
 ]);
-</script>
 
+// อัพเดท selected key เมื่อ route เปลี่ยน
+watch(
+  () => route.path,
+  (newPath) => {
+    const path = newPath.substring(1) || 'home';
+    current.value = [path];
+  }
+);
+</script>
