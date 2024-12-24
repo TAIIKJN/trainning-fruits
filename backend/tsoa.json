@@ -1,13 +1,21 @@
 {
-    "entryFile": "src/app.ts",
-    "noImplicitAdditionalProperties": "throw-on-extras",
-    "controllerPathGlobs": ["src/controllers/*.ts"],
-    "spec": {
-      
-      "outputDirectory": "static",
-      "specVersion": 3
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "spec": {
+    "securityDefinitions": {
+      "keycloak": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "description": "Keycloak Bearer Token",
+        "in": "header"
+      }
     },
-    "routes": {
-      "routesDir": "src"
-    }
+    "outputDirectory": "static",
+    "specVersion": 3
+  },
+  "routes": {
+    "routesDir": "src",
+    "authenticationModule": "src/auth.ts"
   }
+}
