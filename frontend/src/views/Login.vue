@@ -24,8 +24,8 @@
        }
      },async mounted(){
        try{
-         const res = await HttpService.getAxiosClient().get("http://localhost:3001/api/profile")
-         //console.log(res.data)
+         const res = await HttpService.getAxiosClient().get("/api/profile")
+         console.log("profile",res.data)
          this.protect = JSON.stringify(res.data,null,4)
        }catch(e){
          console.log(e)

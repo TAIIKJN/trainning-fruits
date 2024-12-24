@@ -20,4 +20,4 @@ app.use(Antd);
 KeyCloakService.CallLogin(renderApp);
 HttpService.configureAxiosKeycloak();
 
-app.mount('#app')
+// app.mount('#app')

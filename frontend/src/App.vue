@@ -1,22 +1,17 @@
 <template>
   <a-layout class="layout">
-    <Navbar v-if="isLoggedIn" />
+    <Navbar  />
     <div :style="{ background: '#fff', }">
       <router-view />
-   
     </div>
     <Footer />
   </a-layout>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-import { useMainStore } from './store'
 
-const store = useMainStore()
-const isLoggedIn = computed(() => store.isLoggedIn)
 </script>
 
 <style scoped>

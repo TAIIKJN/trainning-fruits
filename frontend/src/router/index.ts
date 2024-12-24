@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
-import Products from '../views/Products.vue'
+import Fruits from '../views/fruits.vue'
 import Setting from '../views/Setting.vue'
 import Setting2 from '../views/Setting2.vue'
 
@@ -10,7 +10,7 @@ import Setting2 from '../views/Setting2.vue'
 const routes = [
   { path: '/', component: Login },
   { path: '/home', component: Home, meta: { requiresAuth: true } },
-  { path: '/products', component: Products, meta: { requiresAuth: true } },
+  { path: '/fruits', component: Fruits, meta: { requiresAuth: true } },
   { 
     path: '/setting/1', 
     component: Setting, 

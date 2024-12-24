@@ -1,0 +1,81 @@
+@host = http://localhost:5173
+@token = MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvRJrQ3d+JOpBAyApcdrhmwU7oBFuVimJOp4ye3Woncr1VGbuLeqPpBbgjtNzd+jXfe/i0eTffxLrNY48B8KQf2wzCrxx/k63x4QMCwrJGWP/PnF9E9pI9ZKDVpWS+RSYheTjCiMstC3D+z94jZO0iKLfVdQoj2cd7DSjWxtHMvxWQ+kNE/Jgy6DOl8jwGGX08ynUV6Xdqs7h1SQmxiAgMlsHJwjjXDH7Dy+3dEMqb4AE7NZ01b/tUV/4g/351D1cwM2wUHVCXjtHz20vqDxHW4MTZ/vytvDWNiltIHa2VPLpJa0BfTCkvt+u8Yu0XcmyfGBp6uJW8kBFPcDVoZHshQIDAQAB
+
+
+## public key of realm
+GET {{host}}/realms/taii-aif
+### Login for realms user
+POST {{host}}/realms/taii-aif/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=training-fruits
+&username=admin
+&password=1234
+&grant_type=password
+
+
+########## Admin API https://www.keycloak.org/docs-api/latest/rest-api/index.html
+## Login by admin of master realms
+POST {{host}}/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=admin-cli
+&username=admin
+&password=admin
+&grant_type=password
+
+### Login by secret of sso realms (server to server)
+POST {{host}}/realms/sso/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=b2b-client
+&client_secret=n4LacxK00hfHCSKZCvY64IqDhAL0EkL0
+&grant_type=client_credentials
+
+### default realms config
+GET {{host}}/admin/realms
+Authorization: Bearer {{token}}
+
+### Get Realms config
+GET {{host}}/admin/realms/sso
+Authorization: Bearer {{token}}
+
+### Get users in realms
+GET {{host}}/admin/realms/sso/users
+Authorization: Bearer {{token}}
+
+### Create user in realms
+POST {{host}}/admin/realms/sso/users
+Authorization: Bearer {{token}}
+
+{
+    "username":"oom2",
+    "email":"oom2@xxx.com",
+    "enabled":true,
+    "credentials":[
+        {
+            "temporary":false,
+            "type":"password",
+            "value":"oom2"
+        }
+    ]
+}
+
+### assign role not finished yet
+POST {{host}}/admin/realms/sso/users/user_id/role-mappings/clients/client_uuid
+
+### Get a user by name
+GET {{host}}/admin/realms/sso/users/?username=oom
+Authorization: Bearer {{token}}
+
+### Delete user
+DELETE {{host}}/admin/realms/sso/users/9144accb-ed90-461c-a00a-23aa02d2ef53
+Authorization: Bearer {{token}}
+
+### Find id of express-client
+GET {{host}}/admin/realms/sso/clients/?clientId=express-client
+Authorization: Bearer {{token}}
+
+### Get role list in express-client
+GET {{host}}/admin/realms/sso/clients/ea8ca0eb-f5f7-4843-a060-f0c263b30d26/roles
+Authorization: Bearer {{token}}

@@ -21,10 +21,10 @@ const items = ref<MenuProps['items']>([
     onClick: () => router.push('/home'),
   },
   {
-    key: 'products',
+    key: 'fruits',
     icon: () => h(AppstoreOutlined),
-    label: 'Products',
-    onClick: () => router.push('/products'),
+    label: 'Fruits',
+    onClick: () => router.push('/fruits'),
   },
   {
     key: 'settings',

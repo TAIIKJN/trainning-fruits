@@ -8,7 +8,9 @@ const HttpMethods = {
   DELETE: "DELETE",
 };
 
-const _axios = axios.create();
+const _axios = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL
+});
 
 const cb = (config: InternalAxiosRequestConfig) => {
   config.headers.Authorization = `Bearer ${KeyCloakService.GetAccesToken()}`;
