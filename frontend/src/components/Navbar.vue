@@ -67,7 +67,6 @@ const items = ref<MenuProps['items']>([
   },
 ]);
 
-// อัพเดท selected key เมื่อ route เปลี่ยน
 watch(
   () => route.path,
   (newPath) => {
