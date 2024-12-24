@@ -24,7 +24,14 @@
 				"additionalProperties": false
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"keycloak": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"description": "Keycloak Bearer Token",
+				"in": "header"
+			}
+		}
 	},
 	"info": {
 		"title": "backend",
@@ -43,7 +50,28 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"items": {
+										"properties": {
+											"color": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"color",
+											"name",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
 							}
 						}
 					}
@@ -58,12 +86,34 @@
 						"description": "Created",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"properties": {
+										"color": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"color",
+										"name",
+										"id"
+									],
+									"type": "object"
+								}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -85,7 +135,35 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"color": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"color",
+												"name",
+												"id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
 							}
 						}
 					}
@@ -109,12 +187,44 @@
 						"description": "Update",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"color": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"color",
+												"name",
+												"id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -154,7 +264,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",

@@ -4,14 +4,18 @@ import {
   Body,
   Controller,
   Delete,
-  Example,
   Get,
   Patch,
   Path,
   Post,
+  Request,
   Route,
+  Security,
   SuccessResponse,
 } from "tsoa";
+import Express from "express";
+import HttpError from "../interfaces/http-error";
+import HttpStatus from "../interfaces/http-status";
 
 export interface Fruits {
   name: string;
@@ -45,8 +49,24 @@ export class fruitController extends Controller {
   }
 
   @Post()
+  @Security("keycloak")
   @SuccessResponse("201", "Created")
-  public async createFruit(@Body() requestBody: Fruits) {
+  public async createFruit(
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    },
+    @Body() requestBody: Fruits
+  ) {
+    const isAdmin = req.user.role.some((v) => v === "admin");
+    if (!isAdmin) {
+      throw new HttpError(
+        HttpStatus.UNAUTHORIZED,
+        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+      );
+    }
     const _fruits = await prisma.fruit.create({
       data: {
         name: requestBody.name,
@@ -58,8 +78,25 @@ export class fruitController extends Controller {
   }
 
   @Patch("{id}")
+  @Security("keycloak")
   @SuccessResponse("200", "Update")
-  public async updateFruit(@Path() id: string, @Body() requestBody: Fruits) {
+  public async updateFruit(
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    },
+    @Path() id: string,
+    @Body() requestBody: Fruits
+  ) {
+    const isAdmin = req.user.role.some((v) => v === "admin");
+    if (!isAdmin) {
+      throw new HttpError(
+        HttpStatus.UNAUTHORIZED,
+        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+      );
+    }
     const afruit = await prisma.fruit.findFirst({
       where: {
         id: id,
@@ -87,8 +124,24 @@ export class fruitController extends Controller {
   }
 
   @Delete("{id}")
+  @Security("keycloak")
   @SuccessResponse("200", "Delete")
-  public async deleteFruit(@Path() id: string) {
+  public async deleteFruit(
+    @Path() id: string,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    const isAdmin = req.user.role.some((v) => v === "admin");
+    if (!isAdmin) {
+      throw new HttpError(
+        HttpStatus.UNAUTHORIZED,
+        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+      );
+    }
     const afruit = await prisma.fruit.findFirst({
       where: {
         id: id,
