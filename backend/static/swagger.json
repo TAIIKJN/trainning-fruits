@@ -7,6 +7,106 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"Suppliers": {
+				"properties": {
+					"address": {
+						"type": "string"
+					},
+					"city": {
+						"type": "string"
+					},
+					"companyName": {
+						"type": "string"
+					},
+					"contactName": {
+						"type": "string"
+					},
+					"contactTitle": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"fax": {
+						"type": "string"
+					},
+					"homePage": {
+						"type": "string"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"postalCode": {
+						"type": "string"
+					},
+					"region": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"address",
+					"city",
+					"companyName",
+					"contactName",
+					"contactTitle",
+					"country",
+					"fax",
+					"homePage",
+					"phone",
+					"postalCode",
+					"region"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Produucts": {
+				"properties": {
+					"categoryId": {
+						"type": "string"
+					},
+					"discontinued": {
+						"type": "number",
+						"format": "double"
+					},
+					"productName": {
+						"type": "string"
+					},
+					"quantityPerUnit": {
+						"type": "string"
+					},
+					"reorderLevel": {
+						"type": "number",
+						"format": "double"
+					},
+					"supplierId": {
+						"type": "string"
+					},
+					"unitPrice": {
+						"type": "string"
+					},
+					"unitsInStock": {
+						"type": "number",
+						"format": "double"
+					},
+					"unitsOnOrder": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"categoryId",
+					"discontinued",
+					"productName",
+					"quantityPerUnit",
+					"reorderLevel",
+					"supplierId",
+					"unitPrice",
+					"unitsInStock",
+					"unitsOnOrder"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Fruits": {
 				"properties": {
 					"name": {
@@ -19,6 +119,98 @@
 				"required": [
 					"name",
 					"color"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Employees": {
+				"properties": {
+					"address": {
+						"type": "string"
+					},
+					"birthDate": {
+						"type": "string"
+					},
+					"city": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"extension": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"hireDate": {
+						"type": "string"
+					},
+					"homePhone": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"notes": {
+						"type": "string"
+					},
+					"photo": {
+						"type": "string"
+					},
+					"photoPath": {
+						"type": "string"
+					},
+					"postalCode": {
+						"type": "string"
+					},
+					"region": {
+						"type": "string"
+					},
+					"reportsTo": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"titleOfCourtesy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"address",
+					"birthDate",
+					"city",
+					"country",
+					"extension",
+					"firstName",
+					"hireDate",
+					"homePhone",
+					"lastName",
+					"notes",
+					"photo",
+					"photoPath",
+					"postalCode",
+					"region",
+					"reportsTo",
+					"title",
+					"titleOfCourtesy"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Categorys": {
+				"properties": {
+					"categoryName": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"categoryName",
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -42,6 +234,984 @@
 		"contact": {}
 	},
 	"paths": {
+		"/Supplier": {
+			"get": {
+				"operationId": "GetSupplierAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"allOf": [
+											{
+												"properties": {
+													"Product": {
+														"items": {
+															"properties": {
+																"UnitsOnOrder": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"UnitsInStock": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"UnitPrice": {
+																	"type": "string"
+																},
+																"SupplierId": {
+																	"type": "string"
+																},
+																"ReorderLevel": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"QuantityPerUnit": {
+																	"type": "string"
+																},
+																"ProductName": {
+																	"type": "string"
+																},
+																"Discontinued": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"CategoryId": {
+																	"type": "string"
+																},
+																"Id": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"UnitsOnOrder",
+																"UnitsInStock",
+																"UnitPrice",
+																"SupplierId",
+																"ReorderLevel",
+																"QuantityPerUnit",
+																"ProductName",
+																"Discontinued",
+																"CategoryId",
+																"Id"
+															],
+															"type": "object"
+														},
+														"type": "array"
+													}
+												},
+												"required": [
+													"Product"
+												],
+												"type": "object"
+											},
+											{
+												"properties": {
+													"Region": {
+														"type": "string"
+													},
+													"PostalCode": {
+														"type": "string"
+													},
+													"Phone": {
+														"type": "string"
+													},
+													"Id": {
+														"type": "string"
+													},
+													"HomePage": {
+														"type": "string"
+													},
+													"Fax": {
+														"type": "string"
+													},
+													"Country": {
+														"type": "string"
+													},
+													"ContactTitle": {
+														"type": "string"
+													},
+													"ContactName": {
+														"type": "string"
+													},
+													"CompanyName": {
+														"type": "string"
+													},
+													"City": {
+														"type": "string"
+													},
+													"Address": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"Region",
+													"PostalCode",
+													"Phone",
+													"Id",
+													"HomePage",
+													"Fax",
+													"Country",
+													"ContactTitle",
+													"ContactName",
+													"CompanyName",
+													"City",
+													"Address"
+												],
+												"type": "object"
+											}
+										]
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateSupplier",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"HomePage": {
+													"type": "string"
+												},
+												"Fax": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"ContactTitle": {
+													"type": "string"
+												},
+												"ContactName": {
+													"type": "string"
+												},
+												"CompanyName": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Region",
+												"PostalCode",
+												"Phone",
+												"Id",
+												"HomePage",
+												"Fax",
+												"Country",
+												"ContactTitle",
+												"ContactName",
+												"CompanyName",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Suppliers"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Supplier/{id}": {
+			"get": {
+				"operationId": "GetSupplierById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"HomePage": {
+													"type": "string"
+												},
+												"Fax": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"ContactTitle": {
+													"type": "string"
+												},
+												"ContactName": {
+													"type": "string"
+												},
+												"CompanyName": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Region",
+												"PostalCode",
+												"Phone",
+												"Id",
+												"HomePage",
+												"Fax",
+												"Country",
+												"ContactTitle",
+												"ContactName",
+												"CompanyName",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateSupplier",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"HomePage": {
+													"type": "string"
+												},
+												"Fax": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"ContactTitle": {
+													"type": "string"
+												},
+												"ContactName": {
+													"type": "string"
+												},
+												"CompanyName": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Region",
+												"PostalCode",
+												"Phone",
+												"Id",
+												"HomePage",
+												"Fax",
+												"Country",
+												"ContactTitle",
+												"ContactName",
+												"CompanyName",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Suppliers"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteSupplier",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"enum": [
+										"ไม่พบข้อมูล",
+										"ลบข้อมูลสำเร็จ"
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/Product": {
+			"get": {
+				"operationId": "GetProduuctAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"allOf": [
+											{
+												"properties": {
+													"Category": {
+														"properties": {
+															"Description": {
+																"type": "string"
+															},
+															"CategoryName": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"Description",
+															"CategoryName",
+															"Id"
+														],
+														"type": "object"
+													}
+												},
+												"required": [
+													"Category"
+												],
+												"type": "object"
+											},
+											{
+												"properties": {
+													"UnitsOnOrder": {
+														"type": "number",
+														"format": "double"
+													},
+													"UnitsInStock": {
+														"type": "number",
+														"format": "double"
+													},
+													"UnitPrice": {
+														"type": "string"
+													},
+													"SupplierId": {
+														"type": "string"
+													},
+													"ReorderLevel": {
+														"type": "number",
+														"format": "double"
+													},
+													"QuantityPerUnit": {
+														"type": "string"
+													},
+													"ProductName": {
+														"type": "string"
+													},
+													"Discontinued": {
+														"type": "number",
+														"format": "double"
+													},
+													"CategoryId": {
+														"type": "string"
+													},
+													"Id": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"UnitsOnOrder",
+													"UnitsInStock",
+													"UnitPrice",
+													"SupplierId",
+													"ReorderLevel",
+													"QuantityPerUnit",
+													"ProductName",
+													"Discontinued",
+													"CategoryId",
+													"Id"
+												],
+												"type": "object"
+											}
+										]
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateProduuct",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"UnitsOnOrder": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitsInStock": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitPrice": {
+													"type": "string"
+												},
+												"SupplierId": {
+													"type": "string"
+												},
+												"ReorderLevel": {
+													"type": "number",
+													"format": "double"
+												},
+												"QuantityPerUnit": {
+													"type": "string"
+												},
+												"ProductName": {
+													"type": "string"
+												},
+												"Discontinued": {
+													"type": "number",
+													"format": "double"
+												},
+												"CategoryId": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"UnitsOnOrder",
+												"UnitsInStock",
+												"UnitPrice",
+												"SupplierId",
+												"ReorderLevel",
+												"QuantityPerUnit",
+												"ProductName",
+												"Discontinued",
+												"CategoryId",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่่พบข้อมุลประเภท"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Produucts"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Product/{id}": {
+			"patch": {
+				"operationId": "UpdataProduuct",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"allOf": [
+												{
+													"properties": {
+														"Category": {
+															"properties": {
+																"Description": {
+																	"type": "string"
+																},
+																"CategoryName": {
+																	"type": "string"
+																},
+																"Id": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"Description",
+																"CategoryName",
+																"Id"
+															],
+															"type": "object"
+														}
+													},
+													"required": [
+														"Category"
+													],
+													"type": "object"
+												},
+												{
+													"properties": {
+														"UnitsOnOrder": {
+															"type": "number",
+															"format": "double"
+														},
+														"UnitsInStock": {
+															"type": "number",
+															"format": "double"
+														},
+														"UnitPrice": {
+															"type": "string"
+														},
+														"SupplierId": {
+															"type": "string"
+														},
+														"ReorderLevel": {
+															"type": "number",
+															"format": "double"
+														},
+														"QuantityPerUnit": {
+															"type": "string"
+														},
+														"ProductName": {
+															"type": "string"
+														},
+														"Discontinued": {
+															"type": "number",
+															"format": "double"
+														},
+														"CategoryId": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"UnitsOnOrder",
+														"UnitsInStock",
+														"UnitPrice",
+														"SupplierId",
+														"ReorderLevel",
+														"QuantityPerUnit",
+														"ProductName",
+														"Discontinued",
+														"CategoryId",
+														"Id"
+													],
+													"type": "object"
+												}
+											]
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่่พบข้อมุล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Produucts"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteProduct",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"UnitsOnOrder": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitsInStock": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitPrice": {
+													"type": "string"
+												},
+												"SupplierId": {
+													"type": "string"
+												},
+												"ReorderLevel": {
+													"type": "number",
+													"format": "double"
+												},
+												"QuantityPerUnit": {
+													"type": "string"
+												},
+												"ProductName": {
+													"type": "string"
+												},
+												"Discontinued": {
+													"type": "number",
+													"format": "double"
+												},
+												"CategoryId": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"UnitsOnOrder",
+												"UnitsInStock",
+												"UnitPrice",
+												"SupplierId",
+												"ReorderLevel",
+												"QuantityPerUnit",
+												"ProductName",
+												"Discontinued",
+												"CategoryId",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/fruits": {
 			"get": {
 				"operationId": "GetFruit",
@@ -56,17 +1226,17 @@
 											"color": {
 												"type": "string"
 											},
-											"name": {
+											"id": {
 												"type": "string"
 											},
-											"id": {
+											"name": {
 												"type": "string"
 											}
 										},
 										"required": [
 											"color",
-											"name",
-											"id"
+											"id",
+											"name"
 										],
 										"type": "object"
 									},
@@ -91,17 +1261,17 @@
 										"color": {
 											"type": "string"
 										},
-										"name": {
+										"id": {
 											"type": "string"
 										},
-										"id": {
+										"name": {
 											"type": "string"
 										}
 									},
 									"required": [
 										"color",
-										"name",
-										"id"
+										"id",
+										"name"
 									],
 									"type": "object"
 								}
@@ -142,17 +1312,17 @@
 												"color": {
 													"type": "string"
 												},
-												"name": {
+												"id": {
 													"type": "string"
 												},
-												"id": {
+												"name": {
 													"type": "string"
 												}
 											},
 											"required": [
 												"color",
-												"name",
-												"id"
+												"id",
+												"name"
 											],
 											"type": "object"
 										},
@@ -194,17 +1364,17 @@
 												"color": {
 													"type": "string"
 												},
-												"name": {
+												"id": {
 													"type": "string"
 												},
-												"id": {
+												"name": {
 													"type": "string"
 												}
 											},
 											"required": [
 												"color",
-												"name",
-												"id"
+												"id",
+												"name"
 											],
 											"type": "object"
 										},
@@ -269,6 +1439,744 @@
 						"keycloak": []
 					}
 				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/Employee": {
+			"get": {
+				"operationId": "GetEmployeeAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"TitleOfCourtesy": {
+												"type": "string"
+											},
+											"Title": {
+												"type": "string"
+											},
+											"ReportsTo": {
+												"type": "string"
+											},
+											"PhotoPath": {
+												"type": "string"
+											},
+											"Photo": {
+												"type": "string"
+											},
+											"Notes": {
+												"type": "string"
+											},
+											"LastName": {
+												"type": "string"
+											},
+											"HomePhone": {
+												"type": "string"
+											},
+											"HireDate": {
+												"type": "string"
+											},
+											"FirstName": {
+												"type": "string"
+											},
+											"Extension": {
+												"type": "string"
+											},
+											"BirthDate": {
+												"type": "string"
+											},
+											"Region": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "string"
+											},
+											"Country": {
+												"type": "string"
+											},
+											"City": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"TitleOfCourtesy",
+											"Title",
+											"ReportsTo",
+											"PhotoPath",
+											"Photo",
+											"Notes",
+											"LastName",
+											"HomePhone",
+											"HireDate",
+											"FirstName",
+											"Extension",
+											"BirthDate",
+											"Region",
+											"PostalCode",
+											"Id",
+											"Country",
+											"City",
+											"Address"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateEmployee",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"TitleOfCourtesy": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"ReportsTo": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"HomePhone": {
+													"type": "string"
+												},
+												"HireDate": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Extension": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"TitleOfCourtesy",
+												"Title",
+												"ReportsTo",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"LastName",
+												"HomePhone",
+												"HireDate",
+												"FirstName",
+												"Extension",
+												"BirthDate",
+												"Region",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Employees"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Employee/{id}": {
+			"get": {
+				"operationId": "GetEmployeeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"TitleOfCourtesy": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"ReportsTo": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"HomePhone": {
+													"type": "string"
+												},
+												"HireDate": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Extension": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"TitleOfCourtesy",
+												"Title",
+												"ReportsTo",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"LastName",
+												"HomePhone",
+												"HireDate",
+												"FirstName",
+												"Extension",
+												"BirthDate",
+												"Region",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateEmployee",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"TitleOfCourtesy": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"ReportsTo": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"HomePhone": {
+													"type": "string"
+												},
+												"HireDate": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Extension": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"TitleOfCourtesy",
+												"Title",
+												"ReportsTo",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"LastName",
+												"HomePhone",
+												"HireDate",
+												"FirstName",
+												"Extension",
+												"BirthDate",
+												"Region",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Employees"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteEmployee",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"enum": [
+										"ไม่พบข้อมูล",
+										"ลบข้อมูลสำเร็จ"
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/Category": {
+			"get": {
+				"operationId": "GetCategoryAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"Description": {
+												"type": "string"
+											},
+											"CategoryName": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"Description",
+											"CategoryName",
+											"Id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateCategory",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Description": {
+											"type": "string"
+										},
+										"CategoryName": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"Description",
+										"CategoryName",
+										"Id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Categorys"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Category/{id}": {
+			"patch": {
+				"operationId": "UpdataCategory",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Description": {
+													"type": "string"
+												},
+												"CategoryName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Description",
+												"CategoryName",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Categorys"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteCategory",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Description": {
+													"type": "string"
+												},
+												"CategoryName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Description",
+												"CategoryName",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
 				"parameters": [
 					{
 						"in": "path",

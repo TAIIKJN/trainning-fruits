@@ -15,3 +15,136 @@ model fruit {
   name  String
   color String
 }
+
+model Employee {
+  Address         String?
+  BirthDate       String?
+  City            String?
+  Country         String?
+  Extension       String?
+  FirstName       String?
+  HireDate        String?
+  HomePhone       String?
+  Id              String  @id @default(uuid())
+  LastName        String?
+  Notes           String?
+  Photo           String?
+  PhotoPath       String?
+  PostalCode      String?
+  Region          String?
+  ReportsTo       String?
+  Title           String?
+  TitleOfCourtesy String?
+}
+
+model Category {
+  CategoryName String?
+  Description  String?
+  Id           String    @id @default(uuid())
+  Product      Product[]
+}
+
+model Customer {
+  Address      String?
+  City         String?
+  CompanyName  String?
+  ContactName  String?
+  ContactTitle String?
+  Country      String?
+  Fax          String?
+  Id           String  @id @default(uuid())
+  Phone        String?
+  PostalCode   String?
+  Region       String?
+}
+
+model Shipper {
+  CompanyName String?
+  Id          String  @id @default(uuid())
+  Phone       String?
+}
+
+model Supplier {
+  Address      String?
+  City         String?
+  CompanyName  String?
+  ContactName  String?
+  ContactTitle String?
+  Country      String?
+  Fax          String?
+  HomePage     String?
+  Id           String    @id @default(uuid())
+  Phone        String?
+  PostalCode   String?
+  Region       String?
+  Product      Product[]
+}
+
+model Order {
+  CustomerId     String?
+  EmployeeId     String
+  Freight        String
+  Id             String  @id @default(uuid())
+  OrderDate      String?
+  RequiredDate   String?
+  ShipAddress    String?
+  ShipCity       String?
+  ShipCountry    String?
+  ShipName       String?
+  ShipPostalCode String?
+  ShipRegion     String?
+  ShipVia        Int?
+  ShippedDate    String?
+}
+
+model Product {
+  CategoryId String
+  Category   Category @relation(fields: [CategoryId], references: [Id])
+
+  Discontinued    Int
+  Id              String    @id @default(uuid())
+  ProductName     String?
+  QuantityPerUnit String?
+  ReorderLevel    Int
+  SupplierId      String?
+  Supplier        Supplier? @relation(fields: [SupplierId], references: [Id])
+  UnitPrice       String
+  UnitsInStock    Int
+  UnitsOnOrder    Int
+}
+
+model OrderDetail {
+  Discount  Float
+  Id        String @id @default(uuid())
+  OrderId   String
+  ProductId Int
+  Quantity  Int
+  UnitPrice String
+}
+
+model CustomerCustomerDemo {
+  CustomerTypeId String?
+  Id             String  @id @default(uuid())
+}
+
+model CustomerDemographic {
+  CustomerDesc String?
+  Id           String  @id @default(uuid())
+}
+
+model Region {
+  Id                String  @id @default(uuid())
+  RegionDescription String?
+}
+
+model Territory {
+  Id                   String  @id @default(uuid())
+  RegionId             String
+  TerritoryDescription String?
+}
+
+model EmployeeTerritory {
+  EmployeeId  String
+  Id          String  @id @default(uuid())
+  TerritoryId String?
+}
