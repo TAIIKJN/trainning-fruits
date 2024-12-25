@@ -16,10 +16,9 @@ import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import KeycloakService from './services/KeycloakService';
 
-
 const logout = () => {
   KeycloakService.CallLogOut();
-};
+}; 
 </script>
 
 <style scoped>

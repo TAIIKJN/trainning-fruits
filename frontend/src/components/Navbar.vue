@@ -27,42 +27,33 @@ const items = ref<MenuProps['items']>([
     onClick: () => router.push('/fruits'),
   },
   {
-    key: 'settings',
+    key: 'supplier',
+    icon: () => h(AppstoreOutlined),
+    label: 'Supplier',
+    onClick: () => router.push('/supplier'),
+  },
+  {
+    key: 'product',
     icon: () => h(SettingOutlined),
-    label: 'Settings',
+    label: 'Product',
     children: [
       {
         type: 'group',
-        label: 'Settings Group 1',
+        label: 'Product Group ',
         children: [
           {
-            label: 'Setting 1',
-            key: 'setting:1',
-            onClick: () => router.push('/setting/1'),
+            label: 'สินค้าทั้งหมด',
+            key: 'product-all',
+            onClick: () => router.push('/product'),
           },
           {
-            label: 'Setting 2',
-            key: 'setting:2',
-            onClick: () => router.push('/setting/2'),
+            label: 'ประเภทสินค้า',
+            key: 'product-category',
+            onClick: () => router.push('/category'),
           },
         ],
       },
-      {
-        type: 'group',
-        label: 'Settings Group 2',
-        children: [
-          {
-            label: 'Setting 3',
-            key: 'setting:3',
-            onClick: () => router.push('/setting/3'),
-          },
-          {
-            label: 'Setting 4',
-            key: 'setting:4',
-            onClick: () => router.push('/setting/4'),
-          },
-        ],
-      },
+    
     ],
   },
 ]);

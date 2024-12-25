@@ -359,6 +359,7 @@ async function remove() {
 function clearFields() {
   fruitName.value = '';
   fruitColor.value = '';
+  selectedId.value = null;
 }
 
 watch(selectedId, (newId) => {
