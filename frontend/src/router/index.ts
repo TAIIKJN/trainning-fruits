@@ -5,7 +5,8 @@ import Fruits from '../views/fruits.vue'
 import Product from '../views/Product/product.vue'
 import Category from '../views/Product/category.vue'
 import Supplier from '../views/Supplier/supplier.vue'
-
+import Employee from '../views/Employee/employee.vue'
+import customer from '../views/Customer/customer.vue'
 
 // import { useMainStore } from '../store'
 
@@ -24,6 +25,8 @@ const routes = [
     meta: { requiresAuth: true }
   },
   { path: '/supplier', component: Supplier, meta: { requiresAuth: true } },
+  { path: '/employee', component: Employee, meta: { requiresAuth: true } },
+  { path: '/customer', component: customer, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({

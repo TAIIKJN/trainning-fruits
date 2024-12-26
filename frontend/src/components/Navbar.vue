@@ -56,6 +56,18 @@ const items = ref<MenuProps['items']>([
     
     ],
   },
+  {
+    key: 'employee',
+    icon: () => h(SettingOutlined),
+    label: 'Employee',
+    onClick: () => router.push('/employee'),
+  },
+  {
+    key: 'customer',
+    icon: () => h(SettingOutlined),
+    label: 'Customer',
+    onClick: () => router.push('/customer'),
+  }
 ]);
 
 watch(

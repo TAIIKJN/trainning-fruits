@@ -229,7 +229,6 @@
         <span>Fruits</span>
       </div>
 
-      <!-- Load, Update, and Delete buttons -->
       <div class="flex justify-between mb-2">
         <a-button type="primary" @click="load">Load Fruits</a-button>
         <a-button type="primary" @click="update" :disabled="selectedId === null" v-if="isUserRole">Update</a-button>
@@ -242,7 +241,6 @@
         <a-button type="primary" @click="create" :disabled="!fruitName || !fruitColor">Add Fruit</a-button>
         <a-button @click="clearFields" :disabled="!fruitName && !fruitColor">Clear Fields</a-button>
       </div>
-      <!-- Fruits list -->
       <a-list class="mb-4" bordered :dataSource="fruits">
         <template #renderItem="{ item }">
           <a-list-item>

@@ -32,12 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
-// import KeycloakService from '../../services/KeycloakService';
+import KeycloakService from '../../services/KeycloakService';
 
-// const roles = KeycloakService.GetUserRoles();
+const roles = KeycloakService.GetUserRoles();
+const isUserRole = roles.includes('admin');
 
 interface CategoryItem {
     Id: string;
@@ -55,7 +56,7 @@ const formState = reactive<CategoryForm>({
     categoryName: '',
     description: '',
 });
-const columns = [
+const baseColumns = [
     {
         title: 'ชื่อประเภท',
         dataIndex: 'CategoryName',
@@ -67,13 +68,15 @@ const columns = [
         key: 'description',
         ellipsis: true,
     },
-    {
-        title: 'จัดการ',
-        key: 'actions',
-        width: '150px',
-    },
 ];
-
+const actionColumn = {
+    title: 'จัดการ',
+    key: 'actions',
+    width: '150px',
+};
+const columns = computed(() => {
+    return isUserRole ? [...baseColumns, actionColumn] : baseColumns;
+});
 const categories = ref<CategoryItem[]>([]);
 const loading = ref(false);
 

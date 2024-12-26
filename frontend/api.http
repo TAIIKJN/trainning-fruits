@@ -1,4 +1,4 @@
-@host = http://localhost:5173
+@host = https://identity.frappet.synology.me/
 @token = MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvRJrQ3d+JOpBAyApcdrhmwU7oBFuVimJOp4ye3Woncr1VGbuLeqPpBbgjtNzd+jXfe/i0eTffxLrNY48B8KQf2wzCrxx/k63x4QMCwrJGWP/PnF9E9pI9ZKDVpWS+RSYheTjCiMstC3D+z94jZO0iKLfVdQoj2cd7DSjWxtHMvxWQ+kNE/Jgy6DOl8jwGGX08ynUV6Xdqs7h1SQmxiAgMlsHJwjjXDH7Dy+3dEMqb4AE7NZ01b/tUV/4g/351D1cwM2wUHVCXjtHz20vqDxHW4MTZ/vytvDWNiltIHa2VPLpJa0BfTCkvt+u8Yu0XcmyfGBp6uJW8kBFPcDVoZHshQIDAQAB
 
 
@@ -9,7 +9,7 @@ POST {{host}}/realms/taii-aif/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
 client_id=training-fruits
-&username=admin
+&username=aif
 &password=1234
 &grant_type=password
 
