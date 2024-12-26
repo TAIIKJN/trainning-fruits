@@ -14,17 +14,17 @@ import {
 const prisma = new PrismaClient();
 
 export interface Suppliers {
-  address: string;
-  city: string;
-  companyName: string;
-  contactName: string;
-  contactTitle: string;
-  country: string;
-  fax: string;
-  homePage: string;
-  phone: string;
-  postalCode: string;
-  region: string;
+  Address: string;
+  City: string;
+  CompanyName: string;
+  ContactName: string;
+  ContactTitle: string;
+  Country: string;
+  Fax: string;
+  HomePage: string;
+  Phone: string;
+  PostalCode: string;
+  Region: string;
 }
 
 @Route("Supplier")
@@ -60,17 +60,17 @@ export class supplierController extends Controller {
     try {
       const data = await prisma.supplier.create({
         data: {
-          Address: requestBody.address,
-          City: requestBody.city,
-          CompanyName: requestBody.companyName,
-          ContactName: requestBody.contactName,
-          ContactTitle: requestBody.contactTitle,
-          Country: requestBody.country,
-          Fax: requestBody.fax,
-          HomePage: requestBody.homePage,
-          Phone: requestBody.phone,
-          PostalCode: requestBody.postalCode,
-          Region: requestBody.region,
+          Address: requestBody.Address,
+          City: requestBody.City,
+          CompanyName: requestBody.CompanyName,
+          ContactName: requestBody.ContactName,
+          ContactTitle: requestBody.ContactTitle,
+          Country: requestBody.Country,
+          Fax: requestBody.Fax,
+          HomePage: requestBody.HomePage,
+          Phone: requestBody.Phone,
+          PostalCode: requestBody.PostalCode,
+          Region: requestBody.Region,
         },
       });
 
@@ -102,17 +102,17 @@ export class supplierController extends Controller {
       if (dataSupplier) {
         const data = await prisma.supplier.update({
           data: {
-            Address: requestBody.address,
-            City: requestBody.city,
-            CompanyName: requestBody.companyName,
-            ContactName: requestBody.contactName,
-            ContactTitle: requestBody.contactTitle,
-            Country: requestBody.country,
-            Fax: requestBody.fax,
-            HomePage: requestBody.homePage,
-            Phone: requestBody.phone,
-            PostalCode: requestBody.postalCode,
-            Region: requestBody.region,
+            Address: requestBody.Address,
+            City: requestBody.City,
+            CompanyName: requestBody.CompanyName,
+            ContactName: requestBody.ContactName,
+            ContactTitle: requestBody.ContactTitle,
+            Country: requestBody.Country,
+            Fax: requestBody.Fax,
+            HomePage: requestBody.HomePage,
+            Phone: requestBody.Phone,
+            PostalCode: requestBody.PostalCode,
+            Region: requestBody.Region,
           },
           where: {
             Id: id,
@@ -143,7 +143,7 @@ export class supplierController extends Controller {
     });
 
     if (dataSupplier) {
-      const data = await prisma.supplier.delete({
+      await prisma.supplier.delete({
         where: {
           Id: id,
         },

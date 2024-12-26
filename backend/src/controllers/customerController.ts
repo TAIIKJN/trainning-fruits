@@ -13,7 +13,7 @@ import {
 
 const prisma = new PrismaClient();
 
-export interface Employees {
+export interface Customers {
   Title: string;
   FirstName: string;
   LastName: string;
@@ -27,26 +27,26 @@ export interface Employees {
   Notes: string;
   Photo: string;
   PhotoPath: string;
+  Role: string;
 }
-
-@Route("Employee")
-export class employeeController extends Controller {
+@Route("Customer")
+export class customerController extends Controller {
   @Get()
-  public async getEmployeeAll() {
-    const data = await prisma.employee.findMany();
+  public async getCustomerAll() {
+    const data = await prisma.customer.findMany({});
     return data;
   }
 
   @Get("{id}")
-  public async getEmployeeById(@Path() id: string) {
-    const dataEmployee = await prisma.employee.findFirst({
+  public async getCustomerById(@Path() id: string) {
+    const dataCustomer = await prisma.customer.findFirst({
       where: {
         Id: id,
       },
     });
 
-    if (dataEmployee) {
-      return dataEmployee;
+    if (dataCustomer) {
+      return dataCustomer;
     } else {
       return "ไม่พบข้อมูล";
     }
@@ -54,9 +54,9 @@ export class employeeController extends Controller {
 
   @Post()
   @SuccessResponse("201", "Created")
-  public async createEmployee(@Body() requestBody: Employees) {
+  public async createCustomer(@Body() requestBody: Customers) {
     try {
-      const dataUser = await prisma.employee.findFirst({
+      const dataUser = await prisma.customer.findFirst({
         where: {
           OR: [
             { UserName: requestBody.UserName },
@@ -71,7 +71,7 @@ export class employeeController extends Controller {
           message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
         };
       } else {
-        const data = await prisma.employee.create({
+        const data = await prisma.customer.create({
           data: {
             Title: requestBody.Title,
             FirstName: requestBody.FirstName,
@@ -86,6 +86,7 @@ export class employeeController extends Controller {
             Notes: requestBody.Notes,
             Photo: requestBody.Photo,
             PhotoPath: requestBody.PhotoPath,
+            Role: requestBody.Role,
           },
         });
 
@@ -104,16 +105,18 @@ export class employeeController extends Controller {
 
   @Patch("{id}")
   @SuccessResponse("200", "Update")
-  public async updateEmployee(
+  public async updateCustomer(
     @Path() id: string,
-    @Body() requestBody: Employees
+    @Body() requestBody: Customers
   ) {
     try {
-      const dataEmployee = await prisma.employee.findFirst({
-        where: { Id: id },
+      const dataCustomer = await prisma.customer.findFirst({
+        where: {
+          Id: id,
+        },
       });
 
-      const dataUser = await prisma.employee.findFirst({
+      const dataUser = await prisma.customer.findFirst({
         where: {
           AND: [
             {
@@ -127,14 +130,14 @@ export class employeeController extends Controller {
         },
       });
 
-      if (dataEmployee) {
+      if (dataCustomer) {
         if (dataUser) {
           return {
             status: 400,
             message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
           };
         } else {
-          const data = await prisma.employee.update({
+          const data = await prisma.customer.update({
             data: {
               Title: requestBody.Title,
               FirstName: requestBody.FirstName,
@@ -149,6 +152,7 @@ export class employeeController extends Controller {
               Notes: requestBody.Notes,
               Photo: requestBody.Photo,
               PhotoPath: requestBody.PhotoPath,
+              Role: requestBody.Role,
             },
             where: {
               Id: id,
@@ -172,15 +176,15 @@ export class employeeController extends Controller {
 
   @Delete("{id}")
   @SuccessResponse("200", "Delete")
-  public async deleteEmployee(@Path() id: string) {
-    const dataEmployee = await prisma.employee.findFirst({
+  public async deleteCustomer(@Path() id: string) {
+    const dataCustomer = await prisma.customer.findFirst({
       where: {
         Id: id,
       },
     });
 
-    if (dataEmployee) {
-      await prisma.employee.delete({
+    if (dataCustomer) {
+      await prisma.customer.delete({
         where: {
           Id: id,
         },

@@ -9,52 +9,52 @@
 		"schemas": {
 			"Suppliers": {
 				"properties": {
-					"address": {
+					"Address": {
 						"type": "string"
 					},
-					"city": {
+					"City": {
 						"type": "string"
 					},
-					"companyName": {
+					"CompanyName": {
 						"type": "string"
 					},
-					"contactName": {
+					"ContactName": {
 						"type": "string"
 					},
-					"contactTitle": {
+					"ContactTitle": {
 						"type": "string"
 					},
-					"country": {
+					"Country": {
 						"type": "string"
 					},
-					"fax": {
+					"Fax": {
 						"type": "string"
 					},
-					"homePage": {
+					"HomePage": {
 						"type": "string"
 					},
-					"phone": {
+					"Phone": {
 						"type": "string"
 					},
-					"postalCode": {
+					"PostalCode": {
 						"type": "string"
 					},
-					"region": {
+					"Region": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"address",
-					"city",
-					"companyName",
-					"contactName",
-					"contactTitle",
-					"country",
-					"fax",
-					"homePage",
-					"phone",
-					"postalCode",
-					"region"
+					"Address",
+					"City",
+					"CompanyName",
+					"ContactName",
+					"ContactTitle",
+					"Country",
+					"Fax",
+					"HomePage",
+					"Phone",
+					"PostalCode",
+					"Region"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -107,6 +107,85 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Prisma.BatchPayload": {
+				"properties": {
+					"count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"count"
+				],
+				"type": "object",
+				"description": "Batch Payload for updateMany & deleteMany & createMany"
+			},
+			"OrderDetail": {
+				"properties": {
+					"Discount": {
+						"type": "number",
+						"format": "double"
+					},
+					"ProductId": {
+						"type": "string"
+					},
+					"Quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"UnitPrice": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Discount",
+					"ProductId",
+					"Quantity",
+					"UnitPrice"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Orders": {
+				"properties": {
+					"CustomerId": {
+						"type": "string"
+					},
+					"EmployeeId": {
+						"type": "string"
+					},
+					"OrderDate": {
+						"type": "string"
+					},
+					"TotalPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"State": {
+						"type": "string"
+					},
+					"OrderDetail": {
+						"items": {
+							"$ref": "#/components/schemas/OrderDetail"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"CustomerId",
+					"EmployeeId",
+					"OrderDate",
+					"TotalPrice",
+					"Address",
+					"State",
+					"OrderDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Fruits": {
 				"properties": {
 					"name": {
@@ -125,76 +204,124 @@
 			},
 			"Employees": {
 				"properties": {
-					"address": {
+					"Title": {
 						"type": "string"
 					},
-					"birthDate": {
+					"FirstName": {
 						"type": "string"
 					},
-					"city": {
+					"LastName": {
 						"type": "string"
 					},
-					"country": {
+					"BirthDate": {
 						"type": "string"
 					},
-					"extension": {
+					"Email": {
 						"type": "string"
 					},
-					"firstName": {
+					"UserName": {
 						"type": "string"
 					},
-					"hireDate": {
+					"Address": {
 						"type": "string"
 					},
-					"homePhone": {
+					"City": {
 						"type": "string"
 					},
-					"lastName": {
+					"Country": {
 						"type": "string"
 					},
-					"notes": {
+					"PostalCode": {
 						"type": "string"
 					},
-					"photo": {
+					"Notes": {
 						"type": "string"
 					},
-					"photoPath": {
+					"Photo": {
 						"type": "string"
 					},
-					"postalCode": {
-						"type": "string"
-					},
-					"region": {
-						"type": "string"
-					},
-					"reportsTo": {
-						"type": "string"
-					},
-					"title": {
-						"type": "string"
-					},
-					"titleOfCourtesy": {
+					"PhotoPath": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"address",
-					"birthDate",
-					"city",
-					"country",
-					"extension",
-					"firstName",
-					"hireDate",
-					"homePhone",
-					"lastName",
-					"notes",
-					"photo",
-					"photoPath",
-					"postalCode",
-					"region",
-					"reportsTo",
-					"title",
-					"titleOfCourtesy"
+					"Title",
+					"FirstName",
+					"LastName",
+					"BirthDate",
+					"Email",
+					"UserName",
+					"Address",
+					"City",
+					"Country",
+					"PostalCode",
+					"Notes",
+					"Photo",
+					"PhotoPath"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Customers": {
+				"properties": {
+					"Title": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"BirthDate": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"City": {
+						"type": "string"
+					},
+					"Country": {
+						"type": "string"
+					},
+					"PostalCode": {
+						"type": "string"
+					},
+					"Notes": {
+						"type": "string"
+					},
+					"Photo": {
+						"type": "string"
+					},
+					"PhotoPath": {
+						"type": "string"
+					},
+					"Role": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title",
+					"FirstName",
+					"LastName",
+					"BirthDate",
+					"Email",
+					"UserName",
+					"Address",
+					"City",
+					"Country",
+					"PostalCode",
+					"Notes",
+					"Photo",
+					"PhotoPath",
+					"Role"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1212,6 +1339,490 @@
 				]
 			}
 		},
+		"/Order": {
+			"get": {
+				"operationId": "GetOrderAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"allOf": [
+											{
+												"properties": {
+													"OrderDetail": {
+														"items": {
+															"properties": {
+																"OrderId": {
+																	"type": "string"
+																},
+																"Quantity": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"ProductId": {
+																	"type": "string"
+																},
+																"Discount": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"UnitPrice": {
+																	"type": "string"
+																},
+																"Id": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"OrderId",
+																"Quantity",
+																"ProductId",
+																"Discount",
+																"UnitPrice",
+																"Id"
+															],
+															"type": "object"
+														},
+														"type": "array"
+													}
+												},
+												"required": [
+													"OrderDetail"
+												],
+												"type": "object"
+											},
+											{
+												"properties": {
+													"State": {
+														"type": "string"
+													},
+													"TotalPrice": {
+														"type": "number",
+														"format": "double"
+													},
+													"OrderDate": {
+														"type": "string"
+													},
+													"EmployeeId": {
+														"type": "string"
+													},
+													"CustomerId": {
+														"type": "string"
+													},
+													"Id": {
+														"type": "string"
+													},
+													"Address": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"State",
+													"TotalPrice",
+													"OrderDate",
+													"EmployeeId",
+													"CustomerId",
+													"Id",
+													"Address"
+												],
+												"type": "object"
+											}
+										]
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateOrder",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"error": {},
+												"message": {},
+												"status": {},
+												"orderDetails": {
+													"$ref": "#/components/schemas/Prisma.BatchPayload"
+												},
+												"order": {
+													"properties": {
+														"State": {
+															"type": "string"
+														},
+														"TotalPrice": {
+															"type": "number",
+															"format": "double"
+														},
+														"OrderDate": {
+															"type": "string"
+														},
+														"EmployeeId": {
+															"type": "string"
+														},
+														"CustomerId": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"State",
+														"TotalPrice",
+														"OrderDate",
+														"EmployeeId",
+														"CustomerId",
+														"Id",
+														"Address"
+													],
+													"type": "object"
+												}
+											},
+											"required": [
+												"orderDetails",
+												"order"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"orderDetails": {},
+												"order": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"orderDetails": {},
+												"order": {},
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Orders"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Order/{id}": {
+			"get": {
+				"operationId": "GetOrderById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"allOf": [
+												{
+													"properties": {
+														"OrderDetail": {
+															"items": {
+																"properties": {
+																	"OrderId": {
+																		"type": "string"
+																	},
+																	"Quantity": {
+																		"type": "number",
+																		"format": "double"
+																	},
+																	"ProductId": {
+																		"type": "string"
+																	},
+																	"Discount": {
+																		"type": "number",
+																		"format": "double"
+																	},
+																	"UnitPrice": {
+																		"type": "string"
+																	},
+																	"Id": {
+																		"type": "string"
+																	}
+																},
+																"required": [
+																	"OrderId",
+																	"Quantity",
+																	"ProductId",
+																	"Discount",
+																	"UnitPrice",
+																	"Id"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														}
+													},
+													"required": [
+														"OrderDetail"
+													],
+													"type": "object"
+												},
+												{
+													"properties": {
+														"State": {
+															"type": "string"
+														},
+														"TotalPrice": {
+															"type": "number",
+															"format": "double"
+														},
+														"OrderDate": {
+															"type": "string"
+														},
+														"EmployeeId": {
+															"type": "string"
+														},
+														"CustomerId": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"State",
+														"TotalPrice",
+														"OrderDate",
+														"EmployeeId",
+														"CustomerId",
+														"Id",
+														"Address"
+													],
+													"type": "object"
+												}
+											]
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateOrder",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"State": {
+													"type": "string"
+												},
+												"TotalPrice": {
+													"type": "number",
+													"format": "double"
+												},
+												"OrderDate": {
+													"type": "string"
+												},
+												"EmployeeId": {
+													"type": "string"
+												},
+												"CustomerId": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"State",
+												"TotalPrice",
+												"OrderDate",
+												"EmployeeId",
+												"CustomerId",
+												"Id",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Orders"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteOrder",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"enum": [
+										"ไม่พบข้อมูล",
+										"ลบข้อมูลสำเร็จ"
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/fruits": {
 			"get": {
 				"operationId": "GetFruit",
@@ -1462,15 +2073,6 @@
 								"schema": {
 									"items": {
 										"properties": {
-											"TitleOfCourtesy": {
-												"type": "string"
-											},
-											"Title": {
-												"type": "string"
-											},
-											"ReportsTo": {
-												"type": "string"
-											},
 											"PhotoPath": {
 												"type": "string"
 											},
@@ -1480,25 +2082,22 @@
 											"Notes": {
 												"type": "string"
 											},
-											"LastName": {
+											"UserName": {
 												"type": "string"
 											},
-											"HomePhone": {
-												"type": "string"
-											},
-											"HireDate": {
-												"type": "string"
-											},
-											"FirstName": {
-												"type": "string"
-											},
-											"Extension": {
+											"Email": {
 												"type": "string"
 											},
 											"BirthDate": {
 												"type": "string"
 											},
-											"Region": {
+											"LastName": {
+												"type": "string"
+											},
+											"FirstName": {
+												"type": "string"
+											},
+											"Title": {
 												"type": "string"
 											},
 											"PostalCode": {
@@ -1518,19 +2117,15 @@
 											}
 										},
 										"required": [
-											"TitleOfCourtesy",
-											"Title",
-											"ReportsTo",
 											"PhotoPath",
 											"Photo",
 											"Notes",
-											"LastName",
-											"HomePhone",
-											"HireDate",
-											"FirstName",
-											"Extension",
+											"UserName",
+											"Email",
 											"BirthDate",
-											"Region",
+											"LastName",
+											"FirstName",
+											"Title",
 											"PostalCode",
 											"Id",
 											"Country",
@@ -1559,15 +2154,6 @@
 									"anyOf": [
 										{
 											"properties": {
-												"TitleOfCourtesy": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
-												"ReportsTo": {
-													"type": "string"
-												},
 												"PhotoPath": {
 													"type": "string"
 												},
@@ -1577,25 +2163,22 @@
 												"Notes": {
 													"type": "string"
 												},
-												"LastName": {
+												"UserName": {
 													"type": "string"
 												},
-												"HomePhone": {
-													"type": "string"
-												},
-												"HireDate": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Extension": {
+												"Email": {
 													"type": "string"
 												},
 												"BirthDate": {
 													"type": "string"
 												},
-												"Region": {
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
 													"type": "string"
 												},
 												"PostalCode": {
@@ -1615,19 +2198,15 @@
 												}
 											},
 											"required": [
-												"TitleOfCourtesy",
-												"Title",
-												"ReportsTo",
 												"PhotoPath",
 												"Photo",
 												"Notes",
-												"LastName",
-												"HomePhone",
-												"HireDate",
-												"FirstName",
-												"Extension",
+												"UserName",
+												"Email",
 												"BirthDate",
-												"Region",
+												"LastName",
+												"FirstName",
+												"Title",
 												"PostalCode",
 												"Id",
 												"Country",
@@ -1703,15 +2282,6 @@
 									"anyOf": [
 										{
 											"properties": {
-												"TitleOfCourtesy": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
-												"ReportsTo": {
-													"type": "string"
-												},
 												"PhotoPath": {
 													"type": "string"
 												},
@@ -1721,25 +2291,22 @@
 												"Notes": {
 													"type": "string"
 												},
-												"LastName": {
+												"UserName": {
 													"type": "string"
 												},
-												"HomePhone": {
-													"type": "string"
-												},
-												"HireDate": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Extension": {
+												"Email": {
 													"type": "string"
 												},
 												"BirthDate": {
 													"type": "string"
 												},
-												"Region": {
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
 													"type": "string"
 												},
 												"PostalCode": {
@@ -1759,19 +2326,15 @@
 												}
 											},
 											"required": [
-												"TitleOfCourtesy",
-												"Title",
-												"ReportsTo",
 												"PhotoPath",
 												"Photo",
 												"Notes",
-												"LastName",
-												"HomePhone",
-												"HireDate",
-												"FirstName",
-												"Extension",
+												"UserName",
+												"Email",
 												"BirthDate",
-												"Region",
+												"LastName",
+												"FirstName",
+												"Title",
 												"PostalCode",
 												"Id",
 												"Country",
@@ -1815,15 +2378,6 @@
 									"anyOf": [
 										{
 											"properties": {
-												"TitleOfCourtesy": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
-												"ReportsTo": {
-													"type": "string"
-												},
 												"PhotoPath": {
 													"type": "string"
 												},
@@ -1833,25 +2387,22 @@
 												"Notes": {
 													"type": "string"
 												},
-												"LastName": {
+												"UserName": {
 													"type": "string"
 												},
-												"HomePhone": {
-													"type": "string"
-												},
-												"HireDate": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Extension": {
+												"Email": {
 													"type": "string"
 												},
 												"BirthDate": {
 													"type": "string"
 												},
-												"Region": {
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
 													"type": "string"
 												},
 												"PostalCode": {
@@ -1871,19 +2422,15 @@
 												}
 											},
 											"required": [
-												"TitleOfCourtesy",
-												"Title",
-												"ReportsTo",
 												"PhotoPath",
 												"Photo",
 												"Notes",
-												"LastName",
-												"HomePhone",
-												"HireDate",
-												"FirstName",
-												"Extension",
+												"UserName",
+												"Email",
 												"BirthDate",
-												"Region",
+												"LastName",
+												"FirstName",
+												"Title",
 												"PostalCode",
 												"Id",
 												"Country",
@@ -1963,6 +2510,499 @@
 			},
 			"delete": {
 				"operationId": "DeleteEmployee",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"enum": [
+										"ไม่พบข้อมูล",
+										"ลบข้อมูลสำเร็จ"
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/Customer": {
+			"get": {
+				"operationId": "GetCustomerAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"Role": {
+												"type": "string"
+											},
+											"PhotoPath": {
+												"type": "string"
+											},
+											"Photo": {
+												"type": "string"
+											},
+											"Notes": {
+												"type": "string"
+											},
+											"UserName": {
+												"type": "string"
+											},
+											"Email": {
+												"type": "string"
+											},
+											"BirthDate": {
+												"type": "string"
+											},
+											"LastName": {
+												"type": "string"
+											},
+											"FirstName": {
+												"type": "string"
+											},
+											"Title": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "string"
+											},
+											"Country": {
+												"type": "string"
+											},
+											"City": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"Role",
+											"PhotoPath",
+											"Photo",
+											"Notes",
+											"UserName",
+											"Email",
+											"BirthDate",
+											"LastName",
+											"FirstName",
+											"Title",
+											"PostalCode",
+											"Id",
+											"Country",
+											"City",
+											"Address"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateCustomer",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Role": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Role",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"UserName",
+												"Email",
+												"BirthDate",
+												"LastName",
+												"FirstName",
+												"Title",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Customers"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Customer/{id}": {
+			"get": {
+				"operationId": "GetCustomerById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Role": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Role",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"UserName",
+												"Email",
+												"BirthDate",
+												"LastName",
+												"FirstName",
+												"Title",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateCustomer",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Role": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Role",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"UserName",
+												"Email",
+												"BirthDate",
+												"LastName",
+												"FirstName",
+												"Title",
+												"PostalCode",
+												"Id",
+												"Country",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Customers"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteCustomer",
 				"responses": {
 					"200": {
 						"description": "Delete",
