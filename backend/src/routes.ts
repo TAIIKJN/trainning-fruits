@@ -8,6 +8,8 @@ import { supplierController } from './controllers/supplierController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { productController } from './controllers/productController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { orderDetailContoller } from './controllers/orderDetailController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { orderController } from './controllers/orderController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { fruitController } from './controllers/fruitController';
@@ -61,11 +63,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Prisma.BatchPayload": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"count":{"dataType":"double","required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "OrderDetail": {
         "dataType": "refObject",
         "properties": {
@@ -87,6 +84,33 @@ const models: TsoaRoute.Models = {
             "Address": {"dataType":"string","required":true},
             "State": {"dataType":"string","required":true},
             "OrderDetail": {"dataType":"array","array":{"dataType":"refObject","ref":"OrderDetail"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrderDetailUpdate": {
+        "dataType": "refObject",
+        "properties": {
+            "Discount": {"dataType":"double","required":true},
+            "ProductId": {"dataType":"string","required":true},
+            "Quantity": {"dataType":"double","required":true},
+            "UnitPrice": {"dataType":"string","required":true},
+            "Id": {"dataType":"string"},
+            "OrderId": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OrdersUpdate": {
+        "dataType": "refObject",
+        "properties": {
+            "CustomerId": {"dataType":"string","required":true},
+            "EmployeeId": {"dataType":"string","required":true},
+            "OrderDate": {"dataType":"string","required":true},
+            "TotalPrice": {"dataType":"double","required":true},
+            "Address": {"dataType":"string","required":true},
+            "State": {"dataType":"string","required":true},
+            "OrderDetail": {"dataType":"array","array":{"dataType":"refObject","ref":"OrderDetailUpdate"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -437,6 +461,36 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsorderDetailContoller_deleteOrderDetail: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+        };
+        app.delete('/OrderDetail/:id',
+            ...(fetchMiddlewares<RequestHandler>(orderDetailContoller)),
+            ...(fetchMiddlewares<RequestHandler>(orderDetailContoller.prototype.deleteOrderDetail)),
+
+            async function orderDetailContoller_deleteOrderDetail(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsorderDetailContoller_deleteOrderDetail, request, response });
+
+                const controller = new orderDetailContoller();
+
+              await templateService.apiHandler({
+                methodName: 'deleteOrderDetail',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsorderController_getOrderAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/Order',
@@ -528,7 +582,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsorderController_updateOrder: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
-                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Orders"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"OrdersUpdate"},
         };
         app.patch('/Order/:id',
             ...(fetchMiddlewares<RequestHandler>(orderController)),
@@ -546,36 +600,6 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updateOrder',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: 200,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsorderController_deleteOrder: Record<string, TsoaRoute.ParameterSchema> = {
-                id: {"in":"path","name":"id","required":true,"dataType":"string"},
-        };
-        app.delete('/Order/:id',
-            ...(fetchMiddlewares<RequestHandler>(orderController)),
-            ...(fetchMiddlewares<RequestHandler>(orderController.prototype.deleteOrder)),
-
-            async function orderController_deleteOrder(request: ExRequest, response: ExResponse, next: any) {
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args: argsorderController_deleteOrder, request, response });
-
-                const controller = new orderController();
-
-              await templateService.apiHandler({
-                methodName: 'deleteOrder',
                 controller,
                 response,
                 next,

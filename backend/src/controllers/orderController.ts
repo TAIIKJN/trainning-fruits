@@ -30,6 +30,13 @@ export interface OrderDetail {
   UnitPrice: string;
 }
 
+export interface OrdersUpdate extends Orders {
+  OrderDetail: OrderDetailUpdate[];
+}
+export interface OrderDetailUpdate extends OrderDetail {
+  Id?: string;
+  OrderId?: string;
+}
 @Route("Order")
 export class orderController extends Controller {
   @Get()
@@ -71,7 +78,7 @@ export class orderController extends Controller {
       });
 
       if (!dataCustomer) {
-        return "ไม่พบข้อมูลประเภทสินค้า";
+        return "ไม่พบข้อมูลลูกค้า";
       }
 
       const dataEmployee = await prisma.employee.findFirst({
@@ -137,8 +144,31 @@ export class orderController extends Controller {
 
   @Patch("{id}")
   @SuccessResponse("200", "Update")
-  public async updateOrder(@Path() id: string, @Body() requestBody: Orders) {
+  public async updateOrder(
+    @Path() id: string,
+    @Body() requestBody: OrdersUpdate
+  ) {
     try {
+      const dataCustomer = await prisma.customer.findFirst({
+        where: {
+          Id: requestBody.CustomerId,
+        },
+      });
+
+      if (!dataCustomer) {
+        return "ไม่พบข้อมูลลูกค้า";
+      }
+
+      const dataEmployee = await prisma.employee.findFirst({
+        where: {
+          Id: requestBody.EmployeeId,
+        },
+      });
+
+      if (!dataEmployee) {
+        return "ไม่พบข้อมูลพนักงาน";
+      }
+
       const dataOrder = await prisma.order.findFirst({
         where: {
           Id: id,
@@ -146,7 +176,7 @@ export class orderController extends Controller {
       });
 
       if (dataOrder) {
-        const data = await prisma.order.update({
+        const dataOrder = await prisma.order.update({
           data: {
             TotalPrice: requestBody?.TotalPrice,
             Address: requestBody?.Address,
@@ -156,8 +186,54 @@ export class orderController extends Controller {
             Id: id,
           },
         });
-        console.log(data);
-        return data;
+        console.log("dataOrder", dataOrder);
+
+        const dataOrderDetail = await Promise.all(
+          requestBody.OrderDetail.map(async (item) => {
+            const product = await prisma.product.findFirst({
+              where: {
+                Id: item.ProductId,
+              },
+            });
+            console.log("product", product);
+
+            if (!product) {
+              throw new Error(`ไม่พบข้อมูลสินค้า: ${item.ProductId}`);
+            }
+
+            if (item.Id) {
+              const dataDetail = await prisma.orderDetail.update({
+                where: {
+                  Id: item.Id,
+                },
+                data: {
+                  Discount: item?.Discount,
+                  ProductId: item?.ProductId,
+                  Quantity: item?.Quantity,
+                  UnitPrice: item?.UnitPrice,
+                  OrderId: item.OrderId,
+                },
+              });
+
+              return dataDetail;
+            } else {
+              const dataDetail = await prisma.orderDetail.create({
+                data: {
+                  Discount: item?.Discount,
+                  ProductId: product?.Id,
+                  Quantity: item?.Quantity,
+                  UnitPrice: item?.UnitPrice,
+                  OrderId: dataOrder.Id,
+                },
+              });
+
+              return dataDetail;
+            }
+          })
+        );
+
+        console.log(dataOrder, dataOrderDetail);
+        return { order: dataOrder, orderDetails: dataOrderDetail };
       } else {
         return "ไม่พบข้อมูล";
       }
@@ -168,27 +244,6 @@ export class orderController extends Controller {
       }
       // ในกรณีที่เกิดข้อผิดพลาดทั่วไป
       return { status: 500, message: "Internal server error", error: e };
-    }
-  }
-
-  @Delete("{id}")
-  @SuccessResponse("200", "Delete")
-  public async deleteOrder(@Path() id: string) {
-    const dataOrder = await prisma.order.findFirst({
-      where: {
-        Id: id,
-      },
-    });
-
-    if (dataOrder) {
-      await prisma.order.delete({
-        where: {
-          Id: id,
-        },
-      });
-      return `ลบข้อมูลสำเร็จ`;
-    } else {
-      return "ไม่พบข้อมูล";
     }
   }
 }

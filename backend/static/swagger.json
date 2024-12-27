@@ -107,19 +107,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Prisma.BatchPayload": {
-				"properties": {
-					"count": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"count"
-				],
-				"type": "object",
-				"description": "Batch Payload for updateMany & deleteMany & createMany"
-			},
 			"OrderDetail": {
 				"properties": {
 					"Discount": {
@@ -170,6 +157,78 @@
 					"OrderDetail": {
 						"items": {
 							"$ref": "#/components/schemas/OrderDetail"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"CustomerId",
+					"EmployeeId",
+					"OrderDate",
+					"TotalPrice",
+					"Address",
+					"State",
+					"OrderDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OrderDetailUpdate": {
+				"properties": {
+					"Discount": {
+						"type": "number",
+						"format": "double"
+					},
+					"ProductId": {
+						"type": "string"
+					},
+					"Quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"UnitPrice": {
+						"type": "string"
+					},
+					"Id": {
+						"type": "string"
+					},
+					"OrderId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Discount",
+					"ProductId",
+					"Quantity",
+					"UnitPrice"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OrdersUpdate": {
+				"properties": {
+					"CustomerId": {
+						"type": "string"
+					},
+					"EmployeeId": {
+						"type": "string"
+					},
+					"OrderDate": {
+						"type": "string"
+					},
+					"TotalPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"State": {
+						"type": "string"
+					},
+					"OrderDetail": {
+						"items": {
+							"$ref": "#/components/schemas/OrderDetailUpdate"
 						},
 						"type": "array"
 					}
@@ -1339,6 +1398,38 @@
 				]
 			}
 		},
+		"/OrderDetail/{id}": {
+			"delete": {
+				"operationId": "DeleteOrderDetail",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"enum": [
+										"ไม่พบข้อมูล",
+										"ลบข้อมูลสำเร็จ"
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/Order": {
 			"get": {
 				"operationId": "GetOrderAll",
@@ -1456,7 +1547,40 @@
 												"message": {},
 												"status": {},
 												"orderDetails": {
-													"$ref": "#/components/schemas/Prisma.BatchPayload"
+													"items": {
+														"properties": {
+															"OrderId": {
+																"type": "string"
+															},
+															"Quantity": {
+																"type": "number",
+																"format": "double"
+															},
+															"ProductId": {
+																"type": "string"
+															},
+															"Discount": {
+																"type": "number",
+																"format": "double"
+															},
+															"UnitPrice": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"OrderId",
+															"Quantity",
+															"ProductId",
+															"Discount",
+															"UnitPrice",
+															"Id"
+														],
+														"type": "object"
+													},
+													"type": "array"
 												},
 												"order": {
 													"properties": {
@@ -1539,6 +1663,13 @@
 												"status"
 											],
 											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูลลูกค้า",
+												"ไม่พบข้อมูลพนักงาน"
+											]
 										}
 									]
 								}
@@ -1689,43 +1820,93 @@
 									"anyOf": [
 										{
 											"properties": {
-												"State": {
-													"type": "string"
+												"error": {},
+												"message": {},
+												"status": {},
+												"orderDetails": {
+													"items": {
+														"properties": {
+															"OrderId": {
+																"type": "string"
+															},
+															"Quantity": {
+																"type": "number",
+																"format": "double"
+															},
+															"ProductId": {
+																"type": "string"
+															},
+															"Discount": {
+																"type": "number",
+																"format": "double"
+															},
+															"UnitPrice": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"OrderId",
+															"Quantity",
+															"ProductId",
+															"Discount",
+															"UnitPrice",
+															"Id"
+														],
+														"type": "object"
+													},
+													"type": "array"
 												},
-												"TotalPrice": {
-													"type": "number",
-													"format": "double"
-												},
-												"OrderDate": {
-													"type": "string"
-												},
-												"EmployeeId": {
-													"type": "string"
-												},
-												"CustomerId": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"Address": {
-													"type": "string"
+												"order": {
+													"properties": {
+														"State": {
+															"type": "string"
+														},
+														"TotalPrice": {
+															"type": "number",
+															"format": "double"
+														},
+														"OrderDate": {
+															"type": "string"
+														},
+														"EmployeeId": {
+															"type": "string"
+														},
+														"CustomerId": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"State",
+														"TotalPrice",
+														"OrderDate",
+														"EmployeeId",
+														"CustomerId",
+														"Id",
+														"Address"
+													],
+													"type": "object"
 												}
 											},
 											"required": [
-												"State",
-												"TotalPrice",
-												"OrderDate",
-												"EmployeeId",
-												"CustomerId",
-												"Id",
-												"Address"
+												"orderDetails",
+												"order"
 											],
 											"type": "object"
 										},
 										{
 											"properties": {
 												"error": {},
+												"orderDetails": {},
+												"order": {},
 												"message": {
 													"type": "string"
 												},
@@ -1742,6 +1923,8 @@
 										},
 										{
 											"properties": {
+												"orderDetails": {},
+												"order": {},
 												"error": {},
 												"message": {
 													"type": "string"
@@ -1761,7 +1944,9 @@
 										{
 											"type": "string",
 											"enum": [
-												"ไม่พบข้อมูล"
+												"ไม่พบข้อมูล",
+												"ไม่พบข้อมูลลูกค้า",
+												"ไม่พบข้อมูลพนักงาน"
 											]
 										}
 									]
@@ -1786,41 +1971,11 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Orders"
+								"$ref": "#/components/schemas/OrdersUpdate"
 							}
 						}
 					}
 				}
-			},
-			"delete": {
-				"operationId": "DeleteOrder",
-				"responses": {
-					"200": {
-						"description": "Delete",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "string",
-									"enum": [
-										"ไม่พบข้อมูล",
-										"ลบข้อมูลสำเร็จ"
-									]
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
 			}
 		},
 		"/fruits": {

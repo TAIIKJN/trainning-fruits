@@ -1,0 +1,35 @@
+{
+    "CustomerId": "2f0256f4-83b7-4043-a72a-6b99e96cf28c",
+    "EmployeeId": "39ee7020-dc71-4409-abef-652aaec1ba6b",
+    "OrderDate": "2024-12-25",
+    "TotalPrice": 200,
+    "Address": "2",
+    "State": "Pending",
+    "OrderDetail": [
+      {
+        "Discount": 0,
+        "Id": "90e6426d-64a7-4bca-b220-42067c210c08",
+        "ProductId": "1871e7ec-0616-44df-9872-61705749f649",
+        "Quantity": 2,
+        "UnitPrice": "100",
+        "OrderId": "b0462862-f834-4185-8937-52d1c2155587"
+      },
+      {
+        "Discount": 0,
+        "Id": "07b8b0ca-d5b8-4940-86ca-977085cc0cbc",
+        "ProductId": "1871e7ec-0616-44df-9872-61705749f649",
+        "Quantity": 2,
+        "UnitPrice": "100",
+        "OrderId": "b0462862-f834-4185-8937-52d1c2155587"
+      },
+      {
+        "Discount": 0,
+        "ProductId": "1871e7ec-0616-44df-9872-61705749f649",
+        "Quantity": 2,
+        "UnitPrice": "100"
+      }
+    ]
+  }
+
+
+  b0462862-f834-4185-8937-52d1c2155587

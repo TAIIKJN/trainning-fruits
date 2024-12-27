@@ -3,10 +3,11 @@ services:
     image: docker.frappet.com/training/training-fruits:latest
     container_name: training-fruits
     # image: docker.frappet.com/training/oom_be:latest
+    environment:
+      DATABASE_URL: file:./prisma/dev.db
+      TZ: Asia/Bangkok
     ports:
       - 8001:80
-    environment:
-      - TZ=Asia/Bangkok
     # deploy:
     #   mode: replicated
     #   replicas: 3

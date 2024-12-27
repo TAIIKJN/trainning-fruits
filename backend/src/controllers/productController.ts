@@ -47,12 +47,13 @@ export class productController extends Controller {
       });
 
       const dataSupplier = requestBody.supplierId
-        ? await prisma.category.findFirst({
+        ? await prisma.supplier.findFirst({
             where: {
               Id: requestBody.supplierId,
             },
           })
         : null;
+      console.log("dataSupplier", dataSupplier, requestBody.supplierId);
 
       if (dataCategory) {
         const data = await prisma.product.create({
@@ -116,7 +117,7 @@ export class productController extends Controller {
     }
 
     const dataSupplier = requestBody.supplierId
-      ? await prisma.category.findFirst({
+      ? await prisma.supplier.findFirst({
           where: {
             Id: requestBody.supplierId,
           },

@@ -24,7 +24,7 @@ RUN npm run build
 COPY dist ./dist
 
 # สร้าง Prisma Client
-RUN npx prisma generate
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # เปิดพอร์ตและตั้งคำสั่งเริ่มต้น
 EXPOSE 80
