@@ -1,23 +1,22 @@
-# Use an official node image as the base image
-FROM node:20
-
-# Set the working directory
+# Use the node image from official Docker Hub
+FROM node:22 as build-stage
+# set the working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json
+# Copy the working directory in the container
 COPY package*.json ./
-
-# Install dependencies
+# Install the project dependencies
 RUN npm install
-
-# Copy the rest of the application code
+# Copy the rest of the project files to the container
 COPY . .
-
-# Build the application
+# Build the Vue.js application to the production mode to dist folder
 RUN npm run build
-
-# Expose the port the app runs on
-EXPOSE 8080
-
-# Start the application
-CMD ["npm", "run", "serve"]
+# Use the lightweight Nginx image from the previous stage for the nginx container
+FROM nginx:stable-alpine as production-stage
+# Copy the build application from the previous stage to the Nginx container
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Copy the nginx configuration file
+COPY ./nginx_default.conf /etc/nginx/conf.d/default.conf
+# Expose the port 80
+EXPOSE 80
+# Start Nginx to serve the application
+CMD ["nginx", "-g", "daemon off;"]

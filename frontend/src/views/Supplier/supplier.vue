@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 p-4">
         <div class="mb-4">
-            <a-button type="primary" @click="showModal">เพิ่ม Supplier</a-button>
+            <a-button v-if="isUserRole" type="primary" @click="showModal">เพิ่ม Supplier</a-button>
         </div>
 
         <a-table :columns="columns" :loading="loading" :dataSource="supplier" rowKey="Id"
@@ -65,6 +65,7 @@
                 </a-form-item>
             </a-form>
         </a-modal>
+        
     </div>
 </template>
 
@@ -72,7 +73,10 @@
 import { ref, reactive, onMounted } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
+import KeycloakService from '../../services/KeycloakService';
 
+const roles = KeycloakService.GetUserRoles();
+const isUserRole = roles.includes('admin');
 
 // Combined interfaces
 interface SupplierData {
