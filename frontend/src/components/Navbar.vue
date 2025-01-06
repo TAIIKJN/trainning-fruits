@@ -4,69 +4,81 @@
 
 <script lang="ts" setup>
 import { h, ref, watch } from 'vue';
-import { MailOutlined, AppstoreOutlined, SettingOutlined, UserOutlined, ShoppingOutlined   } from '@ant-design/icons-vue';
+import { MailOutlined, AppstoreOutlined, SettingOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons-vue';
 import { useRouter, useRoute } from 'vue-router';
 import KeycloakService from '../services/KeycloakService';
 
 const router = useRouter();
 const route = useRoute();
 const userRoles = KeycloakService.GetUserRoles();
-
 const current = ref<string[]>([route.path.substring(1) || 'home']);
 
-const createMenuItem = (key: string, icon: any, label: string, onClick?: () => void, children?: any[]) => ({
-  key,
-  icon: icon ? () => h(icon) : undefined, // ตรวจสอบว่ามี icon หรือไม่
-  label,
-  onClick,
-  children,
-});
-
-const createSubMenuItem = (key: string, label: string, onClick?: () => void) => ({
+// Helper function สำหรับสร้าง menu item
+const createItem = (key: string, label: string, icon?: any, children?: any[]) => ({
   key,
   label,
-  onClick,
-  icon: () => h(ShoppingOutlined), 
+  icon: icon ? () => h(icon) : undefined,
+  onClick: () => router.push(`/${key}`),
+  ...(children && { children })
 });
-const baseItems = [
-  createMenuItem('home', MailOutlined, 'Home', () => router.push('/home')),
-];
 
-const roleBasedItems = [
-  userRoles.includes('admin') &&
-  createMenuItem('fruits', AppstoreOutlined, 'Fruits', () => router.push('/fruits')),
+// กำหนด menu items ตาม role
+const items = ref([
+  createItem('home', 'Home', MailOutlined),
   
-  userRoles.includes('customer') &&
-  createMenuItem('customer-menu', UserOutlined, 'Menu', () => router.push('/menu')),
-  
-  (userRoles.includes('supplier') || userRoles.includes('admin')) &&
-  createMenuItem('supplier', AppstoreOutlined, 'Supplier', () => router.push('/supplier')),
-  
-  (userRoles.includes('supplier') || userRoles.includes('admin')) &&
-  createMenuItem('product', SettingOutlined, 'Product', undefined, [
+  // Admin: สามารถดูหน้า Fruits, Employee, Customer, และ Supplier
+  userRoles.includes('admin') && [
+    createItem('fruits', 'Fruits', AppstoreOutlined),
+    createItem('employee', 'Employee', UserOutlined),
+    createItem('customer', 'Customer', AppstoreOutlined),
+    createItem('supplier', 'Supplier', AppstoreOutlined),
     {
-      type: 'group',
-      label: 'Product Group',
-      children: [
-        createSubMenuItem('product-all', 'สินค้าทั้งหมด', () => router.push('/product')),
-        createSubMenuItem('product-category', 'ประเภทสินค้า', () => router.push('/category')),
-      ],
-    },
-  ]),
-  
-  (userRoles.includes('employee') || userRoles.includes('admin')) &&
-  createMenuItem('employee', AppstoreOutlined, 'Employee', () => router.push('/employee')),
-  
-  (userRoles.includes('customer') || userRoles.includes('admin')) &&
-  createMenuItem('customer', AppstoreOutlined, 'Customer', () => router.push('/customer')),
-].filter(Boolean);
+      ...createItem('product', 'Product', SettingOutlined),
+      onClick: undefined,
+      children: [{
+        type: 'group',
+        label: 'Product Group',
+        children: [
+          { key: 'product-all', label: 'สินค้าทั้งหมด', icon: () => h(ShoppingOutlined), onClick: () => router.push('/product') },
+          { key: 'product-category', label: 'ประเภทสินค้า', icon: () => h(ShoppingOutlined), onClick: () => router.push('/category') }
+        ]
+      }]
+    }
+  ],
 
-const items = ref([...baseItems, ...roleBasedItems]);
+  // Customer: สามารถดู Menu และ Order
+  userRoles.includes('customer') && [
+    createItem('menu', 'Menu', UserOutlined),
+    createItem('order', 'Order', AppstoreOutlined),
+    createItem('customer', 'Customer', AppstoreOutlined) // ยังคงหน้า Customer
+  ],
 
-watch(
-  () => route.path,
-  (newPath) => {
-    current.value = [newPath.substring(1) || 'home'];
-  }
-);
+  // Supplier: สามารถดูหน้า Supplier และ Product
+  (userRoles.includes('supplier')) && [
+    createItem('supplier', 'Supplier', AppstoreOutlined),
+    {
+      ...createItem('product', 'Product', SettingOutlined),
+      onClick: undefined,
+      children: [{
+        type: 'group',
+        label: 'Product Group',
+        children: [
+          { key: 'product-all', label: 'สินค้าทั้งหมด', icon: () => h(ShoppingOutlined), onClick: () => router.push('/product') },
+          { key: 'product-category', label: 'ประเภทสินค้า', icon: () => h(ShoppingOutlined), onClick: () => router.push('/category') }
+        ]
+      }]
+    }
+  ],
+
+  // Employee: สามารถดู Employee-specific เมนู
+  userRoles.includes('employee') && [
+    createItem('employee', 'Employee', UserOutlined),
+    createItem('order-employee', 'Order-employee', AppstoreOutlined),
+  ]
+].flat().filter(Boolean));
+
+
+watch(() => route.path, (newPath) => {
+  current.value = [newPath.substring(1) || 'home'];
+});
 </script>

@@ -8,7 +8,8 @@ import Supplier from '../views/Supplier/supplier.vue'
 import Employee from '../views/Employee/employee.vue'
 import customer from '../views/Customer/customer.vue'
 import Menu from '../views/Customer/menu.vue'
-
+import Order from '../views/Customer/order.vue'
+import OrderEmployee from '../views/Employee/order.vue'
 // import { useMainStore } from '../store'
 
 const routes = [
@@ -29,6 +30,8 @@ const routes = [
   { path: '/employee', component: Employee, meta: { requiresAuth: true } },
   { path: '/customer', component: customer, meta: { requiresAuth: true } },
   { path: '/menu', component: Menu, meta: { requiresAuth: true } },
+  { path: '/order', component: Order, meta: { requiresAuth: true } },
+  { path: '/order-employee', component: OrderEmployee, meta: { requiresAuth: true} },
 ]
 
 const router = createRouter({
