@@ -35,8 +35,8 @@
             </a-table>
 
             <!-- Order Details Drawer -->
-            <a-drawer v-model:open="detailsVisible" title="Order Details" placement="right" width="800"
-                :closable="true" @close="closeDrawer">
+            <a-drawer v-model:open="detailsVisible" title="Order Details" placement="right" width="800" :closable="true"
+                @close="closeDrawer">
                 <template v-if="selectedOrder">
                     <div class="space-y-6">
                         <!-- Order Info -->
@@ -83,6 +83,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
+import KeycloakService from '../../services/KeycloakService'
 
 interface OrderDetail {
     Id: string;
@@ -144,11 +145,11 @@ const columns = [
 ];
 
 const detailColumns = [
-{
+    {
         title: 'Product Name',
         dataIndex: 'ProductId',
         key: 'ProductId',
-        customRender: ({ text }: { text: string }) => getProductName(text), 
+        customRender: ({ text }: { text: string }) => getProductName(text),
     },
     {
         title: 'Quantity',
@@ -182,8 +183,33 @@ const fetchProducts = async () => {
 const fetchOrders = async () => {
     try {
         loading.value = true;
-        const response = await HttpService.getAxiosClient().get('/Order');
-        orders.value = response.data.reverse();
+
+        // Step 1: Get preferred_username from KeycloakService
+        const tokenData = KeycloakService.GetDecodeToken();
+        const preferredUsername = tokenData?.preferred_username; // ดึงค่า preferred_username
+        if (!preferredUsername) {
+            console.error('Token data is invalid or preferred_username is missing.');
+            return;
+        }
+
+        // Step 2: Fetch customers and find the matching CustomerId
+        const customersResponse = await HttpService.getAxiosClient().get('/Customer');
+        const customers = customersResponse.data;
+        const customer = customers.find(
+            (c: { UserName: string }) => c.UserName === preferredUsername // เทียบ preferred_username กับ UserName
+        );
+
+        if (!customer) {
+            console.error(`No customer found matching preferred_username: ${preferredUsername}`);
+            return;
+        }
+
+        const customerId = customer.Id;
+
+        // Step 3: Fetch orders and filter by CustomerId
+        const ordersResponse = await HttpService.getAxiosClient().get('/Order');
+        const allOrders = ordersResponse.data;
+        orders.value = allOrders.filter((order: Order) => order.CustomerId === customerId).reverse();
     } catch (error) {
         console.error('Error fetching orders:', error);
     } finally {
@@ -191,9 +217,12 @@ const fetchOrders = async () => {
     }
 };
 
+
+
 const getProductName = (ProductId: string) => {
     const product = products.value.find(p => p.Id === ProductId);
-    return product ? product.ProductName : 'Unknown Product';};
+    return product ? product.ProductName : 'Unknown Product';
+};
 
 
 const formatDate = (date: string) => {
@@ -245,4 +274,3 @@ onMounted(() => {
     fetchOrders();
 });
 </script>
-

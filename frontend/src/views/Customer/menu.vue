@@ -1,12 +1,8 @@
 <template>
     <div class="mx-auto container py-16 px-2 min-h-screen">
-        <div class="flex items-center justify-center mb-4">
+      
 
-            <a-segmented v-model:value="value" block :options="options" size="large" class="w-full  bg-blue-200" />
-
-        </div>
-
-        <div v-if="value === 'grid'">
+        <div>
             <div class="mx-auto justify-center px-2 md:flex md:space-x-6 xl:px-0 min-h-[calc(100vh-12rem)]">
 
                 <div class="rounded-lg md:w-2/3 h-[calc(100vh-12rem)] overflow-y-auto no-scrollbar">
@@ -96,67 +92,15 @@
         </div>
 
 
-        <a-table v-else :columns="columns" :data-source="products" :loading="loading" :pagination="{ pageSize: 10 }"
-            class="shadow-md rounded-lg">
-            <template #bodyCell="{ column, record }">
 
-                <template v-if="column.key === 'quantity'">
-                    <div class="flex items-start justify-center">
-                        <button
-                            class="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
-                            type="button" @click="decrementQuantity(record)">
-                            <span class="sr-only">Decrease quantity</span>
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 18 2">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M1 1h16" />
-                            </svg>
-                        </button>
-                        <div>
-                            <input type="number" v-model.number="record.QuantityToOrder" min="0"
-                                :max="record.UnitsInStock"
-                                class="bg-gray-50 w-24 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"
-                                placeholder="0" required />
-                            <p class="text-xs text-gray-500 mt-1">(สินค้าคงเหลือ: {{ record.UnitsInStock }})</p>
-                        </div>
-                        <button
-                            class="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
-                            type="button" @click="incrementQuantity(record)">
-                            <span class="sr-only">Increase quantity</span>
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 18 18">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M9 1v16M1 9h16" />
-                            </svg>
-                        </button>
-                    </div>
-                </template>
-
-                <!-- Action Column -->
-                <template v-else-if="column.key === 'action'">
-                    <button class="font-medium text-red-600 hover:underline">รายละเอียด</button>
-                </template>
-
-                <!-- Price Column -->
-                <template v-else-if="column.key === 'UnitPrice'">
-                    <span class="font-semibold text-gray-900">{{ record.UnitPrice }}</span>
-                </template>
-
-                <!-- Product Name Column -->
-                <template v-else-if="column.key === 'ProductName'">
-                    <span class="font-semibold text-gray-900">{{ record.ProductName }}</span>
-                </template>
-            </template>
-        </a-table>
 
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, h, computed } from 'vue'
+import { ref, onMounted,  computed } from 'vue'
 import { message } from 'ant-design-vue'
 import HttpService from '../../services/HttpService'
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons-vue';
 import KeycloakService from '../../services/KeycloakService'
 
 interface Product {
@@ -192,49 +136,6 @@ interface Order {
     State: string;
     OrderDetail: OrderDetail[];
 }
-
-const options = reactive([
-    {
-        label: () => h(AppstoreOutlined),
-        value: 'grid',
-    },
-    {
-        label: () => h(BarsOutlined),
-        value: 'list',
-    },
-]);
-
-const value = ref(options[0].value);
-
-const columns = [
-    {
-        title: 'Product',
-        dataIndex: 'ProductName',
-        key: 'ProductName',
-        align: 'left',
-        headerAlign: 'center',
-
-    },
-    {
-        title: 'Qty',
-        key: 'quantity',
-        align: 'center',
-        class: 'px-6 py-3'
-    },
-    {
-        title: 'ราคา',
-        dataIndex: 'UnitPrice',
-        key: 'UnitPrice',
-        align: 'center',
-        class: 'px-6 py-3'
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        align: 'center',
-        class: 'px-6 py-3'
-    }
-]
 
 const loading = ref(false)
 
