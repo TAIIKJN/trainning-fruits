@@ -10,7 +10,8 @@ import customer from '../views/Customer/customer.vue'
 import Menu from '../views/Customer/menu.vue'
 import Order from '../views/Customer/order.vue'
 import OrderEmployee from '../views/Employee/order.vue'
-// import { useMainStore } from '../store'
+import OrderAdmin from '../views/Admin/order.vue'
+import OrderSupplier from '../views/Supplier/order.vue' 
 
 const routes = [
   { path: '/', component: Login },
@@ -32,6 +33,9 @@ const routes = [
   { path: '/menu', component: Menu, meta: { requiresAuth: true } },
   { path: '/order', component: Order, meta: { requiresAuth: true } },
   { path: '/order-employee', component: OrderEmployee, meta: { requiresAuth: true} },
+  { path: '/order-admin', component: OrderAdmin, meta: { requiresAuth: true} },
+  { path: '/order-supplier', component: OrderSupplier, meta: { requiresAuth: true} },
+
 ]
 
 const router = createRouter({

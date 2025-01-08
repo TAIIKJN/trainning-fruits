@@ -1,7 +1,7 @@
 <template>
     <div class="p-6">
         <a-card title="Orders" class="w-full">
-            <a-table :dataSource="orders" :columns="columns" :loading="loading" rowKey="Id">
+            <a-table :dataSource="order" :columns="columns" :loading="loading" rowKey="Id">
                 <template #bodyCell="{ column, record }">
                     <template v-if="column.key === 'State'">
                         <a-tag :color="getStateColor(record.State)">
@@ -22,6 +22,7 @@
                     <template v-if="column.key === 'TotalPrice'">
                         ฿{{ record.TotalPrice ? record.TotalPrice.toLocaleString() : '0' }}
                     </template>
+
 
                     <!-- Actions Column -->
                     <template v-if="column.key === 'actions'">
@@ -86,7 +87,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
-import KeycloakService from '../../services/KeycloakService'
 
 interface Employee {
     Id: string;
@@ -113,7 +113,7 @@ interface Order {
     OrderDetail: OrderDetail[];
 }
 
-const orders = ref<Order[]>([]);
+const order = ref<Order[]>([]);
 const employees = ref<Employee[]>([]);
 
 const loading = ref(true);
@@ -210,38 +210,14 @@ const fetchProducts = async () => {
 };
 
 const fetchOrders = async () => {
+    loading.value = true;
     try {
-        loading.value = true;
-
-        // Step 1: Get preferred_username from KeycloakService
-        const tokenData = KeycloakService.GetDecodeToken();
-        const preferredUsername = tokenData?.preferred_username; // ดึงค่า preferred_username
-        if (!preferredUsername) {
-            console.error('Token data is invalid or preferred_username is missing.');
-            return;
-        }
-
-        // Step 2: Fetch customers and find the matching CustomerId
-        const customersResponse = await HttpService.getAxiosClient().get('/Customer');
-        const customers = customersResponse.data;
-        const customer = customers.find(
-            (c: { UserName: string }) => c.UserName === preferredUsername // เทียบ preferred_username กับ UserName
-        );
-
-        if (!customer) {
-            console.error(`No customer found matching preferred_username: ${preferredUsername}`);
-            return;
-        }
-
-        const customerId = customer.Id;
-
-        // Step 3: Fetch orders and filter by CustomerId
-        const ordersResponse = await HttpService.getAxiosClient().get('/Order');
-        const allOrders = ordersResponse.data;
-        orders.value = allOrders.filter((order: Order) => order.CustomerId === customerId).reverse();
+        const response = await HttpService.getAxiosClient().get('/Order');
+        order.value = response.data;
     } catch (error) {
-        console.error('Error fetching orders:', error);
-    } finally {
+        console.error('Error fetching products:', error);
+    }
+    finally {
         loading.value = false;
     }
 };
@@ -285,7 +261,7 @@ const cancelOrder = async (orderId: string) => {
     try {
         loading.value = true;
         await HttpService.getAxiosClient().delete(`/Order/${orderId}`);
-        orders.value = orders.value.map(order =>
+        order.value = order.value.map(order =>
             order.Id === orderId ? { ...order, State: 'Cancelled' } : order
         );
         // แสดงข้อความสำเร็จ

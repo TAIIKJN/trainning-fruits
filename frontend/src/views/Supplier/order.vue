@@ -1,7 +1,7 @@
 <template>
     <div class="p-6">
         <a-card title="Orders" class="w-full">
-            <a-table :dataSource="orders" :columns="columns" :loading="loading" rowKey="Id">
+            <a-table :dataSource="order" :columns="columns" :loading="loading" rowKey="Id">
                 <template #bodyCell="{ column, record }">
                     <template v-if="column.key === 'State'">
                         <a-tag :color="getStateColor(record.State)">
@@ -77,6 +77,10 @@
                             </a-table>
                         </div>
                     </div>
+                    <div class="w-full flex justify-center items-center">
+                        <button @click="updateOrderState"
+                            class="hover:bg-black  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-full bg-gray-800 text-base font-medium leading-4 text-white">ยืนยัน</button>
+                    </div>
                 </template>
             </a-drawer>
         </a-card>
@@ -86,7 +90,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
-import KeycloakService from '../../services/KeycloakService'
 
 interface Employee {
     Id: string;
@@ -111,9 +114,10 @@ interface Order {
     Address: string;
     State: string;
     OrderDetail: OrderDetail[];
+
 }
 
-const orders = ref<Order[]>([]);
+const order = ref<Order[]>([]);
 const employees = ref<Employee[]>([]);
 
 const loading = ref(true);
@@ -210,37 +214,56 @@ const fetchProducts = async () => {
 };
 
 const fetchOrders = async () => {
+    loading.value = true;
+    try {
+        const response = await HttpService.getAxiosClient().get('/Order');
+        order.value = response.data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+    finally {
+        loading.value = false;
+    }
+};
+
+const getProductName = (ProductId: string) => {
+    const product = products.value.find(p => p.Id === ProductId);
+    return product ? product.ProductName : 'Unknown Product';
+};
+
+const updateOrderState = async () => {
+    if (!selectedOrder.value) return;
+
     try {
         loading.value = true;
+        const { CustomerId, EmployeeId, ...rest } = selectedOrder.value;
 
-        // Step 1: Get preferred_username from KeycloakService
-        const tokenData = KeycloakService.GetDecodeToken();
-        const preferredUsername = tokenData?.preferred_username; // ดึงค่า preferred_username
-        if (!preferredUsername) {
-            console.error('Token data is invalid or preferred_username is missing.');
-            return;
-        }
+        // สร้างข้อมูลใหม่สำหรับส่ง PATCH โดยเปลี่ยน CustomerId และ EmployeeId
+        const payload = {
+            ...rest,
+            State: 'InProgress',
+            CustomerUserName: CustomerId, // แปลงเป็น CustomerUserName
+            EmployeeUserName: EmployeeId, // แปลงเป็น EmployeeUserName
+        };
 
-        // Step 2: Fetch customers and find the matching CustomerId
-        const customersResponse = await HttpService.getAxiosClient().get('/Customer');
-        const customers = customersResponse.data;
-        const customer = customers.find(
-            (c: { UserName: string }) => c.UserName === preferredUsername // เทียบ preferred_username กับ UserName
+
+
+        // ส่งข้อมูลไปยัง API
+        await HttpService.getAxiosClient().patch(`/Order/${selectedOrder.value.Id}`, payload);
+
+        // อัปเดตข้อมูลใน local state (ถ้าจำเป็น)
+        order.value = order.value.map(order =>
+            order.Id === selectedOrder.value?.Id ? { ...order, State: 'InProgress' } : order
         );
 
-        if (!customer) {
-            console.error(`No customer found matching preferred_username: ${preferredUsername}`);
-            return;
-        }
+        // ปิด Drawer หลังจากอัปเดตสำเร็จ
+        closeDrawer();
 
-        const customerId = customer.Id;
-
-        // Step 3: Fetch orders and filter by CustomerId
-        const ordersResponse = await HttpService.getAxiosClient().get('/Order');
-        const allOrders = ordersResponse.data;
-        orders.value = allOrders.filter((order: Order) => order.CustomerId === customerId).reverse();
+        // แสดงข้อความแจ้งเตือนสำเร็จ
+        alert('Order has been updated to "InProgress" successfully!');
     } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error('Error updating order state:', error);
+        alert('Failed to update the order state.');
     } finally {
         loading.value = false;
     }
@@ -248,10 +271,6 @@ const fetchOrders = async () => {
 
 
 
-const getProductName = (ProductId: string) => {
-    const product = products.value.find(p => p.Id === ProductId);
-    return product ? product.ProductName : 'Unknown Product';
-};
 
 
 const formatDate = (date: string) => {
@@ -285,7 +304,7 @@ const cancelOrder = async (orderId: string) => {
     try {
         loading.value = true;
         await HttpService.getAxiosClient().delete(`/Order/${orderId}`);
-        orders.value = orders.value.map(order =>
+        order.value = order.value.map(order =>
             order.Id === orderId ? { ...order, State: 'Cancelled' } : order
         );
         // แสดงข้อความสำเร็จ

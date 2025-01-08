@@ -26,9 +26,9 @@ const createItem = (key: string, label: string, icon?: any, children?: any[]) =>
 const items = ref([
   createItem('home', 'Home', MailOutlined),
   
-  // Admin: สามารถดูหน้า Fruits, Employee, Customer, และ Supplier
   userRoles.includes('admin') && [
     createItem('fruits', 'Fruits', AppstoreOutlined),
+    createItem('order-admin', 'Order', AppstoreOutlined),
     createItem('employee', 'Employee', UserOutlined),
     createItem('customer', 'Customer', AppstoreOutlined),
     createItem('supplier', 'Supplier', AppstoreOutlined),
@@ -46,16 +46,16 @@ const items = ref([
     }
   ],
 
-  // Customer: สามารถดู Menu และ Order
   userRoles.includes('customer') && [
     createItem('menu', 'Menu', UserOutlined),
     createItem('order', 'Order', AppstoreOutlined),
-    createItem('customer', 'Customer', AppstoreOutlined) // ยังคงหน้า Customer
+    createItem('customer', 'Customer', AppstoreOutlined) 
   ],
 
-  // Supplier: สามารถดูหน้า Supplier และ Product
+  // Supplier
   (userRoles.includes('supplier')) && [
     createItem('supplier', 'Supplier', AppstoreOutlined),
+    createItem('order-supplier', 'Order-supplier', AppstoreOutlined),
     {
       ...createItem('product', 'Product', SettingOutlined),
       onClick: undefined,
@@ -70,7 +70,7 @@ const items = ref([
     }
   ],
 
-  // Employee: สามารถดู Employee-specific เมนู
+  // Employee
   userRoles.includes('employee') && [
     createItem('employee', 'Employee', UserOutlined),
     createItem('order-employee', 'Order-employee', AppstoreOutlined),
