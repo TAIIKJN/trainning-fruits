@@ -1589,6 +1589,136 @@
 										"allOf": [
 											{
 												"properties": {
+													"Employee": {
+														"properties": {
+															"PhotoPath": {
+																"type": "string"
+															},
+															"BirthDate": {
+																"type": "string"
+															},
+															"Title": {
+																"type": "string"
+															},
+															"Photo": {
+																"type": "string"
+															},
+															"Notes": {
+																"type": "string"
+															},
+															"PostalCode": {
+																"type": "string"
+															},
+															"Country": {
+																"type": "string"
+															},
+															"City": {
+																"type": "string"
+															},
+															"Address": {
+																"type": "string"
+															},
+															"UserName": {
+																"type": "string"
+															},
+															"Email": {
+																"type": "string"
+															},
+															"LastName": {
+																"type": "string"
+															},
+															"FirstName": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"PhotoPath",
+															"BirthDate",
+															"Title",
+															"Photo",
+															"Notes",
+															"PostalCode",
+															"Country",
+															"City",
+															"Address",
+															"UserName",
+															"Email",
+															"LastName",
+															"FirstName",
+															"Id"
+														],
+														"type": "object"
+													},
+													"Customer": {
+														"properties": {
+															"Role": {
+																"type": "string"
+															},
+															"PhotoPath": {
+																"type": "string"
+															},
+															"BirthDate": {
+																"type": "string"
+															},
+															"Title": {
+																"type": "string"
+															},
+															"Photo": {
+																"type": "string"
+															},
+															"Notes": {
+																"type": "string"
+															},
+															"PostalCode": {
+																"type": "string"
+															},
+															"Country": {
+																"type": "string"
+															},
+															"City": {
+																"type": "string"
+															},
+															"Address": {
+																"type": "string"
+															},
+															"UserName": {
+																"type": "string"
+															},
+															"Email": {
+																"type": "string"
+															},
+															"LastName": {
+																"type": "string"
+															},
+															"FirstName": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"Role",
+															"PhotoPath",
+															"BirthDate",
+															"Title",
+															"Photo",
+															"Notes",
+															"PostalCode",
+															"Country",
+															"City",
+															"Address",
+															"UserName",
+															"Email",
+															"LastName",
+															"FirstName",
+															"Id"
+														],
+														"type": "object"
+													},
 													"OrderDetail": {
 														"items": {
 															"properties": {
@@ -1627,6 +1757,8 @@
 													}
 												},
 												"required": [
+													"Employee",
+													"Customer",
 													"OrderDetail"
 												],
 												"type": "object"

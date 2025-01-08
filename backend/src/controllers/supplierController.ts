@@ -177,22 +177,6 @@ export class supplierController extends Controller {
           message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
         };
       } else {
-        const data = await prisma.supplier.create({
-          data: {
-            FirstName: requestBody.FirstName,
-            LastName: requestBody.LastName,
-            Email: requestBody.Email,
-            UserName: requestBody.UserName,
-            Phone: requestBody.Phone,
-            Address: requestBody.Address,
-            City: requestBody.City,
-            Country: requestBody.Country,
-            PostalCode: requestBody.PostalCode,
-            Notes: requestBody.Notes,
-            Photo: requestBody.Photo,
-          },
-        });
-
         const dataToken = {
           client_id: "admin-cli",
           username: "admin",
@@ -250,6 +234,22 @@ export class supplierController extends Controller {
           `${host}/admin/realms/${realm}/users/${userId}/role-mappings/realm`,
           [dataRole.data]
         );
+
+        const data = await prisma.supplier.create({
+          data: {
+            FirstName: requestBody.FirstName,
+            LastName: requestBody.LastName,
+            Email: requestBody.Email,
+            UserName: requestBody.UserName,
+            Phone: requestBody.Phone,
+            Address: requestBody.Address,
+            City: requestBody.City,
+            Country: requestBody.Country,
+            PostalCode: requestBody.PostalCode,
+            Notes: requestBody.Notes,
+            Photo: requestBody.Photo,
+          },
+        });
 
         console.log(role);
         return { data: data, keycloakResponse: dataUserKeyCloak };

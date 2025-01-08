@@ -54,6 +54,8 @@ export class orderController extends Controller {
     const data = prisma.order.findMany({
       include: {
         OrderDetail: true,
+        Customer: true,
+        Employee: true,
       },
     });
     return data;

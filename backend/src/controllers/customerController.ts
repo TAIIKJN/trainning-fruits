@@ -190,28 +190,6 @@ export class customerController extends Controller {
           message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
         };
       } else {
-        console.log("requestBody");
-
-        const data = await prisma.customer.create({
-          data: {
-            Title: requestBody.Title,
-            FirstName: requestBody.FirstName,
-            LastName: requestBody.LastName,
-            BirthDate: requestBody.BirthDate,
-            Email: requestBody.Email,
-            UserName: requestBody.UserName,
-            Address: requestBody.Address,
-            City: requestBody.City,
-            Country: requestBody.Country,
-            PostalCode: requestBody.PostalCode,
-            Notes: requestBody.Notes,
-            Photo: requestBody.Photo,
-            PhotoPath: requestBody.PhotoPath,
-            Role: requestBody.Role,
-          },
-        });
-        console.log("data", data);
-
         const dataToken = {
           client_id: "admin-cli",
           username: "admin",
@@ -269,6 +247,26 @@ export class customerController extends Controller {
           `${host}/admin/realms/${realm}/users/${userId}/role-mappings/realm`,
           [dataRole.data]
         );
+
+        const data = await prisma.customer.create({
+          data: {
+            Title: requestBody.Title,
+            FirstName: requestBody.FirstName,
+            LastName: requestBody.LastName,
+            BirthDate: requestBody.BirthDate,
+            Email: requestBody.Email,
+            UserName: requestBody.UserName,
+            Address: requestBody.Address,
+            City: requestBody.City,
+            Country: requestBody.Country,
+            PostalCode: requestBody.PostalCode,
+            Notes: requestBody.Notes,
+            Photo: requestBody.Photo,
+            PhotoPath: requestBody.PhotoPath,
+            Role: requestBody.Role,
+          },
+        });
+        console.log("data", data);
 
         console.log(role);
         return { data: data, keycloakResponse: dataUserKeyCloak };

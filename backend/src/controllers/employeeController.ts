@@ -191,24 +191,6 @@ export class employeeController extends Controller {
           message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
         };
       } else {
-        const data = await prisma.employee.create({
-          data: {
-            Title: requestBody.Title,
-            FirstName: requestBody.FirstName,
-            LastName: requestBody.LastName,
-            BirthDate: requestBody.BirthDate,
-            Email: requestBody.Email,
-            UserName: requestBody.UserName,
-            Address: requestBody.Address,
-            City: requestBody.City,
-            Country: requestBody.Country,
-            PostalCode: requestBody.PostalCode,
-            Notes: requestBody.Notes,
-            Photo: requestBody.Photo,
-            PhotoPath: requestBody.PhotoPath,
-          },
-        });
-
         const dataToken = {
           client_id: "admin-cli",
           username: "admin",
@@ -265,6 +247,24 @@ export class employeeController extends Controller {
           `${host}/admin/realms/${realm}/users/${userId}/role-mappings/realm`,
           [dataRole.data]
         );
+
+        const data = await prisma.employee.create({
+          data: {
+            Title: requestBody.Title,
+            FirstName: requestBody.FirstName,
+            LastName: requestBody.LastName,
+            BirthDate: requestBody.BirthDate,
+            Email: requestBody.Email,
+            UserName: requestBody.UserName,
+            Address: requestBody.Address,
+            City: requestBody.City,
+            Country: requestBody.Country,
+            PostalCode: requestBody.PostalCode,
+            Notes: requestBody.Notes,
+            Photo: requestBody.Photo,
+            PhotoPath: requestBody.PhotoPath,
+          },
+        });
 
         // console.log(dataRole);
         return { data: data, keycloakResponse: dataUserKeyCloak };
