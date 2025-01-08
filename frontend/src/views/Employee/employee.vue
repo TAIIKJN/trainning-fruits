@@ -77,7 +77,8 @@
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
                                 วันเกิด
                             </label>
-                            <a-input v-model:value="formState.BirthDate" placeholder="กรอกวันเกิด" />
+                            <a-date-picker v-model:value="birthDate" format="YYYY-MM-DD" class="w-full"
+                                :placeholder="'เลือกวันเกิด'" @change="handleDateChange" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
@@ -145,6 +146,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
+import dayjs from 'dayjs';
 
 
 // Combined interfaces
@@ -186,6 +188,7 @@ const initialFormState: EmployeeData = {
     ConfirmPassword: '',
     RoleUser: 'employee',
 };
+const birthDate = ref<dayjs.Dayjs | null>(null);
 
 const formState = reactive<EmployeeData>({ ...initialFormState });
 const employee = ref<EmployeeData[]>([]);
@@ -219,6 +222,14 @@ const columns = [
     }
 ];
 
+const handleDateChange = (date: dayjs.Dayjs | null) => {
+    if (date) {
+        formState.BirthDate = date.format('YYYY-MM-DD');
+    } else {
+        formState.BirthDate = '';
+    }
+};
+
 const fetchEmployee = async () => {
     try {
         loading.value = true;
@@ -232,8 +243,10 @@ const fetchEmployee = async () => {
     }
 };
 
-const resetForm = () => Object.assign(formState, initialFormState);
-
+const resetForm = () => {
+    Object.assign(formState, initialFormState);
+    birthDate.value = null;
+};
 const showModal = () => {
     isEditing.value = false;
     resetForm();
@@ -261,6 +274,8 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (record: EmployeeData) => {
     Object.assign(formState, record);
+    // Convert string date to dayjs object if exists
+    birthDate.value = record.BirthDate ? dayjs(record.BirthDate) : null;
     isEditing.value = true;
     modalVisible.value = true;
 };
