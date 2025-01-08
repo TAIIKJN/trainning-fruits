@@ -5,7 +5,7 @@
         </div>
 
         <a-table :columns="columns" :loading="loading" :dataSource="supplier" rowKey="Id"
-        :scroll="{ x: 1300, y: 1000 }">
+            :scroll="{ x: 1300, y: 1000 }">
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'actions'">
                     <a-space>
@@ -20,6 +20,23 @@
             @ok="handleOk" @cancel="handleCancel" :confirmLoading="confirmLoading" centered>
             <a-form :model="formState" name="categoryForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }"
                 @finish="onFinish" @finishFailed="onFinishFailed">
+
+                <a-form-item label="ชื่อจริง" name="FirstName">
+                    <a-input v-model:value="formState.FirstName" placeholder="กรอกชื่อจริง" />
+                </a-form-item>
+
+                <a-form-item label="นามสกุล" name="LastName">
+                    <a-input v-model:value="formState.LastName" placeholder="กรอกนามสกุล" />
+                </a-form-item>
+
+                <a-form-item label="Email" name="CompanyEmailName">
+                    <a-input v-model:value="formState.Email" placeholder="กรอก Email" />
+                </a-form-item>
+
+                <a-form-item label="โทรศัพท์" name="Phone">
+                    <a-input v-model:value="formState.Phone" placeholder="กรอกเบอร์โทรศัพท์" />
+                </a-form-item>
+
                 <a-form-item label="ที่อยู่" name="Address">
                     <a-input v-model:value="formState.Address" placeholder="กรอกที่อยู่" />
                 </a-form-item>
@@ -28,44 +45,17 @@
                     <a-input v-model:value="formState.City" placeholder="กรอกเมือง" />
                 </a-form-item>
 
-                <a-form-item label="ชื่อบริษัท" name="CompanyName">
-                    <a-input v-model:value="formState.CompanyName" placeholder="กรอกชื่อบริษัท" />
-                </a-form-item>
-
-                <a-form-item label="ชื่อผู้ติดต่อ" name="ContactName">
-                    <a-input v-model:value="formState.ContactName" placeholder="กรอกชื่อผู้ติดต่อ" />
-                </a-form-item>
-
-                <a-form-item label="ตําแหน่งผู้ติดต่อ" name="ContactTitle">
-                    <a-input v-model:value="formState.ContactTitle" placeholder="กรอกตํำแหน่งผู้ติดต่อ" />
-                </a-form-item>
-
                 <a-form-item label="ประเทศ" name="Country">
                     <a-input v-model:value="formState.Country" placeholder="กรอกประเทศ" />
-                </a-form-item>
-
-                <a-form-item label="โทรศัพท์" name="Phone">
-                    <a-input v-model:value="formState.Phone" placeholder="กรอกเบอร์โทรศัพท์" />
-                </a-form-item>
-
-                <a-form-item label="Fax" name="Fax">
-                    <a-input v-model:value="formState.Fax" placeholder="กรอกเบอร์Fax" />
-                </a-form-item>
-
-                <a-form-item label="HomePage" name="HomePage">
-                    <a-input v-model:value="formState.HomePage" placeholder="กรอกHomePage" />
                 </a-form-item>
 
                 <a-form-item label="รหัสไปรษณีย์" name="PostalCode">
                     <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" />
                 </a-form-item>
 
-                <a-form-item label="ภูมิภาค" name="Region">
-                    <a-input v-model:value="formState.Region" placeholder="กรอกภูมิภาค" />
-                </a-form-item>
             </a-form>
         </a-modal>
-        
+
     </div>
 </template>
 
@@ -81,31 +71,31 @@ const isUserRole = roles.includes('admin');
 // Combined interfaces
 interface SupplierData {
     Id?: string;
+    FirstName: string;
+    LastName: string;
+    Email: string;
+    UserName: string;
+    Phone: string;
     Address: string;
     City: string;
-    CompanyName: string;
-    ContactName: string;
-    ContactTitle: string;
     Country: string;
-    Fax: string;
-    HomePage: string;
-    Phone: string;
     PostalCode: string;
-    Region: string;
+    Notes: string;
+    Photo: string;
 }
 
 const initialFormState: SupplierData = {
+    FirstName: '',
+    LastName: '',
+    Email: '',
+    UserName: '',
+    Phone: '',
     Address: '',
     City: '',
-    CompanyName: '',
-    ContactName: '',
-    ContactTitle: '',
     Country: '',
-    Fax: '',
-    HomePage: '',
-    Phone: '',
     PostalCode: '',
-    Region: ''
+    Notes: '',
+    Photo: '',
 };
 
 const formState = reactive<SupplierData>({ ...initialFormState });
@@ -117,18 +107,15 @@ const isEditing = ref(false);
 
 // Table columns configuration
 const columns = [
-
-    { title: 'ชื่อบริษัท', dataIndex: 'CompanyName', key: 'companyName',  },
-    { title: 'ชื่อผู้ติดต่อ', dataIndex: 'ContactName', key: 'contactName',  },
-    { title: 'ตำแหน่งผู้ติดต่อ', dataIndex: 'ContactTitle', key: 'contactTitle', width: 140 },
-    { title: 'ที่อยู่', dataIndex: 'Address', key: 'address',  },
-    { title: 'เมือง', dataIndex: 'City', key: 'city',  },
-    { title: 'ประเทศ', dataIndex: 'Country', key: 'country',  },
-    { title: 'รหัสไปรษณีย์', dataIndex: 'PostalCode', key: 'postalCode',  },
-    { title: 'ภูมิภาค', dataIndex: ' Region', key: 'region',  },
-    { title: 'แฟกซ์', dataIndex: 'Fax', key: 'fax',  },
-    { title: 'HomePage', dataIndex: 'HomePage', key: 'homePage',  },
-    { title: 'เบอร์โทร', dataIndex: 'Phone', key: 'phone',  },
+    { title: 'ชื่อ', dataIndex: 'FirstName', key: 'firstName', },
+    { title: 'นามสกุล', dataIndex: 'LastName', key: 'lastName', },
+    { title: 'อีเมล', dataIndex: 'Email', key: 'email', },
+    { title: 'ชื่อผู้ใช้', dataIndex: 'UserName', key: 'userName', },
+    { title: 'เบอร์โทร', dataIndex: 'Phone', key: 'phone', },
+    { title: 'ที่อยู่', dataIndex: 'Address', key: 'address', },
+    { title: 'เมือง', dataIndex: 'City', key: 'city', },
+    { title: 'ประเทศ', dataIndex: 'Country', key: 'country', },
+    { title: 'รหัสไปรษณีย์', dataIndex: 'PostalCode', key: 'postalCode', },
     { title: 'จัดการ', key: 'actions', width: '150px', fixed: 'right', }
 ];
 
@@ -183,17 +170,15 @@ const handleOk = async () => {
         confirmLoading.value = true;
 
         const payload = {
+            FirstName: formState.FirstName,
+            LastName: formState.LastName,
+            Email: formState.Email,
+            UserName: formState.UserName,
             Address: formState.Address,
             City: formState.City,
-            CompanyName: formState.CompanyName,
-            ContactName: formState.ContactName,
-            ContactTitle: formState.ContactTitle,
             Country: formState.Country,
-            Fax: formState.Fax,
-            HomePage: formState.HomePage,
             Phone: formState.Phone,
             PostalCode: formState.PostalCode,
-            Region: formState.Region
         };
 
         if (isEditing.value && formState.Id) {

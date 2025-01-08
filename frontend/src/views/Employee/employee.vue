@@ -14,110 +14,127 @@
                     </a-space>
                 </template>
                 <template v-else-if="column.key === 'fullName'">
-                    {{ record.FirstName }} {{ record.LastName }}
+                    {{ record.Title }} {{ record.FirstName }} {{ record.LastName }}
                 </template>
             </template>
         </a-table>
 
         <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไขพนักงาน' : 'เพิ่มพนักงาน'" @ok="handleOk"
             @cancel="handleCancel" :width="820" :confirmLoading="confirmLoading" centered>
-            <a-form :model="formState" name="employeeForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }"
-                @finish="onFinish" @finishFailed="onFinishFailed">
-                <a-row :gutter="16">
+            <a-form :model="formState" name="employeeForm" @finish="onFinish" @finishFailed="onFinishFailed">
 
-                    <a-col :span="12">
-                        <a-form-item label="Username" name="UserName">
-                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="Email" name="Email">
-                            <a-input v-model:value="formState.Email" placeholder="กรอกEmail" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
-                <a-row :gutter="16">
-
-                    <a-col :span="12">
-                        <a-form-item label="ชื่อ" name="FirstName">
+                <div class="flex flex-wrap">
+                    <div class="w-full px-3 sm:w-1/5">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">
+                                คำนำหน้า <span class="text-red-500">*</span>
+                            </label>
+                            <a-select c v-model:value="formState.Title" placeholder="เลือกคำนำหน้า" class="w-full">
+                                <a-select-option value="นาย">นาย</a-select-option>
+                                <a-select-option value="นาย">นาย</a-select-option>
+                                <a-select-option value="นางสาว">นางสาว</a-select-option>
+                            </a-select>
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-2/5">
+                        <div class="mb-2">
+                            <label for="fName" class="mb-2 block text-base font-medium text-[#07074D]">
+                                ชื่อจริง (TH) <span class="text-red-500">*</span>
+                            </label>
                             <a-input v-model:value="formState.FirstName" placeholder="กรอกชื่อ" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="นามสกุล" name="LastName">
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-2/5">
+                        <div class="mb-2">
+                            <label for="fName" class="mb-2 block text-base font-medium text-[#07074D]">
+                                นามสกุล (TH) <span class="text-red-500">*</span>
+                            </label>
                             <a-input v-model:value="formState.LastName" placeholder="กรอกนามสกุล" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="flex flex-wrap">
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">
+                                Username
+                            </label>
+                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername" />
 
-
-
-
-                <a-row :gutter="16">
-                    <a-col :span="12">
-                        <a-form-item label="ที่อยู่" name="Address">
-                            <a-input v-model:value="formState.Address" placeholder="กรอกที่อยู่" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="อำเภอ" name="City">
-                            <a-input v-model:value="formState.City" placeholder="กรอกเอำเภอ" />
-                        </a-form-item>
-                    </a-col>
-
-                </a-row>
-                <a-row :gutter="16">
-                    <a-col :span="12">
-                        <a-form-item label="ประเทศ" name="Country">
-                            <a-input v-model:value="formState.Country" placeholder="กรอกประเทศ" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="รหัสไปรษณีย์" name="PostalCode">
-                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" />
-                        </a-form-item>
-                    </a-col>
-
-
-                </a-row>
-                <a-row :gutter="16">
-
-                    <a-col :span="12">
-                        <a-form-item label="วันเกิด" name="BirthDate">
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">
+                                Email
+                            </label>
+                            <a-input v-model:value="formState.Email" placeholder="กรอก Email" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">
+                                วันเกิด
+                            </label>
                             <a-input v-model:value="formState.BirthDate" placeholder="กรอกวันเกิด" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="หมายเหตุ" name="Notes">
-                            <a-input v-model:value="formState.Notes" placeholder="กรอกหมายเหตุ" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
-
-                <a-row :gutter="16">
-                    <a-col :span="12">
-                        <a-form-item label="รูป" name="Photo">
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">ที่อยู่</label>
+                            <a-input v-model:value="formState.Address" placeholder="กรอกที่อยู่" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">จังหวัด</label>
+                            <a-input v-model:value="formState.City" placeholder="กรอกจังหวัด" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">ประเทศ</label>
+                            <a-input v-model:value="formState.Country" placeholder="กรอกประเทศ" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">รหัสไปรษณีย์</label>
+                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">รูป</label>
                             <a-input v-model:value="formState.Photo" placeholder="กรอกรูป" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-item label="PhotoPath" name="PhotoPath">
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">PhotoPath</label>
                             <a-input v-model:value="formState.PhotoPath" placeholder="กรอกPhotoPath" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
-
-
-                <a-row :gutter="16">
-
-                    <a-col :span="12">
-                        <a-form-item label="ตำแหน่ง" name="Title">
-                            <a-input v-model:value="formState.Title" placeholder="กรอกตำแหน่ง" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
-
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">หมายเหตุ</label>
+                            <a-input v-model:value="formState.Notes" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">Password</label>
+                            <a-input v-model:value="formState.Password" placeholder="กรอกPassword" />
+                        </div>
+                    </div>
+                    <div class="w-full px-3 sm:w-1/2">
+                        <div class="mb-2">
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">ยืนยัน Password</label>
+                            <a-input v-model:value="formState.ConfirmPassword" placeholder="กรอกยืนยัน Password" />
+                        </div>
+                    </div>
+                </div>
             </a-form>
 
         </a-modal>
@@ -132,36 +149,42 @@ import HttpService from '../../services/HttpService';
 
 // Combined interfaces
 interface EmployeeData {
-    Photo: string;
-    PhotoPath: string;
-    Notes: string;
     Id?: string;
-    UserName: string;
-    Email: string;
-    Address: string;
-    BirthDate: string;
-    City: string;
-    Country: string;
+    Title: string | null;
     FirstName: string;
     LastName: string;
+    BirthDate: string;
+    Email: string;
+    UserName: string;
+    Address: string;
+    City: string;
+    Country: string;
     PostalCode: string;
-    Title: string;
+    Notes: string;
+    Photo: string;
+    PhotoPath: string;
+    Password: string;
+    ConfirmPassword: string;
+    RoleUser: string;
 }
 
 const initialFormState: EmployeeData = {
-    Address: '',
-    UserName: '',
+    Title: null,
     FirstName: '',
     LastName: '',
-    Email: '',
     BirthDate: '',
+    Email: '',
+    UserName: '',
+    Address: '',
     City: '',
     Country: '',
+    PostalCode: '',
     Notes: '',
     Photo: '',
     PhotoPath: '',
-    PostalCode: '',
-    Title: '',
+    Password: '',
+    ConfirmPassword: '',
+    RoleUser: 'employee',
 };
 
 const formState = reactive<EmployeeData>({ ...initialFormState });
@@ -171,7 +194,6 @@ const modalVisible = ref(false);
 const confirmLoading = ref(false);
 const isEditing = ref(false);
 
-// Table columns configuration
 const columns = [
     {
         title: 'ชื่อ-นามสกุล',
@@ -227,7 +249,7 @@ const handleDelete = (id: string) => {
         onOk: async () => {
             try {
                 await HttpService.getAxiosClient().delete(`/Employee/${id}`);
-                message.success('ลบประเภทสินค้าสำเร็จ');
+                message.success('ลบสำเร็จ');
                 await fetchEmployee();
             } catch (error) {
                 console.error('Error deleting category:', error);
@@ -246,16 +268,33 @@ const handleEdit = (record: EmployeeData) => {
 const handleOk = async () => {
     try {
         confirmLoading.value = true;
-        // ตรวจสอบว่า UserName และ Email ซ้ำหรือไม่
-        if (await checkDuplicate(formState.UserName, formState.Email)) return;
 
-        const payload = { ...formState };
+        if (!formState.FirstName || !formState.LastName || !formState.UserName || !formState.Email || !formState.Password) {
+            message.error('กรุณากรอกชื่อจริง, นามสกุล, ชื่อผู้ใช้, อีเมล, และรหัสผ่าน');
+            return;
+        }
+        // ตรวจสอบว่า Password และ ConfirmPassword ตรงกันหรือไม่
+        if (formState.Password !== formState.ConfirmPassword) {
+            message.error('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน');
+            return;
+        }
+        // ตรวจสอบว่า Password และ ConfirmPassword ได้กรอกหรือยัง
+        if (!formState.Password || !formState.ConfirmPassword) {
+            message.error('กรุณากรอกรหัสผ่านและยืนยันรหัสผ่าน');
+            return;
+        }
+
+        // ตรวจสอบว่า UserName และ Email ซ้ำหรือไม่
+        if (await checkDuplicate(formState.UserName, formState.Email, formState.Id)) return;
+
+        // ลบ Id ออกจาก payload ก่อนที่จะส่งไป API
+        const { ConfirmPassword, Id, ...payload } = formState;
 
         const method = isEditing.value && formState.Id ? 'patch' : 'post';
         const url = isEditing.value && formState.Id ? `/Employee/${formState.Id}` : '/Employee';
 
         await HttpService.getAxiosClient()[method](url, payload);
-        message.success(isEditing.value ? 'แก้ไขประเภทสินค้าสำเร็จ' : 'เพิ่มประเภทสินค้าสำเร็จ');
+        message.success(isEditing.value ? 'แก้ไขสำเร็จ' : 'เพิ่มสำเร็จ');
 
         modalVisible.value = false;
         fetchEmployee();
@@ -268,18 +307,22 @@ const handleOk = async () => {
     }
 };
 
-const checkDuplicate = async (username: string, email: string) => {
+const checkDuplicate = async (username: string, email: string, employeeId?: string) => {
     try {
         const { data } = await HttpService.getAxiosClient().get('/Employee');
-        // ระบุประเภทของ employee ใน data
-        if (data.some((employee: { UserName: string }) => employee.UserName === username)) {
+
+        // ตรวจสอบว่า UserName ซ้ำหรือไม่ ถ้าไม่ได้แก้ไข
+        if (data.some((employee: { UserName: string, Id: string }) => employee.UserName === username && employee.Id !== employeeId)) {
             message.error('ชื่อผู้ใช้นี้มีอยู่แล้ว');
             return true;
         }
-        if (data.some((employee: { Email: string }) => employee.Email === email)) {
+
+        // ตรวจสอบว่า Email ซ้ำหรือไม่ ถ้าไม่ได้แก้ไข
+        if (data.some((employee: { Email: string, Id: string }) => employee.Email === email && employee.Id !== employeeId)) {
             message.error('อีเมลนี้มีอยู่แล้ว');
             return true;
         }
+
         return false;
     } catch (error) {
         console.error('Error checking duplicates:', error);
@@ -287,8 +330,6 @@ const checkDuplicate = async (username: string, email: string) => {
         return false;
     }
 };
-
-
 
 const handleCancel = () => {
     modalVisible.value = false;

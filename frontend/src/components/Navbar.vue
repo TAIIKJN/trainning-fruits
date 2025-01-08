@@ -55,7 +55,7 @@ const items = ref([
   // Supplier
   (userRoles.includes('supplier')) && [
     createItem('supplier', 'Supplier', AppstoreOutlined),
-    createItem('order-supplier', 'Order-supplier', AppstoreOutlined),
+    createItem('order-supplier', 'Order', AppstoreOutlined),
     {
       ...createItem('product', 'Product', SettingOutlined),
       onClick: undefined,

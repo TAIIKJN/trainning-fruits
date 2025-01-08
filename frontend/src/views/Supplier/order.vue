@@ -90,11 +90,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
+import { message } from 'ant-design-vue'
 
 interface Employee {
     Id: string;
     FirstName: string;
     LastName: string;
+    UserName: string;
 }
 interface OrderDetail {
     Id: string;
@@ -231,47 +233,63 @@ const getProductName = (ProductId: string) => {
     return product ? product.ProductName : 'Unknown Product';
 };
 
+const getCustomerUsername = async (customerId: string): Promise<string | null> => {
+    try {
+        const response = await HttpService.getAxiosClient().get(`/Customer/${customerId}`);
+        return response.data?.UserName || null;
+    } catch (error) {
+        console.error('Error fetching customer username:', error);
+        return null;
+    }
+};
+
+const getEmployeeUsername = (employeeId: string): string | null => {
+    const employee = employees.value.find(e => e.Id === employeeId);
+    return employee ? employee.UserName : null;
+};
+
 const updateOrderState = async () => {
     if (!selectedOrder.value) return;
 
     try {
         loading.value = true;
+
         const { CustomerId, EmployeeId, ...rest } = selectedOrder.value;
 
-        // สร้างข้อมูลใหม่สำหรับส่ง PATCH โดยเปลี่ยน CustomerId และ EmployeeId
+        // ดึง Username จาก CustomerId และ EmployeeId
+        const customerUserName = await getCustomerUsername(CustomerId);
+        const employeeUserName = getEmployeeUsername(EmployeeId);
+
+        if (!customerUserName || !employeeUserName) {
+            message.error('Failed to retrieve necessary user data.');
+            return;
+        }
+
         const payload = {
             ...rest,
             State: 'InProgress',
-            CustomerUserName: CustomerId, // แปลงเป็น CustomerUserName
-            EmployeeUserName: EmployeeId, // แปลงเป็น EmployeeUserName
+            CustomerUserName: customerUserName,
+            EmployeeUserName: employeeUserName,
         };
-
-
 
         // ส่งข้อมูลไปยัง API
         await HttpService.getAxiosClient().patch(`/Order/${selectedOrder.value.Id}`, payload);
 
-        // อัปเดตข้อมูลใน local state (ถ้าจำเป็น)
+        // อัปเดตข้อมูลใน local state
         order.value = order.value.map(order =>
             order.Id === selectedOrder.value?.Id ? { ...order, State: 'InProgress' } : order
         );
 
-        // ปิด Drawer หลังจากอัปเดตสำเร็จ
         closeDrawer();
 
-        // แสดงข้อความแจ้งเตือนสำเร็จ
-        alert('Order has been updated to "InProgress" successfully!');
+        message.success('Order has been updated to "InProgress" successfully!');
     } catch (error) {
         console.error('Error updating order state:', error);
-        alert('Failed to update the order state.');
+        message.error('Failed to update the order state.');
     } finally {
         loading.value = false;
     }
 };
-
-
-
-
 
 const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('th-TH', {
@@ -308,10 +326,10 @@ const cancelOrder = async (orderId: string) => {
             order.Id === orderId ? { ...order, State: 'Cancelled' } : order
         );
         // แสดงข้อความสำเร็จ
-        alert('Order has been cancelled successfully!');
+        message.success('Order has been cancelled successfully!');
     } catch (error) {
         console.error('Error cancelling order:', error);
-        alert('Failed to cancel the order.');
+        message.error('Failed to cancel the order.');
     } finally {
         loading.value = false;
     }
