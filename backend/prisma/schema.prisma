@@ -69,19 +69,19 @@ model Shipper {
 }
 
 model Supplier {
-  Address      String?
-  City         String?
-  CompanyName  String?
-  ContactName  String?
-  ContactTitle String?
-  Country      String?
-  Fax          String?
-  HomePage     String?
-  Id           String    @id @default(uuid())
-  Phone        String?
-  PostalCode   String?
-  Region       String?
-  Product      Product[]
+  Id         String    @id @default(uuid())
+  FirstName  String    @default("test")
+  LastName   String?
+  Email      String    @unique @default("test@test.com")
+  UserName   String    @unique @default("test")
+  Phone      String?
+  Address    String?
+  City       String?
+  Country    String?
+  PostalCode String?
+  Notes      String?
+  Photo      String?
+  Product    Product[]
 }
 
 model Order {

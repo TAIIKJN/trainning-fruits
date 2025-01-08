@@ -29,20 +29,32 @@ const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "SearchSupplier": {
+        "dataType": "refObject",
+        "properties": {
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "UserName": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Suppliers": {
         "dataType": "refObject",
         "properties": {
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "UserName": {"dataType":"string","required":true},
+            "Phone": {"dataType":"string","required":true},
             "Address": {"dataType":"string","required":true},
             "City": {"dataType":"string","required":true},
-            "CompanyName": {"dataType":"string","required":true},
-            "ContactName": {"dataType":"string","required":true},
-            "ContactTitle": {"dataType":"string","required":true},
             "Country": {"dataType":"string","required":true},
-            "Fax": {"dataType":"string","required":true},
-            "HomePage": {"dataType":"string","required":true},
-            "Phone": {"dataType":"string","required":true},
             "PostalCode": {"dataType":"string","required":true},
-            "Region": {"dataType":"string","required":true},
+            "Notes": {"dataType":"string","required":true},
+            "Photo": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -77,8 +89,8 @@ const models: TsoaRoute.Models = {
     "Orders": {
         "dataType": "refObject",
         "properties": {
-            "CustomerId": {"dataType":"string","required":true},
-            "EmployeeId": {"dataType":"string","required":true},
+            "CustomerUserName": {"dataType":"string","required":true},
+            "EmployeeUserName": {"dataType":"string","required":true},
             "OrderDate": {"dataType":"string","required":true},
             "TotalPrice": {"dataType":"double","required":true},
             "Address": {"dataType":"string","required":true},
@@ -124,6 +136,17 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SearchEmployees": {
+        "dataType": "refObject",
+        "properties": {
+            "UserName": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Employees": {
         "dataType": "refObject",
         "properties": {
@@ -140,6 +163,19 @@ const models: TsoaRoute.Models = {
             "Notes": {"dataType":"string","required":true},
             "Photo": {"dataType":"string","required":true},
             "PhotoPath": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
+            "RoleUser": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SearchCustomers": {
+        "dataType": "refObject",
+        "properties": {
+            "UserName": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -161,6 +197,7 @@ const models: TsoaRoute.Models = {
             "Photo": {"dataType":"string","required":true},
             "PhotoPath": {"dataType":"string","required":true},
             "Role": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -191,6 +228,38 @@ export function RegisterRoutes(app: Router) {
 
 
     
+        const argssupplierController_getSupplier: Record<string, TsoaRoute.ParameterSchema> = {
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchSupplier"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.post('/Supplier/chaeckSupplier',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(supplierController)),
+            ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.getSupplier)),
+
+            async function supplierController_getSupplier(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argssupplierController_getSupplier, request, response });
+
+                const controller = new supplierController();
+
+              await templateService.apiHandler({
+                methodName: 'getSupplier',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_getSupplierAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/Supplier',
@@ -251,9 +320,11 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_createSupplier: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Suppliers"},
         };
         app.post('/Supplier',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.createSupplier)),
 
@@ -283,8 +354,10 @@ export function RegisterRoutes(app: Router) {
         const argssupplierController_updateSupplier: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Suppliers"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.patch('/Supplier/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.updateSupplier)),
 
@@ -313,8 +386,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_deleteSupplier: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.delete('/Supplier/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.deleteSupplier)),
 
@@ -341,24 +416,54 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsproductController_getProduuctAll: Record<string, TsoaRoute.ParameterSchema> = {
+        const argsproductController_getProductAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/Product',
             ...(fetchMiddlewares<RequestHandler>(productController)),
-            ...(fetchMiddlewares<RequestHandler>(productController.prototype.getProduuctAll)),
+            ...(fetchMiddlewares<RequestHandler>(productController.prototype.getProductAll)),
 
-            async function productController_getProduuctAll(request: ExRequest, response: ExResponse, next: any) {
+            async function productController_getProductAll(request: ExRequest, response: ExResponse, next: any) {
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args: argsproductController_getProduuctAll, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsproductController_getProductAll, request, response });
 
                 const controller = new productController();
 
               await templateService.apiHandler({
-                methodName: 'getProduuctAll',
+                methodName: 'getProductAll',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsproductController_getProductById: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+        };
+        app.get('/Product/:id',
+            ...(fetchMiddlewares<RequestHandler>(productController)),
+            ...(fetchMiddlewares<RequestHandler>(productController.prototype.getProductById)),
+
+            async function productController_getProductById(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsproductController_getProductById, request, response });
+
+                const controller = new productController();
+
+              await templateService.apiHandler({
+                methodName: 'getProductById',
                 controller,
                 response,
                 next,
@@ -372,8 +477,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsproductController_createProduuct: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Produucts"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/Product',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.createProduuct)),
 
@@ -403,8 +510,10 @@ export function RegisterRoutes(app: Router) {
         const argsproductController_updataProduuct: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Produucts"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.patch('/Product/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.updataProduuct)),
 
@@ -433,8 +542,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsproductController_deleteProduct: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.delete('/Product/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.deleteProduct)),
 
@@ -552,8 +663,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsorderController_createOrder: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Orders"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/Order',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(orderController)),
             ...(fetchMiddlewares<RequestHandler>(orderController.prototype.createOrder)),
 
@@ -767,6 +880,38 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsemployeeController_getEmployee: Record<string, TsoaRoute.ParameterSchema> = {
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchEmployees"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.post('/Employee/chaeckEmployee',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(employeeController)),
+            ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.getEmployee)),
+
+            async function employeeController_getEmployee(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsemployeeController_getEmployee, request, response });
+
+                const controller = new employeeController();
+
+              await templateService.apiHandler({
+                methodName: 'getEmployee',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsemployeeController_getEmployeeAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/Employee',
@@ -828,8 +973,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsemployeeController_createEmployee: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Employees"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/Employee',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.createEmployee)),
 
@@ -859,8 +1006,10 @@ export function RegisterRoutes(app: Router) {
         const argsemployeeController_updateEmployee: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Employees"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.patch('/Employee/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.updateEmployee)),
 
@@ -889,8 +1038,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsemployeeController_deleteEmployee: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.delete('/Employee/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.deleteEmployee)),
 
@@ -911,6 +1062,38 @@ export function RegisterRoutes(app: Router) {
                 next,
                 validatedArgs,
                 successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argscustomerController_getCustomer: Record<string, TsoaRoute.ParameterSchema> = {
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchCustomers"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.post('/Customer/chaeckCustomer',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(customerController)),
+            ...(fetchMiddlewares<RequestHandler>(customerController.prototype.getCustomer)),
+
+            async function customerController_getCustomer(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argscustomerController_getCustomer, request, response });
+
+                const controller = new customerController();
+
+              await templateService.apiHandler({
+                methodName: 'getCustomer',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
               });
             } catch (err) {
                 return next(err);
@@ -978,8 +1161,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscustomerController_createCustomer: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Customers"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/Customer',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.createCustomer)),
 
@@ -1009,8 +1194,10 @@ export function RegisterRoutes(app: Router) {
         const argscustomerController_updateCustomer: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Customers"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.patch('/Customer/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.updateCustomer)),
 
@@ -1039,8 +1226,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscustomerController_deleteCustomer: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.delete('/Customer/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.deleteCustomer)),
 
@@ -1098,8 +1287,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscategoryController_createCategory: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Categorys"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/Category',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.createCategory)),
 
@@ -1129,8 +1320,10 @@ export function RegisterRoutes(app: Router) {
         const argscategoryController_updataCategory: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Categorys"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.patch('/Category/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.updataCategory)),
 
@@ -1159,8 +1352,10 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscategoryController_deleteCategory: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.delete('/Category/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.deleteCategory)),
 

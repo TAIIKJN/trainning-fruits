@@ -7,9 +7,13 @@ import {
   Patch,
   Path,
   Post,
+  Request,
   Route,
+  Security,
   SuccessResponse,
 } from "tsoa";
+import HttpError from "../interfaces/http-error";
+import HttpStatus from "../interfaces/http-status";
 const prisma = new PrismaClient();
 
 export interface Produucts {
@@ -27,7 +31,7 @@ export interface Produucts {
 @Route("Product")
 export class productController extends Controller {
   @Get()
-  public async getProduuctAll() {
+  public async getProductAll() {
     const data = await prisma.product.findMany({
       include: {
         Category: true,
@@ -36,10 +40,53 @@ export class productController extends Controller {
     return data;
   }
 
-  @Post()
-  @SuccessResponse("201", "Created")
-  public async createProduuct(@Body() requestBody: Produucts) {
+  @Get("{id}")
+  public async getProductById(@Path() id: string) {
     try {
+      const dataProduct = await prisma.product.findFirst({
+        where: {
+          Id: id,
+        },
+        include: {
+          Category: true,
+          Supplier: true,
+        },
+      });
+
+      if (dataProduct) {
+        return dataProduct;
+      } else {
+        return "ไม่พบข้อมูล";
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  @Post()
+  @Security("keycloak")
+  @SuccessResponse("201", "Created")
+  public async createProduuct(
+    @Body() requestBody: Produucts,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
+
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+        );
+      }
+
       const dataCategory = await prisma.category.findFirst({
         where: {
           Id: requestBody.categoryId,
@@ -86,101 +133,150 @@ export class productController extends Controller {
   }
 
   @Patch("{id}")
+  @Security("keycloak")
   @SuccessResponse("200", "Update")
   public async updataProduuct(
     @Path() id: string,
-    @Body() requestBody: Produucts
+    @Body() requestBody: Produucts,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
   ) {
-    const dataProduct = await prisma.product.findFirst({
-      where: {
-        Id: id,
-      },
-      include: {
-        Category: true,
-      },
-    });
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
 
-    let dataCategory: string = dataProduct?.Category?.Id?.toString() ?? "";
-    const idCategory = dataProduct?.Category?.Id !== requestBody.categoryId;
-    if (idCategory) {
-      const data = await prisma.category.findFirst({
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
+        );
+      }
+
+      const dataProduct = await prisma.product.findFirst({
         where: {
-          Id: requestBody.categoryId,
+          Id: id,
+        },
+        include: {
+          Category: true,
         },
       });
-      if (data?.Id) {
-        dataCategory = data.Id.toString(); // ทำให้แน่ใจว่าเป็น string
-      } else {
-        // สามารถจัดการกรณีไม่พบ data ได้ที่นี่ เช่น การแสดงข้อความหรือจัดการกับ error
-        console.log("ไม่พบข้อมูล Category ที่มี Id: ", requestBody.categoryId);
-      }
-    }
 
-    const dataSupplier = requestBody.supplierId
-      ? await prisma.supplier.findFirst({
+      let dataCategory: string = dataProduct?.Category?.Id?.toString() ?? "";
+      const idCategory = dataProduct?.Category?.Id !== requestBody.categoryId;
+      if (idCategory) {
+        const data = await prisma.category.findFirst({
           where: {
-            Id: requestBody.supplierId,
-          },
-        })
-      : null;
-
-    if (dataProduct && dataCategory !== "") {
-      try {
-        const data = await prisma.product.update({
-          data: {
-            CategoryId: requestBody.categoryId,
-            Discontinued: requestBody.discontinued,
-            ProductName: requestBody.productName,
-            QuantityPerUnit: requestBody.quantityPerUnit,
-            ReorderLevel: requestBody.reorderLevel,
-            SupplierId: dataSupplier?.Id,
-            UnitPrice: requestBody.unitPrice,
-            UnitsInStock: requestBody.unitsInStock,
-            UnitsOnOrder: requestBody.unitsOnOrder,
-          },
-          where: {
-            Id: id,
-          },
-          include: {
-            Category: true,
+            Id: requestBody.categoryId,
           },
         });
-
-        console.log(data);
-        return data;
-      } catch (e) {
-        // ตรวจสอบข้อผิดพลาดจาก Prisma Client
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          return { status: 400, message: `Prisma error: ${e.message}` };
+        if (data?.Id) {
+          dataCategory = data.Id.toString(); // ทำให้แน่ใจว่าเป็น string
+        } else {
+          // สามารถจัดการกรณีไม่พบ data ได้ที่นี่ เช่น การแสดงข้อความหรือจัดการกับ error
+          console.log(
+            "ไม่พบข้อมูล Category ที่มี Id: ",
+            requestBody.categoryId
+          );
         }
-        // ในกรณีที่เกิดข้อผิดพลาดทั่วไป
-        return { status: 500, message: "Internal server error", error: e };
       }
-    } else {
-      return "ไม่่พบข้อมุล";
+
+      const dataSupplier = requestBody.supplierId
+        ? await prisma.supplier.findFirst({
+            where: {
+              Id: requestBody.supplierId,
+            },
+          })
+        : null;
+
+      if (dataProduct && dataCategory !== "") {
+        try {
+          const data = await prisma.product.update({
+            data: {
+              CategoryId: requestBody.categoryId,
+              Discontinued: requestBody.discontinued,
+              ProductName: requestBody.productName,
+              QuantityPerUnit: requestBody.quantityPerUnit,
+              ReorderLevel: requestBody.reorderLevel,
+              SupplierId: dataSupplier?.Id,
+              UnitPrice: requestBody.unitPrice,
+              UnitsInStock: requestBody.unitsInStock,
+              UnitsOnOrder: requestBody.unitsOnOrder,
+            },
+            where: {
+              Id: id,
+            },
+            include: {
+              Category: true,
+            },
+          });
+
+          console.log(data);
+          return data;
+        } catch (e) {
+          // ตรวจสอบข้อผิดพลาดจาก Prisma Client
+          if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            return { status: 400, message: `Prisma error: ${e.message}` };
+          }
+          // ในกรณีที่เกิดข้อผิดพลาดทั่วไป
+          return { status: 500, message: "Internal server error", error: e };
+        }
+      } else {
+        return "ไม่่พบข้อมุล";
+      }
+    } catch (e) {
+      return e;
     }
   }
 
   @Delete("{id}")
+  @Security("keycloak")
   @SuccessResponse("200", "Delete")
-  public async deleteProduct(@Path() id: string) {
-    const dataProduuct = await prisma.product.findFirst({
-      where: {
-        Id: id,
-      },
-    });
+  public async deleteProduct(
+    @Path() id: string,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
 
-    if (dataProduuct) {
-      const data = await prisma.product.delete({
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
+        );
+      }
+
+      const dataProduuct = await prisma.product.findFirst({
         where: {
           Id: id,
         },
       });
 
-      console.log(data);
-      return data;
-    } else {
-      return "ไม่พบข้อมูล";
+      if (dataProduuct) {
+        const data = await prisma.product.delete({
+          where: {
+            Id: id,
+          },
+        });
+
+        console.log(data);
+        return data;
+      } else {
+        return "ไม่พบข้อมูล";
+      }
+    } catch (e) {
+      return e;
     }
   }
 }

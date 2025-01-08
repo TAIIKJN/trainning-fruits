@@ -7,15 +7,19 @@ import {
   Patch,
   Path,
   Post,
+  Request,
   Route,
+  Security,
   SuccessResponse,
 } from "tsoa";
+import HttpError from "../interfaces/http-error";
+import HttpStatus from "../interfaces/http-status";
 
 const prisma = new PrismaClient();
 
 export interface Orders {
-  CustomerId: string;
-  EmployeeId: string;
+  CustomerUserName: string;
+  EmployeeUserName: string;
   OrderDate: string;
   TotalPrice: number;
   Address: string;
@@ -30,7 +34,13 @@ export interface OrderDetail {
   UnitPrice: string;
 }
 
-export interface OrdersUpdate extends Orders {
+export interface OrdersUpdate {
+  CustomerId: string;
+  EmployeeId: string;
+  OrderDate: string;
+  TotalPrice: number;
+  Address: string;
+  State: string;
   OrderDetail: OrderDetailUpdate[];
 }
 export interface OrderDetailUpdate extends OrderDetail {
@@ -68,12 +78,30 @@ export class orderController extends Controller {
   }
 
   @Post()
+  @Security("keycloak")
   @SuccessResponse("201", "Created")
-  public async createOrder(@Body() requestBody: Orders) {
+  public async createOrder(
+    @Body() requestBody: Orders,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
     try {
+      const isSupplier = req.user.role.some((item) => item === "supplier");
+
+      if (isSupplier) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+        );
+      }
+
       const dataCustomer = await prisma.customer.findFirst({
         where: {
-          Id: requestBody.CustomerId,
+          UserName: requestBody.CustomerUserName,
         },
       });
 
@@ -83,7 +111,7 @@ export class orderController extends Controller {
 
       const dataEmployee = await prisma.employee.findFirst({
         where: {
-          Id: requestBody.EmployeeId,
+          UserName: requestBody.EmployeeUserName,
         },
       });
 
@@ -93,8 +121,8 @@ export class orderController extends Controller {
 
       const dataOrder = await prisma.order.create({
         data: {
-          CustomerId: requestBody?.CustomerId,
-          EmployeeId: requestBody?.EmployeeId,
+          CustomerId: dataCustomer?.Id,
+          EmployeeId: dataEmployee?.Id,
           OrderDate: requestBody?.OrderDate,
           TotalPrice: requestBody?.TotalPrice,
           Address: requestBody?.Address,

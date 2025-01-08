@@ -7,54 +7,82 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"SearchSupplier": {
+				"properties": {
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"FirstName",
+					"LastName",
+					"Email",
+					"UserName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Suppliers": {
 				"properties": {
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Phone": {
+						"type": "string"
+					},
 					"Address": {
 						"type": "string"
 					},
 					"City": {
 						"type": "string"
 					},
-					"CompanyName": {
-						"type": "string"
-					},
-					"ContactName": {
-						"type": "string"
-					},
-					"ContactTitle": {
-						"type": "string"
-					},
 					"Country": {
-						"type": "string"
-					},
-					"Fax": {
-						"type": "string"
-					},
-					"HomePage": {
-						"type": "string"
-					},
-					"Phone": {
 						"type": "string"
 					},
 					"PostalCode": {
 						"type": "string"
 					},
-					"Region": {
+					"Notes": {
+						"type": "string"
+					},
+					"Photo": {
+						"type": "string"
+					},
+					"Password": {
 						"type": "string"
 					}
 				},
 				"required": [
+					"FirstName",
+					"LastName",
+					"Email",
+					"UserName",
+					"Phone",
 					"Address",
 					"City",
-					"CompanyName",
-					"ContactName",
-					"ContactTitle",
 					"Country",
-					"Fax",
-					"HomePage",
-					"Phone",
 					"PostalCode",
-					"Region"
+					"Notes",
+					"Photo",
+					"Password"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -135,10 +163,10 @@
 			},
 			"Orders": {
 				"properties": {
-					"CustomerId": {
+					"CustomerUserName": {
 						"type": "string"
 					},
-					"EmployeeId": {
+					"EmployeeUserName": {
 						"type": "string"
 					},
 					"OrderDate": {
@@ -162,8 +190,8 @@
 					}
 				},
 				"required": [
-					"CustomerId",
-					"EmployeeId",
+					"CustomerUserName",
+					"EmployeeUserName",
 					"OrderDate",
 					"TotalPrice",
 					"Address",
@@ -261,6 +289,30 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"SearchEmployees": {
+				"properties": {
+					"UserName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"UserName",
+					"Email",
+					"FirstName",
+					"LastName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Employees": {
 				"properties": {
 					"Title": {
@@ -301,6 +353,12 @@
 					},
 					"PhotoPath": {
 						"type": "string"
+					},
+					"Password": {
+						"type": "string"
+					},
+					"RoleUser": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -316,7 +374,33 @@
 					"PostalCode",
 					"Notes",
 					"Photo",
-					"PhotoPath"
+					"PhotoPath",
+					"Password",
+					"RoleUser"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SearchCustomers": {
+				"properties": {
+					"UserName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"UserName",
+					"Email",
+					"FirstName",
+					"LastName"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -364,6 +448,9 @@
 					},
 					"Role": {
 						"type": "string"
+					},
+					"Password": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -380,7 +467,8 @@
 					"Notes",
 					"Photo",
 					"PhotoPath",
-					"Role"
+					"Role",
+					"Password"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -420,6 +508,136 @@
 		"contact": {}
 	},
 	"paths": {
+		"/Supplier/chaeckSupplier": {
+			"post": {
+				"operationId": "GetSupplier",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Photo",
+												"Notes",
+												"PostalCode",
+												"Country",
+												"City",
+												"Address",
+												"Phone",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ส่งข้อมูลการเรียกดูไม่ครบ"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SearchSupplier"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/Supplier": {
 			"get": {
 				"operationId": "GetSupplierAll",
@@ -495,34 +713,16 @@
 											},
 											{
 												"properties": {
-													"Region": {
+													"Photo": {
+														"type": "string"
+													},
+													"Notes": {
 														"type": "string"
 													},
 													"PostalCode": {
 														"type": "string"
 													},
-													"Phone": {
-														"type": "string"
-													},
-													"Id": {
-														"type": "string"
-													},
-													"HomePage": {
-														"type": "string"
-													},
-													"Fax": {
-														"type": "string"
-													},
 													"Country": {
-														"type": "string"
-													},
-													"ContactTitle": {
-														"type": "string"
-													},
-													"ContactName": {
-														"type": "string"
-													},
-													"CompanyName": {
 														"type": "string"
 													},
 													"City": {
@@ -530,21 +730,39 @@
 													},
 													"Address": {
 														"type": "string"
+													},
+													"Phone": {
+														"type": "string"
+													},
+													"UserName": {
+														"type": "string"
+													},
+													"Email": {
+														"type": "string"
+													},
+													"LastName": {
+														"type": "string"
+													},
+													"FirstName": {
+														"type": "string"
+													},
+													"Id": {
+														"type": "string"
 													}
 												},
 												"required": [
-													"Region",
+													"Photo",
+													"Notes",
 													"PostalCode",
-													"Phone",
-													"Id",
-													"HomePage",
-													"Fax",
 													"Country",
-													"ContactTitle",
-													"ContactName",
-													"CompanyName",
 													"City",
-													"Address"
+													"Address",
+													"Phone",
+													"UserName",
+													"Email",
+													"LastName",
+													"FirstName",
+													"Id"
 												],
 												"type": "object"
 											}
@@ -570,62 +788,9 @@
 									"anyOf": [
 										{
 											"properties": {
-												"Region": {
-													"type": "string"
-												},
-												"PostalCode": {
-													"type": "string"
-												},
-												"Phone": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"HomePage": {
-													"type": "string"
-												},
-												"Fax": {
-													"type": "string"
-												},
-												"Country": {
-													"type": "string"
-												},
-												"ContactTitle": {
-													"type": "string"
-												},
-												"ContactName": {
-													"type": "string"
-												},
-												"CompanyName": {
-													"type": "string"
-												},
-												"City": {
-													"type": "string"
-												},
-												"Address": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"Region",
-												"PostalCode",
-												"Phone",
-												"Id",
-												"HomePage",
-												"Fax",
-												"Country",
-												"ContactTitle",
-												"ContactName",
-												"CompanyName",
-												"City",
-												"Address"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
 												"error": {},
+												"keycloakResponse": {},
+												"data": {},
 												"message": {
 													"type": "string"
 												},
@@ -642,6 +807,125 @@
 										},
 										{
 											"properties": {
+												"error": {},
+												"message": {},
+												"status": {},
+												"keycloakResponse": {
+													"properties": {
+														"credentials": {
+															"items": {
+																"properties": {
+																	"value": {
+																		"type": "string"
+																	},
+																	"type": {
+																		"type": "string"
+																	},
+																	"temporary": {
+																		"type": "boolean"
+																	}
+																},
+																"required": [
+																	"value",
+																	"type",
+																	"temporary"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														},
+														"enabled": {
+															"type": "boolean"
+														},
+														"lastName": {
+															"type": "string"
+														},
+														"firstName": {
+															"type": "string"
+														},
+														"email": {
+															"type": "string"
+														},
+														"username": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"credentials",
+														"enabled",
+														"lastName",
+														"firstName",
+														"email",
+														"username"
+													],
+													"type": "object"
+												},
+												"data": {
+													"properties": {
+														"Photo": {
+															"type": "string"
+														},
+														"Notes": {
+															"type": "string"
+														},
+														"PostalCode": {
+															"type": "string"
+														},
+														"Country": {
+															"type": "string"
+														},
+														"City": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														},
+														"Phone": {
+															"type": "string"
+														},
+														"UserName": {
+															"type": "string"
+														},
+														"Email": {
+															"type": "string"
+														},
+														"LastName": {
+															"type": "string"
+														},
+														"FirstName": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"Photo",
+														"Notes",
+														"PostalCode",
+														"Country",
+														"City",
+														"Address",
+														"Phone",
+														"UserName",
+														"Email",
+														"LastName",
+														"FirstName",
+														"Id"
+													],
+													"type": "object"
+												}
+											},
+											"required": [
+												"keycloakResponse",
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"keycloakResponse": {},
+												"data": {},
 												"error": {},
 												"message": {
 													"type": "string"
@@ -664,7 +948,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -690,34 +978,16 @@
 									"anyOf": [
 										{
 											"properties": {
-												"Region": {
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
 													"type": "string"
 												},
 												"PostalCode": {
 													"type": "string"
 												},
-												"Phone": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"HomePage": {
-													"type": "string"
-												},
-												"Fax": {
-													"type": "string"
-												},
 												"Country": {
-													"type": "string"
-												},
-												"ContactTitle": {
-													"type": "string"
-												},
-												"ContactName": {
-													"type": "string"
-												},
-												"CompanyName": {
 													"type": "string"
 												},
 												"City": {
@@ -725,21 +995,39 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
-												"Region",
+												"Photo",
+												"Notes",
 												"PostalCode",
-												"Phone",
-												"Id",
-												"HomePage",
-												"Fax",
 												"Country",
-												"ContactTitle",
-												"ContactName",
-												"CompanyName",
 												"City",
-												"Address"
+												"Address",
+												"Phone",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -778,34 +1066,16 @@
 									"anyOf": [
 										{
 											"properties": {
-												"Region": {
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
 													"type": "string"
 												},
 												"PostalCode": {
 													"type": "string"
 												},
-												"Phone": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"HomePage": {
-													"type": "string"
-												},
-												"Fax": {
-													"type": "string"
-												},
 												"Country": {
-													"type": "string"
-												},
-												"ContactTitle": {
-													"type": "string"
-												},
-												"ContactName": {
-													"type": "string"
-												},
-												"CompanyName": {
 													"type": "string"
 												},
 												"City": {
@@ -813,21 +1083,39 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
-												"Region",
+												"Photo",
+												"Notes",
 												"PostalCode",
-												"Phone",
-												"Id",
-												"HomePage",
-												"Fax",
 												"Country",
-												"ContactTitle",
-												"ContactName",
-												"CompanyName",
 												"City",
-												"Address"
+												"Address",
+												"Phone",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -878,7 +1166,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -918,7 +1210,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -933,7 +1229,7 @@
 		},
 		"/Product": {
 			"get": {
-				"operationId": "GetProduuctAll",
+				"operationId": "GetProductAll",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -1138,7 +1434,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -1153,6 +1453,30 @@
 			}
 		},
 		"/Product/{id}": {
+			"get": {
+				"operationId": "GetProductById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
 			"patch": {
 				"operationId": "UpdataProduuct",
 				"responses": {
@@ -1160,138 +1484,16 @@
 						"description": "Update",
 						"content": {
 							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"allOf": [
-												{
-													"properties": {
-														"Category": {
-															"properties": {
-																"Description": {
-																	"type": "string"
-																},
-																"CategoryName": {
-																	"type": "string"
-																},
-																"Id": {
-																	"type": "string"
-																}
-															},
-															"required": [
-																"Description",
-																"CategoryName",
-																"Id"
-															],
-															"type": "object"
-														}
-													},
-													"required": [
-														"Category"
-													],
-													"type": "object"
-												},
-												{
-													"properties": {
-														"UnitsOnOrder": {
-															"type": "number",
-															"format": "double"
-														},
-														"UnitsInStock": {
-															"type": "number",
-															"format": "double"
-														},
-														"UnitPrice": {
-															"type": "string"
-														},
-														"SupplierId": {
-															"type": "string"
-														},
-														"ReorderLevel": {
-															"type": "number",
-															"format": "double"
-														},
-														"QuantityPerUnit": {
-															"type": "string"
-														},
-														"ProductName": {
-															"type": "string"
-														},
-														"Discontinued": {
-															"type": "number",
-															"format": "double"
-														},
-														"CategoryId": {
-															"type": "string"
-														},
-														"Id": {
-															"type": "string"
-														}
-													},
-													"required": [
-														"UnitsOnOrder",
-														"UnitsInStock",
-														"UnitPrice",
-														"SupplierId",
-														"ReorderLevel",
-														"QuantityPerUnit",
-														"ProductName",
-														"Discontinued",
-														"CategoryId",
-														"Id"
-													],
-													"type": "object"
-												}
-											]
-										},
-										{
-											"properties": {
-												"error": {},
-												"message": {
-													"type": "string"
-												},
-												"status": {
-													"type": "number",
-													"format": "double"
-												}
-											},
-											"required": [
-												"message",
-												"status"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
-												"error": {},
-												"message": {
-													"type": "string"
-												},
-												"status": {
-													"type": "number",
-													"format": "double"
-												}
-											},
-											"required": [
-												"error",
-												"message",
-												"status"
-											],
-											"type": "object"
-										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่่พบข้อมุล"
-											]
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1320,72 +1522,16 @@
 						"description": "Delete",
 						"content": {
 							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"UnitsOnOrder": {
-													"type": "number",
-													"format": "double"
-												},
-												"UnitsInStock": {
-													"type": "number",
-													"format": "double"
-												},
-												"UnitPrice": {
-													"type": "string"
-												},
-												"SupplierId": {
-													"type": "string"
-												},
-												"ReorderLevel": {
-													"type": "number",
-													"format": "double"
-												},
-												"QuantityPerUnit": {
-													"type": "string"
-												},
-												"ProductName": {
-													"type": "string"
-												},
-												"Discontinued": {
-													"type": "number",
-													"format": "double"
-												},
-												"CategoryId": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"UnitsOnOrder",
-												"UnitsInStock",
-												"UnitPrice",
-												"SupplierId",
-												"ReorderLevel",
-												"QuantityPerUnit",
-												"ProductName",
-												"Discontinued",
-												"CategoryId",
-												"Id"
-											],
-											"type": "object"
-										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1503,10 +1649,10 @@
 													"CustomerId": {
 														"type": "string"
 													},
-													"Id": {
+													"Address": {
 														"type": "string"
 													},
-													"Address": {
+													"Id": {
 														"type": "string"
 													}
 												},
@@ -1516,8 +1662,8 @@
 													"OrderDate",
 													"EmployeeId",
 													"CustomerId",
-													"Id",
-													"Address"
+													"Address",
+													"Id"
 												],
 												"type": "object"
 											}
@@ -1600,10 +1746,10 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Id": {
+														"Address": {
 															"type": "string"
 														},
-														"Address": {
+														"Id": {
 															"type": "string"
 														}
 													},
@@ -1613,8 +1759,8 @@
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Id",
-														"Address"
+														"Address",
+														"Id"
 													],
 													"type": "object"
 												}
@@ -1677,7 +1823,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -1765,10 +1915,10 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Id": {
+														"Address": {
 															"type": "string"
 														},
-														"Address": {
+														"Id": {
 															"type": "string"
 														}
 													},
@@ -1778,8 +1928,8 @@
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Id",
-														"Address"
+														"Address",
+														"Id"
 													],
 													"type": "object"
 												}
@@ -1877,10 +2027,10 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Id": {
+														"Address": {
 															"type": "string"
 														},
-														"Address": {
+														"Id": {
 															"type": "string"
 														}
 													},
@@ -1890,8 +2040,8 @@
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Id",
-														"Address"
+														"Address",
+														"Id"
 													],
 													"type": "object"
 												}
@@ -2217,92 +2367,12 @@
 				]
 			}
 		},
-		"/Employee": {
-			"get": {
-				"operationId": "GetEmployeeAll",
+		"/Employee/chaeckEmployee": {
+			"post": {
+				"operationId": "GetEmployee",
 				"responses": {
 					"200": {
 						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"properties": {
-											"PhotoPath": {
-												"type": "string"
-											},
-											"Photo": {
-												"type": "string"
-											},
-											"Notes": {
-												"type": "string"
-											},
-											"UserName": {
-												"type": "string"
-											},
-											"Email": {
-												"type": "string"
-											},
-											"BirthDate": {
-												"type": "string"
-											},
-											"LastName": {
-												"type": "string"
-											},
-											"FirstName": {
-												"type": "string"
-											},
-											"Title": {
-												"type": "string"
-											},
-											"PostalCode": {
-												"type": "string"
-											},
-											"Id": {
-												"type": "string"
-											},
-											"Country": {
-												"type": "string"
-											},
-											"City": {
-												"type": "string"
-											},
-											"Address": {
-												"type": "string"
-											}
-										},
-										"required": [
-											"PhotoPath",
-											"Photo",
-											"Notes",
-											"UserName",
-											"Email",
-											"BirthDate",
-											"LastName",
-											"FirstName",
-											"Title",
-											"PostalCode",
-											"Id",
-											"Country",
-											"City",
-											"Address"
-										],
-										"type": "object"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": []
-			},
-			"post": {
-				"operationId": "CreateEmployee",
-				"responses": {
-					"201": {
-						"description": "Created",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -2312,34 +2382,19 @@
 												"PhotoPath": {
 													"type": "string"
 												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
 												"Photo": {
 													"type": "string"
 												},
 												"Notes": {
 													"type": "string"
 												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
 												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
 													"type": "string"
 												},
 												"Country": {
@@ -2350,23 +2405,38 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
 												"PhotoPath",
+												"BirthDate",
+												"Title",
 												"Photo",
 												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
 												"PostalCode",
-												"Id",
 												"Country",
 												"City",
-												"Address"
+												"Address",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -2404,6 +2474,12 @@
 												"status"
 											],
 											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ส่งข้อมูลการเรียกดูไม่ครบ"
+											]
 										}
 									]
 								}
@@ -2411,7 +2487,224 @@
 						}
 					}
 				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SearchEmployees"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Employee": {
+			"get": {
+				"operationId": "GetEmployeeAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
 				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateEmployee",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"error": {},
+												"keycloakResponse": {},
+												"data": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"message",
+												"status"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"message": {},
+												"status": {},
+												"keycloakResponse": {
+													"properties": {
+														"credentials": {
+															"items": {
+																"properties": {
+																	"value": {
+																		"type": "string"
+																	},
+																	"type": {
+																		"type": "string"
+																	},
+																	"temporary": {
+																		"type": "boolean"
+																	}
+																},
+																"required": [
+																	"value",
+																	"type",
+																	"temporary"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														},
+														"enabled": {
+															"type": "boolean"
+														},
+														"lastName": {
+															"type": "string"
+														},
+														"firstName": {
+															"type": "string"
+														},
+														"email": {
+															"type": "string"
+														},
+														"username": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"credentials",
+														"enabled",
+														"lastName",
+														"firstName",
+														"email",
+														"username"
+													],
+													"type": "object"
+												},
+												"data": {
+													"properties": {
+														"PhotoPath": {
+															"type": "string"
+														},
+														"BirthDate": {
+															"type": "string"
+														},
+														"Title": {
+															"type": "string"
+														},
+														"Photo": {
+															"type": "string"
+														},
+														"Notes": {
+															"type": "string"
+														},
+														"PostalCode": {
+															"type": "string"
+														},
+														"Country": {
+															"type": "string"
+														},
+														"City": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														},
+														"UserName": {
+															"type": "string"
+														},
+														"Email": {
+															"type": "string"
+														},
+														"LastName": {
+															"type": "string"
+														},
+														"FirstName": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"PhotoPath",
+														"BirthDate",
+														"Title",
+														"Photo",
+														"Notes",
+														"PostalCode",
+														"Country",
+														"City",
+														"Address",
+														"UserName",
+														"Email",
+														"LastName",
+														"FirstName",
+														"Id"
+													],
+													"type": "object"
+												}
+											},
+											"required": [
+												"keycloakResponse",
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"keycloakResponse": {},
+												"data": {},
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"status"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -2433,79 +2726,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"PhotoPath": {
-													"type": "string"
-												},
-												"Photo": {
-													"type": "string"
-												},
-												"Notes": {
-													"type": "string"
-												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
-												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"Country": {
-													"type": "string"
-												},
-												"City": {
-													"type": "string"
-												},
-												"Address": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"PhotoPath",
-												"Photo",
-												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
-												"PostalCode",
-												"Id",
-												"Country",
-												"City",
-												"Address"
-											],
-											"type": "object"
-										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
@@ -2536,34 +2757,19 @@
 												"PhotoPath": {
 													"type": "string"
 												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
 												"Photo": {
 													"type": "string"
 												},
 												"Notes": {
 													"type": "string"
 												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
 												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
 													"type": "string"
 												},
 												"Country": {
@@ -2574,23 +2780,38 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
 												"PhotoPath",
+												"BirthDate",
+												"Title",
 												"Photo",
 												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
 												"PostalCode",
-												"Id",
 												"Country",
 												"City",
-												"Address"
+												"Address",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -2641,7 +2862,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -2670,18 +2895,16 @@
 						"description": "Delete",
 						"content": {
 							"application/json": {
-								"schema": {
-									"type": "string",
-									"enum": [
-										"ไม่พบข้อมูล",
-										"ลบข้อมูลสำเร็จ"
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -2694,6 +2917,37 @@
 				]
 			}
 		},
+		"/Customer/chaeckCustomer": {
+			"post": {
+				"operationId": "GetCustomer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SearchCustomers"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/Customer": {
 			"get": {
 				"operationId": "GetCustomerAll",
@@ -2702,76 +2956,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"items": {
-										"properties": {
-											"Role": {
-												"type": "string"
-											},
-											"PhotoPath": {
-												"type": "string"
-											},
-											"Photo": {
-												"type": "string"
-											},
-											"Notes": {
-												"type": "string"
-											},
-											"UserName": {
-												"type": "string"
-											},
-											"Email": {
-												"type": "string"
-											},
-											"BirthDate": {
-												"type": "string"
-											},
-											"LastName": {
-												"type": "string"
-											},
-											"FirstName": {
-												"type": "string"
-											},
-											"Title": {
-												"type": "string"
-											},
-											"PostalCode": {
-												"type": "string"
-											},
-											"Id": {
-												"type": "string"
-											},
-											"Country": {
-												"type": "string"
-											},
-											"City": {
-												"type": "string"
-											},
-											"Address": {
-												"type": "string"
-											}
-										},
-										"required": [
-											"Role",
-											"PhotoPath",
-											"Photo",
-											"Notes",
-											"UserName",
-											"Email",
-											"BirthDate",
-											"LastName",
-											"FirstName",
-											"Title",
-											"PostalCode",
-											"Id",
-											"Country",
-											"City",
-											"Address"
-										],
-										"type": "object"
-									},
-									"type": "array"
-								}
+								"schema": {}
 							}
 						}
 					}
@@ -2790,74 +2975,9 @@
 									"anyOf": [
 										{
 											"properties": {
-												"Role": {
-													"type": "string"
-												},
-												"PhotoPath": {
-													"type": "string"
-												},
-												"Photo": {
-													"type": "string"
-												},
-												"Notes": {
-													"type": "string"
-												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
-												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												},
-												"Country": {
-													"type": "string"
-												},
-												"City": {
-													"type": "string"
-												},
-												"Address": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"Role",
-												"PhotoPath",
-												"Photo",
-												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
-												"PostalCode",
-												"Id",
-												"Country",
-												"City",
-												"Address"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
 												"error": {},
+												"keycloakResponse": {},
+												"data": {},
 												"message": {
 													"type": "string"
 												},
@@ -2874,6 +2994,137 @@
 										},
 										{
 											"properties": {
+												"error": {},
+												"message": {},
+												"status": {},
+												"keycloakResponse": {
+													"properties": {
+														"credentials": {
+															"items": {
+																"properties": {
+																	"value": {
+																		"type": "string"
+																	},
+																	"type": {
+																		"type": "string"
+																	},
+																	"temporary": {
+																		"type": "boolean"
+																	}
+																},
+																"required": [
+																	"value",
+																	"type",
+																	"temporary"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														},
+														"enabled": {
+															"type": "boolean"
+														},
+														"lastName": {
+															"type": "string"
+														},
+														"firstName": {
+															"type": "string"
+														},
+														"email": {
+															"type": "string"
+														},
+														"username": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"credentials",
+														"enabled",
+														"lastName",
+														"firstName",
+														"email",
+														"username"
+													],
+													"type": "object"
+												},
+												"data": {
+													"properties": {
+														"Role": {
+															"type": "string"
+														},
+														"PhotoPath": {
+															"type": "string"
+														},
+														"BirthDate": {
+															"type": "string"
+														},
+														"Title": {
+															"type": "string"
+														},
+														"Photo": {
+															"type": "string"
+														},
+														"Notes": {
+															"type": "string"
+														},
+														"PostalCode": {
+															"type": "string"
+														},
+														"Country": {
+															"type": "string"
+														},
+														"City": {
+															"type": "string"
+														},
+														"Address": {
+															"type": "string"
+														},
+														"UserName": {
+															"type": "string"
+														},
+														"Email": {
+															"type": "string"
+														},
+														"LastName": {
+															"type": "string"
+														},
+														"FirstName": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"Role",
+														"PhotoPath",
+														"BirthDate",
+														"Title",
+														"Photo",
+														"Notes",
+														"PostalCode",
+														"Country",
+														"City",
+														"Address",
+														"UserName",
+														"Email",
+														"LastName",
+														"FirstName",
+														"Id"
+													],
+													"type": "object"
+												}
+											},
+											"required": [
+												"keycloakResponse",
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"keycloakResponse": {},
+												"data": {},
 												"error": {},
 												"message": {
 													"type": "string"
@@ -2896,7 +3147,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -2928,34 +3183,19 @@
 												"PhotoPath": {
 													"type": "string"
 												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
 												"Photo": {
 													"type": "string"
 												},
 												"Notes": {
 													"type": "string"
 												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
 												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
 													"type": "string"
 												},
 												"Country": {
@@ -2966,24 +3206,39 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
 												"Role",
 												"PhotoPath",
+												"BirthDate",
+												"Title",
 												"Photo",
 												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
 												"PostalCode",
-												"Id",
 												"Country",
 												"City",
-												"Address"
+												"Address",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -3028,34 +3283,19 @@
 												"PhotoPath": {
 													"type": "string"
 												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
 												"Photo": {
 													"type": "string"
 												},
 												"Notes": {
 													"type": "string"
 												},
-												"UserName": {
-													"type": "string"
-												},
-												"Email": {
-													"type": "string"
-												},
-												"BirthDate": {
-													"type": "string"
-												},
-												"LastName": {
-													"type": "string"
-												},
-												"FirstName": {
-													"type": "string"
-												},
-												"Title": {
-													"type": "string"
-												},
 												"PostalCode": {
-													"type": "string"
-												},
-												"Id": {
 													"type": "string"
 												},
 												"Country": {
@@ -3066,24 +3306,39 @@
 												},
 												"Address": {
 													"type": "string"
+												},
+												"UserName": {
+													"type": "string"
+												},
+												"Email": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
 												}
 											},
 											"required": [
 												"Role",
 												"PhotoPath",
+												"BirthDate",
+												"Title",
 												"Photo",
 												"Notes",
-												"UserName",
-												"Email",
-												"BirthDate",
-												"LastName",
-												"FirstName",
-												"Title",
 												"PostalCode",
-												"Id",
 												"Country",
 												"City",
-												"Address"
+												"Address",
+												"UserName",
+												"Email",
+												"LastName",
+												"FirstName",
+												"Id"
 											],
 											"type": "object"
 										},
@@ -3134,7 +3389,11 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -3163,18 +3422,16 @@
 						"description": "Delete",
 						"content": {
 							"application/json": {
-								"schema": {
-									"type": "string",
-									"enum": [
-										"ไม่พบข้อมูล",
-										"ลบข้อมูลสำเร็จ"
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -3231,30 +3488,16 @@
 						"description": "Created",
 						"content": {
 							"application/json": {
-								"schema": {
-									"properties": {
-										"Description": {
-											"type": "string"
-										},
-										"CategoryName": {
-											"type": "string"
-										},
-										"Id": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"Description",
-										"CategoryName",
-										"Id"
-									],
-									"type": "object"
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -3276,40 +3519,16 @@
 						"description": "Update",
 						"content": {
 							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"Description": {
-													"type": "string"
-												},
-												"CategoryName": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"Description",
-												"CategoryName",
-												"Id"
-											],
-											"type": "object"
-										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -3338,40 +3557,16 @@
 						"description": "Delete",
 						"content": {
 							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"Description": {
-													"type": "string"
-												},
-												"CategoryName": {
-													"type": "string"
-												},
-												"Id": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"Description",
-												"CategoryName",
-												"Id"
-											],
-											"type": "object"
-										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",

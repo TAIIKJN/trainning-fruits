@@ -8,9 +8,13 @@ import {
   Patch,
   Path,
   Post,
+  Request,
   Route,
+  Security,
   SuccessResponse,
 } from "tsoa";
+import HttpError from "../interfaces/http-error";
+import HttpStatus from "../interfaces/http-status";
 
 export interface Categorys {
   categoryName: string;
@@ -26,36 +30,30 @@ export class categoryController extends Controller {
   }
 
   @Post()
+  @Security("keycloak")
   @SuccessResponse("201", "Created")
-  public async createCategory(@Body() requestBody: Categorys) {
-    const data = await prisma.category.create({
-      data: {
-        CategoryName: requestBody.categoryName,
-        Description: requestBody.description,
-      },
-    });
-
-    console.log(data);
-    return data;
-  }
-
-  @Patch("{id}")
-  @SuccessResponse("200", "Update")
-  public async updataCategory(
-    @Path() id: string,
-    @Body() requestBody: Categorys
+  public async createCategory(
+    @Body() requestBody: Categorys,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
   ) {
-    const dataCategory = await prisma.category.findFirst({
-      where: {
-        Id: id,
-      },
-    });
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
 
-    if (dataCategory) {
-      const data = await prisma.category.update({
-        where: {
-          Id: id,
-        },
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+        );
+      }
+
+      const data = await prisma.category.create({
         data: {
           CategoryName: requestBody.categoryName,
           Description: requestBody.description,
@@ -64,31 +62,107 @@ export class categoryController extends Controller {
 
       console.log(data);
       return data;
-    } else {
-      return "ไม่พบข้อมูล";
+    } catch (e) {
+      return e;
     }
   }
 
-  @Delete("{id}")
-  @SuccessResponse("200", "Delete")
-  public async deleteCategory(@Path() id: string) {
-    const dataCategory = await prisma.category.findFirst({
-      where: {
-        Id: id,
-      },
-    });
+  @Patch("{id}")
+  @Security("keycloak")
+  @SuccessResponse("200", "Update")
+  public async updataCategory(
+    @Path() id: string,
+    @Body() requestBody: Categorys,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
 
-    if (dataCategory) {
-      const data = await prisma.category.delete({
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
+        );
+      }
+
+      const dataCategory = await prisma.category.findFirst({
         where: {
           Id: id,
         },
       });
 
-      console.log(data);
-      return data;
-    } else {
-      return "ไม่พบข้อมูล";
+      if (dataCategory) {
+        const data = await prisma.category.update({
+          where: {
+            Id: id,
+          },
+          data: {
+            CategoryName: requestBody.categoryName,
+            Description: requestBody.description,
+          },
+        });
+
+        console.log(data);
+        return data;
+      } else {
+        return "ไม่พบข้อมูล";
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  @Delete("{id}")
+  @Security("keycloak")
+  @SuccessResponse("200", "Delete")
+  public async deleteCategory(
+    @Path() id: string,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "supplier"
+      );
+
+      if (!isCreate) {
+        throw new HttpError(
+          HttpStatus.UNAUTHORIZED,
+          "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
+        );
+      }
+
+      const dataCategory = await prisma.category.findFirst({
+        where: {
+          Id: id,
+        },
+      });
+
+      if (dataCategory) {
+        const data = await prisma.category.delete({
+          where: {
+            Id: id,
+          },
+        });
+
+        console.log(data);
+        return data;
+      } else {
+        return "ไม่พบข้อมูล";
+      }
+    } catch (e) {
+      return e;
     }
   }
 }
