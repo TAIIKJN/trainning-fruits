@@ -31,7 +31,7 @@
                             </label>
                             <a-select c v-model:value="formState.Title" placeholder="เลือกคำนำหน้า" class="w-full">
                                 <a-select-option value="นาย">นาย</a-select-option>
-                                <a-select-option value="นาย">นาย</a-select-option>
+                                <a-select-option value="นาง">นาง</a-select-option>
                                 <a-select-option value="นางสาว">นางสาว</a-select-option>
                             </a-select>
                         </div>
