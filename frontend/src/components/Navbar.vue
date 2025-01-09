@@ -29,8 +29,8 @@ const items = ref([
   userRoles.includes('admin') && [
     createItem('fruits', 'Fruits', AppstoreOutlined),
     createItem('order-admin', 'Order', AppstoreOutlined),
-    createItem('employee', 'Employee', UserOutlined),
-    createItem('customer', 'Customer', AppstoreOutlined),
+    createItem('employee-admin', 'Employee', UserOutlined),
+    createItem('customer-admin', 'Customer', AppstoreOutlined),
     createItem('supplier', 'Supplier', AppstoreOutlined),
     {
       ...createItem('product', 'Product', SettingOutlined),

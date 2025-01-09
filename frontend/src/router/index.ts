@@ -5,13 +5,15 @@ import Fruits from '../views/fruits.vue'
 import Product from '../views/Product/product.vue'
 import Category from '../views/Product/category.vue'
 import Supplier from '../views/Supplier/supplier.vue'
-import Employee from '../views/Employee/employee.vue'
+import EmployeeAdmin from '../views/Admin/employee.vue'
 import customer from '../views/Customer/customer.vue'
 import Menu from '../views/Customer/menu.vue'
 import Order from '../views/Customer/order.vue'
 import OrderEmployee from '../views/Employee/order.vue'
 import OrderAdmin from '../views/Admin/order.vue'
-import OrderSupplier from '../views/Supplier/order.vue' 
+import OrderSupplier from '../views/Supplier/order.vue'
+import employee from '../views/Employee/employee.vue'
+import customerAdmin from '../views/Admin/customer.vue'
 
 const routes = [
   { path: '/', component: Login },
@@ -28,13 +30,15 @@ const routes = [
     meta: { requiresAuth: true }
   },
   { path: '/supplier', component: Supplier, meta: { requiresAuth: true } },
-  { path: '/employee', component: Employee, meta: { requiresAuth: true } },
+  { path: '/employee-admin', component: EmployeeAdmin, meta: { requiresAuth: true } },
   { path: '/customer', component: customer, meta: { requiresAuth: true } },
   { path: '/menu', component: Menu, meta: { requiresAuth: true } },
   { path: '/order', component: Order, meta: { requiresAuth: true } },
   { path: '/order-employee', component: OrderEmployee, meta: { requiresAuth: true} },
   { path: '/order-admin', component: OrderAdmin, meta: { requiresAuth: true} },
   { path: '/order-supplier', component: OrderSupplier, meta: { requiresAuth: true} },
+  { path: '/employee', component: employee, meta: { requiresAuth: true} },
+  { path: '/customer-admin', component: customerAdmin, meta: { requiresAuth: true} },
 
 ]
 
