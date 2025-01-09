@@ -31,7 +31,7 @@ const items = ref([
     createItem('order-admin', 'Order', AppstoreOutlined),
     createItem('employee-admin', 'Employee', UserOutlined),
     createItem('customer-admin', 'Customer', AppstoreOutlined),
-    createItem('supplier', 'Supplier', AppstoreOutlined),
+    createItem('supplier-admin', 'Supplier', AppstoreOutlined),
     {
       ...createItem('product', 'Product', SettingOutlined),
       onClick: undefined,

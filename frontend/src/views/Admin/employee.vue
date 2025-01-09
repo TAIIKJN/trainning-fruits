@@ -79,7 +79,7 @@
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
                                 วันเกิด
                             </label>
-                            <a-date-picker v-model:value="birthDate" format="YYYY-MM-DD" class="w-full"
+                            <a-date-picker v-model:value="birthDate" format="DD-MM-YYYY" class="w-full"
                                 :placeholder="'เลือกวันเกิด'" @change="handleDateChange" />
                         </div>
                     </div>
@@ -244,7 +244,7 @@ const fetchProvinces = async () => {
     try {
         loadingProvinces.value = true;
         const response = await axios.get('https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json');
-        console.log(response.data);
+        // console.log(response.data);
 
         provinceOptions.value = response.data.map((province: Province) => ({
             label: province.name_th, // ชื่อจังหวัด
@@ -288,7 +288,7 @@ const resetForm = () => {
 };
 
 const handleDateChange = (date: dayjs.Dayjs | null) => {
-    formState.BirthDate = date ? date.format('YYYY-MM-DD') : '';
+    formState.BirthDate = date ? date.format('DD-MM-YYYY') : '';
 };
 
 const fetchEmployee = async () => {

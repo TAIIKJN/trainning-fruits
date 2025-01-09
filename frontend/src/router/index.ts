@@ -14,6 +14,7 @@ import OrderAdmin from '../views/Admin/order.vue'
 import OrderSupplier from '../views/Supplier/order.vue'
 import employee from '../views/Employee/employee.vue'
 import customerAdmin from '../views/Admin/customer.vue'
+import supplierAdmin from '../views/Admin/supplier.vue'
 
 const routes = [
   { path: '/', component: Login },
@@ -39,6 +40,7 @@ const routes = [
   { path: '/order-supplier', component: OrderSupplier, meta: { requiresAuth: true} },
   { path: '/employee', component: employee, meta: { requiresAuth: true} },
   { path: '/customer-admin', component: customerAdmin, meta: { requiresAuth: true} },
+  { path: '/supplier-admin', component: supplierAdmin, meta: { requiresAuth: true} },
 
 ]
 

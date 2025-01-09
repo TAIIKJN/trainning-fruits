@@ -1,10 +1,10 @@
 <template>
     <div class="px-6 p-4">
         <div class="mb-4">
-            <a-button type="primary" @click="showModal">เพิ่ม Customer</a-button>
+            <a-button type="primary" @click="showModal">เพิ่ม Supplier</a-button>
         </div>
 
-        <a-table :columns="columns" :loading="loading" :dataSource="customer" rowKey="Id"
+        <a-table :columns="columns" :loading="loading" :dataSource="supplier" rowKey="Id"
             :scroll="{ x: 1300, y: 1000 }">
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'actions'">
@@ -19,9 +19,10 @@
             </template>
         </a-table>
 
-        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไขลูกค้า' : 'เพิ่มลูกค้า'" @ok="handleOk"
+        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไข Supplier' : 'เพิ่ม Supplier'" @ok="handleOk"
             @cancel="handleCancel" :width="820" :confirmLoading="confirmLoading" centered>
-            <a-form :model="formState" name="customerForm" @finish="onFinish" @finishFailed="onFinishFailed">
+            <a-form :model="formState" name="supplierForm" @finish="onFinish" @finishFailed="onFinishFailed">
+
                 <div class="flex flex-wrap">
                     <div class="w-full px-3 sm:w-1/5">
                         <div class="mb-2">
@@ -76,12 +77,12 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
-                                วันเกิด
+                                เบอร์โทร
                             </label>
-                            <a-date-picker v-model:value="birthDate" format="DD-MM-YYYY" class="w-full"
-                                :placeholder="'เลือกวันเกิด'" @change="handleDateChange" />
+                            <a-input  v-model:value="formState.Phone" placeholder="กรอกเบอร์โทร" @input="filterNumericInput('Phone', $event)"   />
                         </div>
                     </div>
+       
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">ที่อยู่</label>
@@ -98,8 +99,7 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">รหัสไปรษณีย์</label>
-                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์"
-                                @input="filterNumericInput" />
+                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์"  @input="filterNumericInput('PostalCode', $event)" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
@@ -116,12 +116,7 @@
                             <a-input v-model:value="formState.Photo" placeholder="กรอกรูป" />
                         </div>
                     </div>
-                    <div class="w-full px-3 sm:w-1/2">
-                        <div class="mb-2">
-                            <label class="mb-2 block text-base font-medium text-[#07074D]">PhotoPath</label>
-                            <a-input v-model:value="formState.PhotoPath" placeholder="กรอกPhotoPath" />
-                        </div>
-                    </div>
+       
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">หมายเหตุ</label>
@@ -142,7 +137,6 @@
                     </div>
                 </div>
             </a-form>
-
         </a-modal>
     </div>
 </template>
@@ -156,13 +150,13 @@ import axios from 'axios';
 import countryData from '../../services/countries.json';
 
 // Interface and initial state
-interface CustomerData {
+interface SupplierData {
     Id?: string;
     Title: string | null;
     FirstName: string;
     LastName: string;
-    BirthDate: string;
     Email: string;
+    Phone: string;
     UserName: string;
     Address: string;
     City: string | null;
@@ -170,18 +164,16 @@ interface CustomerData {
     PostalCode: string;
     Notes: string;
     Photo: string;
-    PhotoPath: string;
     Password: string;
     ConfirmPassword: string;
-    Role: string;
 }
 
-const initialFormState: CustomerData = {
+const initialFormState: SupplierData = {
     Title: null,
     FirstName: '',
     LastName: '',
-    BirthDate: '',
     Email: '',
+    Phone: '',
     UserName: '',
     Address: '',
     City: null,
@@ -189,10 +181,8 @@ const initialFormState: CustomerData = {
     PostalCode: '',
     Notes: '',
     Photo: '',
-    PhotoPath: '',
     Password: '',
     ConfirmPassword: '',
-    Role: 'General',
 };
 
 interface Province {
@@ -204,14 +194,13 @@ const countryOptions = ref<{ label: string, value: string }[]>([]);
 const loadingProvinces = ref(false);
 const loadingCountries = ref(false);
 
-const formState = reactive<CustomerData>({ ...initialFormState });
-const customer = ref<CustomerData[]>([]);
+const formState = reactive<SupplierData>({ ...initialFormState });
+const supplier = ref<SupplierData[]>([]);
 const birthDate = ref<dayjs.Dayjs | null>(null);
 const loading = ref(false);
 const modalVisible = ref(false);
 const confirmLoading = ref(false);
 const isEditing = ref(false);
-
 
 const emailWithoutDomain = computed({
     get: () => formState.Email.replace('@gmail.com', ''),
@@ -221,11 +210,15 @@ const emailWithoutDomain = computed({
         formState.Email = `${sanitizedValue}@gmail.com`;
     },
 });
-const filterNumericInput = (event: Event) => {
+
+const filterNumericInput = (field: keyof typeof formState, event: Event) => {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
-    formState.PostalCode = input.value;
+    const numericValue = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
+    input.value = numericValue; // อัปเดตค่าของ input
+    formState[field] = numericValue; // อัปเดตค่าของ formState
 };
+
+
 
 // Table columns
 const columns = [
@@ -258,15 +251,14 @@ const fetchProvinces = async () => {
         loadingProvinces.value = false;
     }
 };
-
 const fetchCountries = async () => {
     try {
         loadingCountries.value = true;
 
         // จัดเรียงประเทศให้ Thailand อยู่แรกสุด
         const countries = countryData.map((country) => ({
-            label: country.label,
-            value: country.label,
+            label: country.label, 
+            value: country.label, 
         }));
 
         // เลื่อน Thailand ไปยังตำแหน่งแรก
@@ -289,17 +281,14 @@ const resetForm = () => {
     birthDate.value = null;
 };
 
-const handleDateChange = (date: dayjs.Dayjs | null) => {
-    formState.BirthDate = date ? date.format('DD-MM-YYYY') : '';
-};
 
-const fetchCustomer = async () => {
+const fetchSupplier = async () => {
     try {
         loading.value = true;
-        const { data } = await HttpService.getAxiosClient().get('/Customer');
-        customer.value = data;
+        const { data } = await HttpService.getAxiosClient().get('/Supplier');
+        supplier.value = data;
     } catch (error) {
-        console.error('Error fetching customer:', error);
+        console.error('Error fetching supplier:', error);
         message.error('ไม่สามารถดึงข้อมูลได้');
     } finally {
         loading.value = false;
@@ -307,34 +296,44 @@ const fetchCustomer = async () => {
 };
 
 const handleOk = async () => {
-    if (await validateForm()) await saveCustomer();
+    if (await validateForm()) await saveSupplier();
 };
-const saveCustomer = async () => {
+const saveSupplier = async () => {
     try {
         confirmLoading.value = true;
-        const { ConfirmPassword, Id, ...payload } = formState;
+
+        const allowedFields = [
+            'Title', 'FirstName', 'LastName', 'Email', 'Phone', 'UserName', 'Address', 'City', 'Country', 'PostalCode', 'Notes', 'Photo', 'Password'
+        ];
+        const payload = Object.fromEntries(
+            Object.entries(formState)
+                .filter(([key]) => allowedFields.includes(key)) 
+        );
+
+        const { Id } = formState;
 
         const method = isEditing.value && Id ? 'patch' : 'post';
-        const url = isEditing.value && Id ? `/Customer/${Id}` : '/Customer';
+        const url = isEditing.value && Id ? `/Supplier/${Id}` : '/Supplier';
 
         const response = await HttpService.getAxiosClient()[method](url, payload);
 
         // ตรวจสอบว่า response มีข้อความ error หรือไม่
         if (response.data && response.data.message) {
-            message.error(response.data.message); // แสดงข้อความ error จาก API
+            message.error(response.data.message); 
         } else {
             message.success(isEditing.value ? 'แก้ไขสำเร็จ' : 'เพิ่มสำเร็จ');
             modalVisible.value = false;
-            fetchCustomer();
+            fetchSupplier();
             resetForm();
         }
     } catch (error) {
-        console.error('Error saving customer:', error);
+        console.error('Error saving supplier:', error);
         message.error('ไม่สามารถบันทึกข้อมูลได้');
     } finally {
         confirmLoading.value = false;
     }
 };
+
 
 const validateForm = async () => {
 
@@ -349,7 +348,7 @@ const validateForm = async () => {
         return false;
     }
 
-    if (!formState.FirstName || !formState.LastName || !formState.UserName || !formState.Email || !formState.Password || !formState.ConfirmPassword || !formState.BirthDate) {
+    if (!formState.FirstName || !formState.LastName || !formState.UserName || !formState.Email || !formState.Password || !formState.ConfirmPassword ) {
         message.error('กรุณากรอกข้อมูลให้ครบถ้วน');
         return false;
     }
@@ -365,16 +364,16 @@ const validateForm = async () => {
 const handleDelete = (id: string) => {
     Modal.confirm({
         title: 'ยืนยันการลบ',
-        content: 'คุณต้องการลบข้อมูลลูกค้าใช่หรือไม่?',
+        content: 'คุณต้องการลบข้อมูลใช่หรือไม่?',
         okText: 'ยืนยัน',
         cancelText: 'ยกเลิก',
         onOk: async () => {
             try {
-                await HttpService.getAxiosClient().delete(`/Customer/${id}`);
+                await HttpService.getAxiosClient().delete(`/Supplier/${id}`);
                 message.success('ลบสำเร็จ');
-                fetchCustomer();
+                fetchSupplier();
             } catch (error) {
-                console.error('Error deleting customer:', error);
+                console.error('Error deleting supplier:', error);
                 message.error('ไม่สามารถลบข้อมูลได้');
             }
         },
@@ -387,18 +386,18 @@ const showModal = () => {
     modalVisible.value = true;
 };
 
-const handleEdit = (record: CustomerData) => {
+const handleEdit = (record: SupplierData) => {
     Object.assign(formState, record);
-    birthDate.value = record.BirthDate ? dayjs(record.BirthDate) : null;
     isEditing.value = true;
     modalVisible.value = true;
 };
 
-const checkDuplicate = async (username: string, email: string, customerId?: string) => {
+
+const checkDuplicate = async (username: string, email: string, supplierId?: string) => {
     try {
-        const { data } = await HttpService.getAxiosClient().get('/Customer');
+        const { data } = await HttpService.getAxiosClient().get('/Supplier');
         const isDuplicate = data.some((e: { UserName: string; Email: string; Id: string }) =>
-            (e.UserName === username || e.Email === email) && e.Id !== customerId
+            (e.UserName === username || e.Email === email) && e.Id !== supplierId
         );
         if (isDuplicate) {
             message.error('ชื่อผู้ใช้หรืออีเมลนี้มีอยู่แล้ว');
@@ -422,6 +421,6 @@ const onFinishFailed = (errorInfo: any) => console.log('Failed:', errorInfo);
 onMounted(() => {
     fetchProvinces();
     fetchCountries();
-    fetchCustomer();
+    fetchSupplier();
 });
 </script>

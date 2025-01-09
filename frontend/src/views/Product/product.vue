@@ -58,7 +58,7 @@
                 <a-form-item label="ผู้จำหน่าย" required>
                     <a-select v-model:value="formState.supplierId" :loading="loading" placeholder="เลือกรายการ">
                         <a-select-option v-for="supplier in suppliers" :key="supplier.Id" :value="supplier.Id">
-                            {{ supplier.CompanyName }}
+                            {{ supplier.FirstName }}
                         </a-select-option>
                     </a-select>
                 </a-form-item>
