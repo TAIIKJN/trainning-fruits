@@ -59,7 +59,8 @@
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
                                 Username
                             </label>
-                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername" />
+                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername"
+                                :disabled="isEditing" />
 
                         </div>
                     </div>
@@ -97,13 +98,15 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">รหัสไปรษณีย์</label>
-                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" />
+                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์"
+                                @input="filterNumericInput" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">ประเทศ</label>
-                            <a-input v-model:value="formState.Country" placeholder="กรอกประเทศ" />
+                            <a-select v-model:value="formState.Country" placeholder="เลือกประเทศ"
+                                :options="countryOptions" :loading="loadingCountries" show-search class="w-full" />
                         </div>
                     </div>
 
@@ -150,6 +153,7 @@ import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import countryData from '../../services/countries.json';
 
 // Interface and initial state
 interface CustomerData {
@@ -162,7 +166,7 @@ interface CustomerData {
     UserName: string;
     Address: string;
     City: string | null;
-    Country: string;
+    Country: string | null;
     PostalCode: string;
     Notes: string;
     Photo: string;
@@ -181,7 +185,7 @@ const initialFormState: CustomerData = {
     UserName: '',
     Address: '',
     City: null,
-    Country: '',
+    Country: null,
     PostalCode: '',
     Notes: '',
     Photo: '',
@@ -194,8 +198,11 @@ const initialFormState: CustomerData = {
 interface Province {
     name_th: string | null;
 }
+
 const provinceOptions = ref([]);
+const countryOptions = ref<{ label: string, value: string }[]>([]);
 const loadingProvinces = ref(false);
+const loadingCountries = ref(false);
 
 const formState = reactive<CustomerData>({ ...initialFormState });
 const customer = ref<CustomerData[]>([]);
@@ -214,6 +221,12 @@ const emailWithoutDomain = computed({
         formState.Email = `${sanitizedValue}@gmail.com`;
     },
 });
+const filterNumericInput = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
+    formState.PostalCode = input.value;
+};
+
 // Table columns
 const columns = [
     { title: 'ชื่อ-นามสกุล', key: 'fullName', width: 150, fixed: 'left' },
@@ -243,6 +256,31 @@ const fetchProvinces = async () => {
         message.error('ไม่สามารถโหลดข้อมูลจังหวัดได้');
     } finally {
         loadingProvinces.value = false;
+    }
+};
+
+const fetchCountries = async () => {
+    try {
+        loadingCountries.value = true;
+
+        // จัดเรียงประเทศให้ Thailand อยู่แรกสุด
+        const countries = countryData.map((country) => ({
+            label: country.label,
+            value: country.label,
+        }));
+
+        // เลื่อน Thailand ไปยังตำแหน่งแรก
+        const thailand = countries.find((country) => country.value === 'Thailand');
+        if (thailand?.value === 'Thailand') {
+            countryOptions.value = [thailand, ...countries.filter((country) => country.value !== 'Thailand')];
+        } else {
+            countryOptions.value = countries;
+        }
+    } catch (error) {
+        console.error('Error fetching countries:', error);
+        message.error('ไม่สามารถโหลดข้อมูลประเทศได้');
+    } finally {
+        loadingCountries.value = false;
     }
 };
 // Form management functions
@@ -387,6 +425,7 @@ const onFinishFailed = (errorInfo: any) => console.log('Failed:', errorInfo);
 
 onMounted(() => {
     fetchProvinces();
+    fetchCountries();
     fetchCustomer();
 });
 </script>

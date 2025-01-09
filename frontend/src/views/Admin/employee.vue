@@ -60,7 +60,8 @@
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
                                 Username
                             </label>
-                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername" />
+                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername"
+                                :disabled="isEditing" />
 
                         </div>
                     </div>
@@ -98,7 +99,7 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">รหัสไปรษณีย์</label>
-                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" />
+                            <a-input v-model:value="formState.PostalCode" placeholder="กรอกรหัสไปรษณีย์" @input="filterNumericInput" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
@@ -151,6 +152,7 @@ import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import countryData from '../../services/countries.json';
 
 // Interface and initial state
 interface EmployeeData {
@@ -195,11 +197,7 @@ const initialFormState: EmployeeData = {
 interface Province {
     name_th: string | null;
 }
-interface Country {
-    name: {
-        common: string;
-    };
-}
+
 const provinceOptions = ref([]);
 const countryOptions = ref<{ label: string, value: string }[]>([]);
 const loadingProvinces = ref(false);
@@ -222,6 +220,11 @@ const emailWithoutDomain = computed({
     },
 });
 
+const filterNumericInput = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
+    formState.PostalCode = input.value; 
+};
 
 // Table columns
 const columns = [
@@ -257,19 +260,17 @@ const fetchProvinces = async () => {
 const fetchCountries = async () => {
     try {
         loadingCountries.value = true;
-        const response = await axios.get('https://restcountries.com/v3.1/all');
-        console.log("country", response.data);
 
         // จัดเรียงประเทศให้ Thailand อยู่แรกสุด
-        const countries = response.data.map((country: Country) => ({
-            label: country.name.common, // ชื่อประเทศ
-            value: country.name.common, // ใช้ชื่อประเทศเป็นค่า value
+        const countries = countryData.map((country) => ({
+            label: country.label, 
+            value: country.label, 
         }));
 
         // เลื่อน Thailand ไปยังตำแหน่งแรก
-        const thailand = countries.find((country: { value: string }) => country.value === 'Thailand');
+        const thailand = countries.find((country) => country.value === 'Thailand');
         if (thailand?.value === 'Thailand') {
-            countryOptions.value = [thailand, ...countries.filter((country: { value: string }) => country.value !== 'Thailand')];
+            countryOptions.value = [thailand, ...countries.filter((country) => country.value !== 'Thailand')];
         } else {
             countryOptions.value = countries;
         }

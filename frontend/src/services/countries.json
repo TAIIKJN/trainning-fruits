@@ -1,0 +1,103 @@
+[
+    {
+      "label": "ไทย",
+      "value": "Thailand",
+      "code": "TH"
+    },
+    {
+      "label": "สหรัฐอเมริกา",
+      "value": "United States",
+      "code": "US"
+    },
+    {
+      "label": "ญี่ปุ่น",
+      "value": "Japan",
+      "code": "JP"
+    },
+    {
+      "label": "สหราชอาณาจักร",
+      "value": "United Kingdom",
+      "code": "GB"
+    },
+    {
+      "label": "จีน",
+      "value": "China",
+      "code": "CN"
+    },
+    {
+      "label": "อินเดีย",
+      "value": "India",
+      "code": "IN"
+    },
+    {
+      "label": "เยอรมนี",
+      "value": "Germany",
+      "code": "DE"
+    },
+    {
+      "label": "ฝรั่งเศส",
+      "value": "France",
+      "code": "FR"
+    },
+    {
+      "label": "ออสเตรเลีย",
+      "value": "Australia",
+      "code": "AU"
+    },
+    {
+      "label": "เกาหลีใต้",
+      "value": "South Korea",
+      "code": "KR"
+    },
+    {
+      "label": "รัสเซีย",
+      "value": "Russia",
+      "code": "RU"
+    },
+    {
+      "label": "แคนาดา",
+      "value": "Canada",
+      "code": "CA"
+    },
+    {
+      "label": "บราซิล",
+      "value": "Brazil",
+      "code": "BR"
+    },
+    {
+      "label": "อิตาลี",
+      "value": "Italy",
+      "code": "IT"
+    },
+    {
+      "label": "สเปน",
+      "value": "Spain",
+      "code": "ES"
+    },
+    {
+      "label": "เม็กซิโก",
+      "value": "Mexico",
+      "code": "MX"
+    },
+    {
+      "label": "นิวซีแลนด์",
+      "value": "New Zealand",
+      "code": "NZ"
+    },
+    {
+      "label": "สิงคโปร์",
+      "value": "Singapore",
+      "code": "SG"
+    },
+    {
+      "label": "มาเลเซีย",
+      "value": "Malaysia",
+      "code": "MY"
+    },
+    {
+      "label": "อินโดนีเซีย",
+      "value": "Indonesia",
+      "code": "ID"
+    }
+  ]
+  
