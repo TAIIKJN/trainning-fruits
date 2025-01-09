@@ -68,7 +68,7 @@
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
                                 Email
                             </label>
-                            <a-input v-model:value="formState.Email" placeholder="กรอก Email"
+                            <a-input v-model:value="emailWithoutDomain" placeholder="กรอก Email"
                                 addon-after="@gmail.com" />
                         </div>
                     </div>
@@ -145,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
 import dayjs from 'dayjs';
@@ -205,6 +205,15 @@ const modalVisible = ref(false);
 const confirmLoading = ref(false);
 const isEditing = ref(false);
 
+
+const emailWithoutDomain = computed({
+    get: () => formState.Email.replace('@gmail.com', ''),
+    set: (value: string) => {
+        // ตรวจสอบและตัด @gmail.com ออกหากผู้ใช้กรอกมาในช่อง input
+        const sanitizedValue = value.replace('@gmail.com', '').trim();
+        formState.Email = `${sanitizedValue}@gmail.com`;
+    },
+});
 // Table columns
 const columns = [
     { title: 'ชื่อ-นามสกุล', key: 'fullName', width: 150, fixed: 'left' },
@@ -266,15 +275,14 @@ const saveCustomer = async () => {
     try {
         confirmLoading.value = true;
         const { ConfirmPassword, Id, ...payload } = formState;
-        payload.Email = `${payload.Email}@gmail.com`;
 
         const method = isEditing.value && Id ? 'patch' : 'post';
         const url = isEditing.value && Id ? `/Customer/${Id}` : '/Customer';
 
         const response = await HttpService.getAxiosClient()[method](url, payload);
 
-       // ตรวจสอบว่า response มีข้อความ error หรือไม่
-       if (response.data && response.data.message) {
+        // ตรวจสอบว่า response มีข้อความ error หรือไม่
+        if (response.data && response.data.message) {
             message.error(response.data.message); // แสดงข้อความ error จาก API
         } else {
             message.success(isEditing.value ? 'แก้ไขสำเร็จ' : 'เพิ่มสำเร็จ');
@@ -307,6 +315,8 @@ const validateForm = async () => {
         message.error('กรุณากรอกข้อมูลให้ครบถ้วน');
         return false;
     }
+    formState.Email = formState.Email.replace('@gmail.com', '').trim() + '@gmail.com';
+
     if (formState.Password !== formState.ConfirmPassword) {
         message.error('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน');
         return false;
@@ -333,7 +343,6 @@ const handleDelete = (id: string) => {
     });
 };
 
-// Modal and form handling
 const showModal = () => {
     isEditing.value = false;
     resetForm();
