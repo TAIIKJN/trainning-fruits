@@ -222,7 +222,7 @@ const emailWithoutDomain = computed({
 
 const filterNumericInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
+    input.value = input.value.replace(/\D/g, ''); 
     formState.PostalCode = input.value; 
 };
 

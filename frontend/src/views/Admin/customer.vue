@@ -248,8 +248,8 @@ const fetchProvinces = async () => {
         // console.log(response.data);
 
         provinceOptions.value = response.data.map((province: Province) => ({
-            label: province.name_th, // ชื่อจังหวัด
-            value: province.name_th, // ใช้ชื่อจังหวัดเป็นค่า value
+            label: province.name_th, 
+            value: province.name_th, 
         }));
     } catch (error) {
         console.error('Error fetching provinces:', error);
@@ -263,7 +263,6 @@ const fetchCountries = async () => {
     try {
         loadingCountries.value = true;
 
-        // จัดเรียงประเทศให้ Thailand อยู่แรกสุด
         const countries = countryData.map((country) => ({
             label: country.label,
             value: country.label,
@@ -319,9 +318,8 @@ const saveCustomer = async () => {
 
         const response = await HttpService.getAxiosClient()[method](url, payload);
 
-        // ตรวจสอบว่า response มีข้อความ error หรือไม่
         if (response.data && response.data.message) {
-            message.error(response.data.message); // แสดงข้อความ error จาก API
+            message.error(response.data.message);
         } else {
             message.success(isEditing.value ? 'แก้ไขสำเร็จ' : 'เพิ่มสำเร็จ');
             modalVisible.value = false;

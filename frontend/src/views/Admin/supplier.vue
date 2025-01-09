@@ -213,9 +213,9 @@ const emailWithoutDomain = computed({
 
 const filterNumericInput = (field: keyof typeof formState, event: Event) => {
     const input = event.target as HTMLInputElement;
-    const numericValue = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
-    input.value = numericValue; // อัปเดตค่าของ input
-    formState[field] = numericValue; // อัปเดตค่าของ formState
+    const numericValue = input.value.replace(/\D/g, ''); 
+    input.value = numericValue;
+    formState[field] = numericValue; 
 };
 
 // Table columns
