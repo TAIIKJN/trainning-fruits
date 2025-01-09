@@ -93,7 +93,7 @@
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">จังหวัด</label>
                             <a-select v-model:value="formState.City" placeholder="เลือกจังหวัด"
-                                :options="provinceOptions" :loading="loadingProvinces" class="w-full" />
+                                :options="provinceOptions" :loading="loadingProvinces"  show-search class="w-full" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
@@ -218,15 +218,12 @@ const filterNumericInput = (field: keyof typeof formState, event: Event) => {
     formState[field] = numericValue; // อัปเดตค่าของ formState
 };
 
-
-
 // Table columns
 const columns = [
     { title: 'ชื่อ-นามสกุล', key: 'fullName', width: 150, fixed: 'left' },
     { title: 'ชื่อผู้ใช้', dataIndex: 'UserName', key: 'userName' },
     { title: 'อีเมล', dataIndex: 'Email', key: 'email' },
     { title: 'ที่อยู่', dataIndex: 'Address', key: 'address' },
-    { title: 'วันเกิด', dataIndex: 'BirthDate', key: 'birthDate' },
     { title: 'เมือง', dataIndex: 'City', key: 'city' },
     { title: 'รหัสไปรษณีย์', dataIndex: 'PostalCode', key: 'postalCode' },
     { title: 'ประเทศ', dataIndex: 'Country', key: 'country' },

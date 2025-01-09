@@ -29,9 +29,10 @@
                             <a-button type="primary" size="small" @click="viewDetails(record)">
                                 View Details
                             </a-button>
-                            <a-button type="danger" size="small" @click="cancelOrder(record.Id)">
+                            <a-button v-if="record.State !== 'Cancel'" danger size="small" @click="cancelOrder(record.Id)">
                                 Cancel Order
                             </a-button>
+
                         </a-space>
                     </template>
                 </template>
@@ -51,6 +52,14 @@
                             <div>
                                 <p class="text-gray-600 mb-1">Order Date:</p>
                                 <p class="font-medium">{{ formatDate(selectedOrder.OrderDate) }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 mb-1">พนักงานรับออเดอร์</p>
+                                <p class="font-medium">{{ getEmployeeName(selectedOrder.EmployeeId) }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 mb-1">ลูกค้า</p>
+                                <p class="font-medium">{{ selectedOrder.Customer.FirstName }} {{ selectedOrder.Customer.LastName }}</p>
                             </div>
                             <div>
                                 <p class="text-gray-600 mb-1">Status:</p>
@@ -87,6 +96,8 @@
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
 import KeycloakService from '../../services/KeycloakService'
+import dayjs from 'dayjs';
+import { message } from 'ant-design-vue';
 
 interface Employee {
     Id: string;
@@ -111,6 +122,10 @@ interface Order {
     Address: string;
     State: string;
     OrderDetail: OrderDetail[];
+    Customer: {
+        FirstName: string;
+        LastName: string;
+    }
 }
 
 const orders = ref<Order[]>([]);
@@ -255,18 +270,14 @@ const getProductName = (ProductId: string) => {
 
 
 const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('th-TH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+    return dayjs(date).format('DD-MM-YYYY');
 };
 
 const getStateColor = (state: string) => {
     const colors: Record<string, string> = {
         Pending: 'orange',
         Completed: 'green',
-        Cancelled: 'red',
+        Cancel: 'red',
     };
     return colors[state] || 'blue';
 };
@@ -284,19 +295,43 @@ const closeDrawer = () => {
 const cancelOrder = async (orderId: string) => {
     try {
         loading.value = true;
-        await HttpService.getAxiosClient().delete(`/Order/${orderId}`);
+
+        const existingOrder = orders.value.find(order => order.Id === orderId);
+
+        if (!existingOrder) {
+            message.error('Order not found!');
+            return;
+        }
+
+        const payload = {
+            CustomerId: existingOrder.CustomerId,
+            EmployeeId: existingOrder.EmployeeId,
+            OrderDate: existingOrder.OrderDate,
+            TotalPrice: existingOrder.TotalPrice,
+            Address: existingOrder.Address,
+            State: 'Cancel',
+            OrderDetail: existingOrder.OrderDetail.map(detail => ({
+                ...detail, 
+            }))
+        };
+
+        await HttpService.getAxiosClient().patch(`/Order/${orderId}`, payload);
+
         orders.value = orders.value.map(order =>
-            order.Id === orderId ? { ...order, State: 'Cancelled' } : order
+            order.Id === orderId ? { ...order, State: 'Cancel' } : order
         );
-        // แสดงข้อความสำเร็จ
-        alert('Order has been cancelled successfully!');
+
+        message.success('Order has been cancelled successfully!');
     } catch (error) {
         console.error('Error cancelling order:', error);
-        alert('Failed to cancel the order.');
+        message.error('Failed to cancel the order.');
     } finally {
         loading.value = false;
     }
 };
+
+
+
 
 onMounted(() => {
     fetchProducts();

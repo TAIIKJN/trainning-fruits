@@ -1,6 +1,6 @@
 <template>
     <div class="mx-auto container py-16 px-2 min-h-screen">
-      
+
 
         <div>
             <div class="mx-auto justify-center px-2 md:flex md:space-x-6 xl:px-0 min-h-[calc(100vh-12rem)]">
@@ -82,6 +82,11 @@
                             <p class="mb-1 text-lg font-bold">{{ totalAmount }} บาท</p>
                         </div>
                     </div>
+                    <div class="mb-2">
+                        <label class="mb-2 block text-base font-medium text-[#07074D]">เลือกลูกค้า</label>
+                        <a-select v-model:value="selectedCustomer" placeholder="เลือกลูกค้า"  show-search :options="customerOptions"
+                            :loading="loadingCustomer" class="w-full" />
+                    </div>
                     <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
                         @click="handleCheckout" :disabled="loading">
                         {{ loading ? 'กำลังดำเนินการ...' : 'Check out' }}
@@ -98,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted,  computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import HttpService from '../../services/HttpService'
 import KeycloakService from '../../services/KeycloakService'
@@ -137,6 +142,16 @@ interface Order {
     OrderDetail: OrderDetail[];
 }
 
+interface Customer {
+    UserName: string;
+    FirstName: string;
+    LastName: string;
+}
+
+const customerOptions = ref([]);
+const loadingCustomer = ref(false);
+const selectedCustomer = ref(null);
+
 const loading = ref(false)
 
 const employees = ref<Employee[]>([])
@@ -146,6 +161,24 @@ const subTotalItems = ref<Product[]>([])
 const totalAmount = computed(() => {
     return subTotalItems.value.reduce((total, item) => total + (parseFloat(item.UnitPrice) * item.QuantityToOrder), 0)
 })
+
+const fetchCustomer = async () => {
+    try {
+        loadingCustomer.value = true;
+        const response = await HttpService.getAxiosClient().get('/Customer');
+        // console.log(response.data);
+
+        customerOptions.value = response.data.map((customer: Customer) => ({
+            label: customer.FirstName,
+            value: customer.UserName,
+        }));
+    } catch (error) {
+        console.error('Error fetching provinces:', error);
+        message.error('ไม่สามารถโหลดข้อมูลจังหวัดได้');
+    } finally {
+        loadingCustomer.value = false;
+    }
+};
 
 const fetchData = async () => {
     loading.value = true
@@ -163,11 +196,7 @@ const fetchData = async () => {
     }
 }
 
-// เพิ่มฟังก์ชันสุ่ม employee
-const getRandomEmployee = (): string => {
-    const randomIndex = Math.floor(Math.random() * employees.value.length)
-    return employees.value[randomIndex].UserName
-}
+
 
 const getCustomerId = (): string => {
     try {
@@ -187,7 +216,11 @@ const handleCheckout = async () => {
         message.warning('กรุณาเลือกสินค้าก่อนสั่งซื้อ')
         return
     }
-
+    // ตรวจสอบว่ามีการเลือกลูกค้าหรือไม่
+    if (!selectedCustomer.value) {
+        message.warning('กรุณาเลือกลูกค้าก่อนสั่งซื้อ')
+        return
+    }
     try {
         loading.value = true
 
@@ -198,8 +231,8 @@ const handleCheckout = async () => {
         }
 
         const orderData: Order = {
-            CustomerUserName: getCustomerId(),  //getCustomerId()
-            EmployeeUserName: getRandomEmployee(),
+            CustomerUserName: selectedCustomer.value,  //getCustomerId()
+            EmployeeUserName: getCustomerId(),
             OrderDate: new Date().toISOString(),
             TotalPrice: totalAmount.value,
             Address: "12222",
@@ -212,13 +245,23 @@ const handleCheckout = async () => {
             }))
         }
 
-        await HttpService.getAxiosClient().post('/Order', orderData)
+        const response = await HttpService.getAxiosClient().post('/Order', orderData)
 
-        message.success('สั่งซื้อสำเร็จ')
-        subTotalItems.value = []
-        products.value.forEach(product => {
-            product.QuantityToOrder = 0
-        })
+
+        if (response.data && typeof response.data === 'string') {
+            message.error(response.data);
+        } else if (response.data && response.data.message) {
+            message.error(response.data.message);
+        } else {
+            message.success('สั่งซื้อสำเร็จ');
+            subTotalItems.value = [];
+            products.value.forEach(product => {
+                product.QuantityToOrder = 0;
+            });
+        }
+
+
+
 
     } catch (error) {
         message.error('ไม่สามารถสั่งซื้อได้')
@@ -255,11 +298,15 @@ const updateSubTotal = (item: Product) => {
     }
 }
 
-onMounted(fetchData)
+onMounted(() => {
+    fetchData();
+    fetchCustomer();
+});
 </script>
 
-<style >
+<style>
 ::v-deep .css-dev-only-do-not-override-1p3hq3p .ant-list .ant-list-item {
-  padding: 8px 16px; /* ลด padding */
+    padding: 8px 16px;
+    /* ลด padding */
 }
 </style>

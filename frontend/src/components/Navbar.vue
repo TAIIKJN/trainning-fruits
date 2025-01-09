@@ -74,6 +74,7 @@ const items = ref([
   userRoles.includes('employee') && [
     createItem('employee', 'Employee', UserOutlined),
     createItem('order-employee', 'Order-employee', AppstoreOutlined),
+    createItem('employee-menu', 'menu', AppstoreOutlined),
   ]
 ].flat().filter(Boolean));
 

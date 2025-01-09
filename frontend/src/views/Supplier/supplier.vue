@@ -47,7 +47,6 @@ const columns = [
     { title: 'เบอร์โทร์', dataIndex: 'Phone', key: 'phone' },
     { title: 'อีเมล', dataIndex: 'Email', key: 'email' },
     { title: 'ที่อยู่', dataIndex: 'Address', key: 'address' },
-    { title: 'วันเกิด', dataIndex: 'BirthDate', key: 'birthDate' },
     { title: 'เมือง', dataIndex: 'City', key: 'city' },
     { title: 'รหัสไปรษณีย์', dataIndex: 'PostalCode', key: 'postalCode' },
     { title: 'ประเทศ', dataIndex: 'Country', key: 'country' },
