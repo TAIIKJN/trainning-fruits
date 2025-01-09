@@ -72,6 +72,7 @@ model Shipper {
 
 model Supplier {
   Id         String    @id @default(uuid())
+  Title      String    @default("นาย")
   FirstName  String    @default("test")
   LastName   String?
   Email      String    @unique @default("test@test.com")

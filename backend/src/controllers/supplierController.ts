@@ -23,6 +23,7 @@ const realm = "taii-aif";
 let token = "";
 
 export interface Suppliers {
+  Title: string;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -237,6 +238,7 @@ export class supplierController extends Controller {
 
         const data = await prisma.supplier.create({
           data: {
+            Title: requestBody.Title,
             FirstName: requestBody.FirstName,
             LastName: requestBody.LastName,
             Email: requestBody.Email,
@@ -386,6 +388,7 @@ export class supplierController extends Controller {
           console.log("dataUser", dataUpdataUser, dataUpdataPassword);
           const data = await prisma.supplier.update({
             data: {
+              Title: requestBody.Title,
               FirstName: requestBody.FirstName,
               LastName: requestBody.LastName,
               Email: requestBody.Email,

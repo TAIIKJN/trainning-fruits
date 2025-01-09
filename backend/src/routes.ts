@@ -43,6 +43,7 @@ const models: TsoaRoute.Models = {
     "Suppliers": {
         "dataType": "refObject",
         "properties": {
+            "Title": {"dataType":"string","required":true},
             "FirstName": {"dataType":"string","required":true},
             "LastName": {"dataType":"string","required":true},
             "Email": {"dataType":"string","required":true},

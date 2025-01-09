@@ -179,6 +179,7 @@ export class orderController extends Controller {
     @Body() requestBody: OrdersUpdate
   ) {
     try {
+      const statusOrder = ["Done", "done"];
       const dataCustomer = await prisma.customer.findFirst({
         where: {
           Id: requestBody.CustomerId,
@@ -245,6 +246,21 @@ export class orderController extends Controller {
                 },
               });
 
+              if (statusOrder.includes(requestBody.State)) {
+                let sumProductInStock = product.UnitsInStock - item.Quantity;
+                let sumProductOnOrder = product.UnitsOnOrder + item.Quantity;
+
+                await prisma.product.update({
+                  where: {
+                    Id: item?.ProductId,
+                  },
+                  data: {
+                    UnitsInStock: sumProductInStock,
+                    UnitsOnOrder: sumProductOnOrder,
+                  },
+                });
+              }
+
               return dataDetail;
             } else {
               const dataDetail = await prisma.orderDetail.create({
@@ -263,6 +279,7 @@ export class orderController extends Controller {
         );
 
         console.log(dataOrder, dataOrderDetail);
+
         return { order: dataOrder, orderDetails: dataOrderDetail };
       } else {
         return "ไม่พบข้อมูล";

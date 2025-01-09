@@ -5,6 +5,7 @@ services:
     # image: docker.frappet.com/training/oom_be:latest
     environment:
       DATABASE_URL: file:./dev.db
+      # DATABASE_URL: file:/app/data/dev.db  # เปลี่ยนให้ชี้ไปที่ path ใน volume
       TZ: Asia/Bangkok
       DEBUG: "*"
       # - TZ=Asia/Bangkok
