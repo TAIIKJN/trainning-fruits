@@ -333,6 +333,70 @@ export class customerController extends Controller {
             message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
           };
         } else {
+          const dataToken = {
+            client_id: "admin-cli",
+            username: "admin",
+            password: "admin",
+            grant_type: "password",
+          };
+          const tokenKeyCloak = await axios.post(
+            `${host}/realms/master/protocol/openid-connect/token`,
+            qs.stringify(dataToken),
+            {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          );
+
+          token = tokenKeyCloak.data.access_token;
+          console.log("token", token);
+
+          const dataKeyCloak = await axios.get(
+            `${host}/admin/realms/${realm}/users/?username=${dataCustomer.UserName}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const dataUserKeyCloak = {
+            email: requestBody.Email,
+            firstName: requestBody.FirstName,
+            lastName: requestBody.LastName,
+          };
+
+          const dataPasswordKeyCloak = {
+            type: "password",
+            value: requestBody.Password,
+            temporary: false,
+          };
+
+          const dataUpdataUser = await axios.put(
+            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}`,
+            dataUserKeyCloak,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const dataUpdataPassword = await axios.put(
+            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
+            dataPasswordKeyCloak,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("dataUser", dataUpdataUser, dataUpdataPassword);
+
           const data = await prisma.customer.update({
             data: {
               Title: requestBody.Title,
@@ -340,7 +404,6 @@ export class customerController extends Controller {
               LastName: requestBody.LastName,
               BirthDate: requestBody.BirthDate,
               Email: requestBody.Email,
-              UserName: requestBody.UserName,
               Address: requestBody.Address,
               City: requestBody.City,
               Country: requestBody.Country,

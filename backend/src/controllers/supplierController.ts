@@ -293,27 +293,117 @@ export class supplierController extends Controller {
         },
       });
 
+      const whereData = {
+        AND: [
+          {
+            OR: [
+              { UserName: requestBody.UserName },
+              { Email: requestBody.Email },
+            ],
+          },
+          { Id: { not: id } },
+        ],
+      };
+      const dataUser = await prisma.supplier.findFirst({
+        where: whereData,
+      });
+      const dataEmployee = await prisma.employee.findFirst({
+        where: whereData,
+      });
+      const dataCustomer = await prisma.customer.findFirst({
+        where: whereData,
+      });
+
       if (dataSupplier) {
-        const data = await prisma.supplier.update({
-          data: {
-            FirstName: requestBody.FirstName,
-            LastName: requestBody.LastName,
-            Email: requestBody.Email,
-            UserName: requestBody.UserName,
-            Phone: requestBody.Phone,
-            Address: requestBody.Address,
-            City: requestBody.City,
-            Country: requestBody.Country,
-            PostalCode: requestBody.PostalCode,
-            Notes: requestBody.Notes,
-            Photo: requestBody.Photo,
-          },
-          where: {
-            Id: id,
-          },
-        });
-        console.log(data);
-        return data;
+        if (dataEmployee || dataUser || dataCustomer) {
+          return {
+            status: 400,
+            message: "ชื่อผู้ใช้หรืออีเมลถูกใช้งานแล้ว",
+          };
+        } else {
+          const dataToken = {
+            client_id: "admin-cli",
+            username: "admin",
+            password: "admin",
+            grant_type: "password",
+          };
+          const tokenKeyCloak = await axios.post(
+            `${host}/realms/master/protocol/openid-connect/token`,
+            qs.stringify(dataToken),
+            {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          );
+
+          token = tokenKeyCloak.data.access_token;
+          console.log("token", token);
+
+          const dataKeyCloak = await axios.get(
+            `${host}/admin/realms/${realm}/users/?username=${dataSupplier.UserName}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const dataUserKeyCloak = {
+            email: requestBody.Email,
+            firstName: requestBody.FirstName,
+            lastName: requestBody.LastName,
+          };
+
+          const dataPasswordKeyCloak = {
+            type: "password",
+            value: requestBody.Password,
+            temporary: false,
+          };
+
+          const dataUpdataUser = await axios.put(
+            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}`,
+            dataUserKeyCloak,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const dataUpdataPassword = await axios.put(
+            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
+            dataPasswordKeyCloak,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("dataUser", dataUpdataUser, dataUpdataPassword);
+          const data = await prisma.supplier.update({
+            data: {
+              FirstName: requestBody.FirstName,
+              LastName: requestBody.LastName,
+              Email: requestBody.Email,
+              Phone: requestBody.Phone,
+              Address: requestBody.Address,
+              City: requestBody.City,
+              Country: requestBody.Country,
+              PostalCode: requestBody.PostalCode,
+              Notes: requestBody.Notes,
+              Photo: requestBody.Photo,
+            },
+            where: {
+              Id: id,
+            },
+          });
+          console.log(data);
+          return data;
+        }
       } else {
         return "ไม่พบข้อมูล";
       }

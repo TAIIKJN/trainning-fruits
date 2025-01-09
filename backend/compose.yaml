@@ -4,13 +4,12 @@ services:
     container_name: training-fruits
     # image: docker.frappet.com/training/oom_be:latest
     environment:
-      # DATABASE_URL: file:./prisma/dev.db
-      # TZ: Asia/Bangkok
-      - TZ=Asia/Bangkok
+      DATABASE_URL: file:./dev.db
+      TZ: Asia/Bangkok
+      DEBUG: "*"
+      # - TZ=Asia/Bangkok
     ports:
       - 8001:80
-    # volumes:
-    #   - ./data:/app/data
     # deploy:
     #   mode: replicated
     #   replicas: 3
@@ -23,4 +22,9 @@ services:
     build:
       context: .
     command: >
-      sh -c "npx prisma generate && npm start"
+        sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
+    volumes:
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data: {}
