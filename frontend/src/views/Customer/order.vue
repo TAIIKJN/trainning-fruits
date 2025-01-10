@@ -29,7 +29,8 @@
                             <a-button type="primary" size="small" @click="viewDetails(record)">
                                 View Details
                             </a-button>
-                            <a-button v-if="record.State !== 'Cancel'" danger size="small" @click="cancelOrder(record.Id)">
+                            <a-button v-if="record.State !== 'Cancel'" danger size="small"
+                                @click="cancelOrder(record.Id)">
                                 Cancel Order
                             </a-button>
 
@@ -59,7 +60,8 @@
                             </div>
                             <div>
                                 <p class="text-gray-600 mb-1">ลูกค้า</p>
-                                <p class="font-medium">{{ selectedOrder.Customer.FirstName }} {{ selectedOrder.Customer.LastName }}</p>
+                                <p class="font-medium">{{ selectedOrder.Customer.FirstName }} {{
+                                    selectedOrder.Customer.LastName }}</p>
                             </div>
                             <div>
                                 <p class="text-gray-600 mb-1">Status:</p>
@@ -69,21 +71,58 @@
                             </div>
                             <div>
                                 <p class="text-gray-600 mb-1">Total Price:</p>
-                                <p class="font-medium text-lg">฿{{ selectedOrder.TotalPrice.toLocaleString() }}</p>
+                                <p class="font-medium text-lg">฿{{ calculateTotalPrice().toLocaleString() }}</p>
                             </div>
                         </div>
 
-                        <!-- Order Items Section -->
+                        <div class="flex justify-end">
+                            <template v-if="isEditing">
+                                <a-button danger @click="toggleEdit">
+                                    Cancel Edit
+                                </a-button>
+                            </template>
+                            <template v-else>
+                                <a-button type="primary" @click="toggleEdit"
+                                    :disabled="selectedOrder.State !== 'Pending'"
+                                    style="background-color: #F14A00; border-color: #FFF2C2">
+                                    Edit Order
+                                </a-button>
+                            </template>
+                        </div>
+
                         <div>
                             <h3 class="text-lg font-medium mb-4">Order Items</h3>
-                            <a-table :dataSource="selectedOrder.OrderDetail" :columns="detailColumns" rowKey="Id"
-                                :pagination="false">
-                                <template #bodyCell="{ column, record }">
-                                    <template v-if="column.key === 'total'">
-                                        ฿{{ (record.Quantity * Number(record.UnitPrice)).toLocaleString() }}
+                            <template v-if="isEditing">
+
+                                <a-table :dataSource="editableOrderDetails" :columns="editableColumns" rowKey="Id">
+                                    <template #bodyCell="{ column, record }">
+                                        <template v-if="column.key === 'quantity'">
+                                            <a-input-number v-model:value="record.Quantity" :min="1" />
+                                        </template>
+                                        <template v-if="column.key === 'total'">
+                                            ฿{{ (record.Quantity * Number(record.UnitPrice)).toLocaleString() }}
+                                        </template>
+                                        <template v-if="column.key === 'actions'">
+                                            <a-button type="link" danger
+                                                @click="removeProduct(record)">Remove</a-button>
+                                        </template>
                                     </template>
-                                </template>
-                            </a-table>
+                                </a-table>
+
+                                <div class="flex justify-end mt-4">
+                                    <a-button type="primary" @click="saveChanges">Save Changes</a-button>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <a-table :dataSource="selectedOrder.OrderDetail" :columns="detailColumns" rowKey="Id"
+                                    :pagination="false">
+                                    <template #bodyCell="{ column, record }">
+                                        <template v-if="column.key === 'total'">
+                                            ฿{{ (record.Quantity * Number(record.UnitPrice)).toLocaleString() }}
+                                        </template>
+                                    </template>
+                                </a-table>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -104,6 +143,12 @@ interface Employee {
     FirstName: string;
     LastName: string;
 }
+interface Product {
+    Id: string;
+    ProductName: string;
+    UnitPrice: string;
+}
+
 interface OrderDetail {
     Id: string;
     ProductId: string;
@@ -128,6 +173,7 @@ interface Order {
     }
 }
 
+
 const orders = ref<Order[]>([]);
 const employees = ref<Employee[]>([]);
 
@@ -135,7 +181,15 @@ const loading = ref(true);
 const detailsVisible = ref(false);
 const selectedOrder = ref<Order | null>(null);
 
-const products = ref<{ Id: string; ProductName: string }[]>([]);
+const products = ref<Product[]>([]);
+
+const isEditing = ref(false);
+const editableOrderDetails = ref<OrderDetail[]>([]);
+const newProduct = ref({
+    ProductId: '',
+    Quantity: 1
+});
+
 
 const columns = [
     {
@@ -201,6 +255,40 @@ const detailColumns = [
         width: '150px',
     },
 ];
+
+const editableColumns = [
+    {
+        title: 'Product Name',
+        dataIndex: 'ProductId',
+        key: 'ProductId',
+        customRender: ({ text }: { text: string }) => getProductName(text),
+    },
+    {
+        title: 'Quantity',
+        dataIndex: 'Quantity',
+        key: 'quantity',
+        width: '150px',
+    },
+    {
+        title: 'Unit Price',
+        dataIndex: 'UnitPrice',
+        key: 'UnitPrice',
+        width: '150px',
+        customRender: ({ text }: { text: string }) => `฿${Number(text).toLocaleString()}`,
+    },
+    {
+        title: 'Total',
+        key: 'total',
+        width: '150px',
+    },
+    {
+        title: 'Actions',
+        key: 'actions',
+        width: '100px',
+    },
+];
+
+
 
 const fetchEmployees = async () => {
     try {
@@ -282,7 +370,79 @@ const getStateColor = (state: string) => {
     return colors[state] || 'blue';
 };
 
+const toggleEdit = async () => {
+    // ถ้าไม่มีข้อมูล products ให้โหลดก่อน
+    if (products.value.length === 0) {
+        await fetchProducts();
+    }
 
+    if (isEditing.value) {
+        isEditing.value = false;
+        editableOrderDetails.value = [];
+    } else {
+        isEditing.value = true;
+        editableOrderDetails.value = JSON.parse(JSON.stringify(selectedOrder.value?.OrderDetail || []));
+    }
+    newProduct.value = {
+        ProductId: '',
+        Quantity: 1
+    };
+};
+
+// Function to remove product
+const removeProduct = (record: OrderDetail) => {
+    editableOrderDetails.value = editableOrderDetails.value.filter(item => item.Id !== record.Id);
+};
+
+// Function to calculate total price
+const calculateTotalPrice = () => {
+    if (isEditing.value) {
+        return editableOrderDetails.value.reduce((total, item) => {
+            return total + (item.Quantity * Number(item.UnitPrice));
+        }, 0);
+    }
+    return selectedOrder.value?.TotalPrice || 0;
+};
+
+// Function to save changes
+const saveChanges = async () => {
+    try {
+        if (!selectedOrder.value) return;
+
+        const payload = {
+            CustomerId: selectedOrder.value.CustomerId,
+            EmployeeId: selectedOrder.value.EmployeeId,
+            OrderDate: selectedOrder.value.OrderDate,
+            TotalPrice: calculateTotalPrice(),
+            Address: selectedOrder.value.Address,
+            State: selectedOrder.value.State,
+            OrderDetail: editableOrderDetails.value.map(detail => ({
+                ...detail,
+            }))
+        };
+
+        await HttpService.getAxiosClient().patch(`/Order/${selectedOrder.value.Id}`, payload);
+
+        // Update local state
+        if (selectedOrder.value) {
+            selectedOrder.value.OrderDetail = [...editableOrderDetails.value];
+            selectedOrder.value.TotalPrice = calculateTotalPrice();
+        }
+
+        // Update orders list
+        orders.value = orders.value.map(order =>
+            order.Id === selectedOrder.value?.Id
+                ? { ...order, OrderDetail: [...editableOrderDetails.value], TotalPrice: calculateTotalPrice() }
+                : order
+        );
+
+        message.success('Order updated successfully!');
+        isEditing.value = false;
+    } catch (error) {
+        console.error('Error updating order:', error);
+        message.error('Failed to update the order.');
+    }
+};
 const viewDetails = (order: Order) => {
     selectedOrder.value = order;
     detailsVisible.value = true;
@@ -291,7 +451,10 @@ const viewDetails = (order: Order) => {
 const closeDrawer = () => {
     detailsVisible.value = false;
     selectedOrder.value = null;
+    isEditing.value = false;
+    editableOrderDetails.value = [];
 };
+
 const cancelOrder = async (orderId: string) => {
     try {
         loading.value = true;
@@ -311,7 +474,7 @@ const cancelOrder = async (orderId: string) => {
             Address: existingOrder.Address,
             State: 'Cancel',
             OrderDetail: existingOrder.OrderDetail.map(detail => ({
-                ...detail, 
+                ...detail,
             }))
         };
 

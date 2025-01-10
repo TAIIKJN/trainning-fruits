@@ -48,10 +48,6 @@
                     <a-input-number v-model:value="formState.unitsInStock" :min="0" style="width: 100%" />
                 </a-form-item>
 
-                <a-form-item label="จำนวนที่สั่งซื้อ">
-                    <a-input-number v-model:value="formState.unitsOnOrder" :min="0" style="width: 100%" />
-                </a-form-item>
-
                 <a-form-item label="ระดับการสั่งซื้อซ้ำ">
                     <a-input-number v-model:value="formState.reorderLevel" :min="0" style="width: 100%" />
                 </a-form-item>
@@ -64,8 +60,8 @@
                 </a-form-item>
                 <a-form-item label="สถานะของสินค้า">
                     <a-radio-group v-model:value="formState.discontinued">
-                        <a-radio :value="0">ยังจำหน่าย</a-radio>
-                        <a-radio :value="1">เลิกจำหน่าย</a-radio>
+                        <a-radio :value="false">ยังจำหน่าย</a-radio>
+                        <a-radio :value="true">เลิกจำหน่าย</a-radio>
                     </a-radio-group>
                 </a-form-item>
             </a-form>
@@ -87,7 +83,7 @@ interface Product {
     UnitsInStock: number;
     UnitsOnOrder: number;
     ReorderLevel: number;
-    Discontinued: number;
+    Discontinued: boolean;
     SupplierId: string;
 }
 
@@ -108,7 +104,7 @@ const formState = reactive({
     unitsInStock: 0,
     unitsOnOrder: 0,
     reorderLevel: 0,
-    discontinued: 0,
+    discontinued: false,
     supplierId: null
 });
 
@@ -156,7 +152,7 @@ const showModal = () => {
         unitsInStock: 0,
         unitsOnOrder: 0,
         reorderLevel: 0,
-        discontinued: 0,
+        discontinued: false,
         supplierId: null
     });
     modalVisible.value = true;

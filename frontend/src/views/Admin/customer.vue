@@ -125,7 +125,7 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">หมายเหตุ</label>
-                            <a-input v-model:value="formState.Notes" />
+                            <a-input v-model:value="formState.Notes" placeholder="กรอกหมายเหตุ" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">

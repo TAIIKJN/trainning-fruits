@@ -29,7 +29,8 @@
                             <a-button type="primary" size="small" @click="viewDetails(record)">
                                 View Details
                             </a-button>
-                            <a-button type="danger" size="small" @click="cancelOrder(record.Id)">
+                            <a-button v-if="record.State !== 'Cancel' && record?.State !== 'Done'" danger size="small"
+                                @click="cancelOrder(record.Id)">
                                 Cancel Order
                             </a-button>
                         </a-space>
@@ -42,7 +43,6 @@
                 @close="closeDrawer">
                 <template v-if="selectedOrder">
                     <div class="space-y-6">
-                        <!-- Order Info -->
                         <div class="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg">
                             <div>
                                 <p class="text-gray-600 mb-1">Order ID:</p>
@@ -64,7 +64,6 @@
                             </div>
                         </div>
 
-                        <!-- Order Items Section -->
                         <div>
                             <h3 class="text-lg font-medium mb-4">Order Items</h3>
                             <a-table :dataSource="selectedOrder.OrderDetail" :columns="detailColumns" rowKey="Id"
@@ -78,8 +77,14 @@
                         </div>
                     </div>
                     <div class="w-full flex justify-center items-center">
-                        <button @click="updateOrderState"
-                            class="hover:bg-black  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-full bg-gray-800 text-base font-medium leading-4 text-white">ยืนยัน</button>
+                        <button v-if="selectedOrder?.State !== 'Cancel' && selectedOrder?.State !== 'Done'"
+                            @click="handleOrderAction" :class="[
+                                'focus:outline-none focus:ring-2 focus:ring-offset-2 py-5 w-full text-base font-medium leading-4 text-white',
+                                selectedOrder?.State === 'Pending' ? 'bg-gray-800 focus:ring-gray-800 hover:bg-black ' : 'bg-green-600 focus:ring-green-600 hover:bg-green-700',
+                            ]">
+                            {{ getButtonText(selectedOrder?.State) }}
+                        </button>
+
                     </div>
                 </template>
             </a-drawer>
@@ -91,6 +96,7 @@
 import { ref, onMounted } from 'vue';
 import HttpService from '../../services/HttpService';
 import { message } from 'ant-design-vue'
+import dayjs from 'dayjs';
 
 interface Employee {
     Id: string;
@@ -214,7 +220,6 @@ const fetchProducts = async () => {
         console.error('Error fetching products:', error);
     }
 };
-
 const fetchOrders = async () => {
     loading.value = true;
     try {
@@ -233,77 +238,80 @@ const getProductName = (ProductId: string) => {
     return product ? product.ProductName : 'Unknown Product';
 };
 
-const getCustomerUsername = async (customerId: string): Promise<string | null> => {
-    try {
-        const response = await HttpService.getAxiosClient().get(`/Customer/${customerId}`);
-        return response.data?.UserName || null;
-    } catch (error) {
-        console.error('Error fetching customer username:', error);
-        return null;
+const getButtonText = (state: string) => {
+    switch (state) {
+        case 'Pending':
+            return 'ยืนยันคำสั่งซื้อ';
+        case 'InProgress':
+            return 'พร้อมเสริฟ';
+        default:
+            return '';
     }
 };
 
-const getEmployeeUsername = (employeeId: string): string | null => {
-    const employee = employees.value.find(e => e.Id === employeeId);
-    return employee ? employee.UserName : null;
-};
-
-const updateOrderState = async () => {
+const handleOrderAction = async () => {
     if (!selectedOrder.value) return;
 
     try {
         loading.value = true;
 
-        const { CustomerId, EmployeeId, ...rest } = selectedOrder.value;
+        const newState =
+            selectedOrder.value.State === 'Pending' ? 'InProgress' :
+                selectedOrder.value.State === 'InProgress' ? 'Done' :
+                    null;
 
-        // ดึง Username จาก CustomerId และ EmployeeId
-        const customerUserName = await getCustomerUsername(CustomerId);
-        const employeeUserName = getEmployeeUsername(EmployeeId);
+        if (!newState) return;
 
-        if (!customerUserName || !employeeUserName) {
-            message.error('Failed to retrieve necessary user data.');
-            return;
-        }
-
+        const { CustomerId, EmployeeId, OrderDate, TotalPrice, Address, OrderDetail } = selectedOrder.value;
         const payload = {
-            ...rest,
-            State: 'InProgress',
-            CustomerUserName: customerUserName,
-            EmployeeUserName: employeeUserName,
+            CustomerId,
+            EmployeeId,
+            OrderDate,
+            TotalPrice,
+            Address,
+            State: newState,
+            OrderDetail: OrderDetail.map(({ Discount, ProductId, Quantity, UnitPrice, Id, OrderId }) => ({
+                Discount,
+                ProductId,
+                Quantity,
+                UnitPrice,
+                Id,
+                OrderId,
+            })),
         };
 
-        // ส่งข้อมูลไปยัง API
         await HttpService.getAxiosClient().patch(`/Order/${selectedOrder.value.Id}`, payload);
 
-        // อัปเดตข้อมูลใน local state
+        selectedOrder.value = {
+            ...selectedOrder.value,
+            State: newState
+        };
         order.value = order.value.map(order =>
-            order.Id === selectedOrder.value?.Id ? { ...order, State: 'InProgress' } : order
+            order.Id === selectedOrder.value?.Id ? { ...order, State: newState } : order
         );
 
-        closeDrawer();
-
-        message.success('Order has been updated to "InProgress" successfully!');
+        message.success(`${newState} สำเร็จ`);
     } catch (error) {
         console.error('Error updating order state:', error);
-        message.error('Failed to update the order state.');
+        message.error('ไม่สามารถอัปเดตสถานะได้');
     } finally {
         loading.value = false;
     }
 };
 
+
 const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('th-TH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+    return dayjs(date).format('DD-MM-YYYY');
 };
 
 const getStateColor = (state: string) => {
     const colors: Record<string, string> = {
         Pending: 'orange',
-        Completed: 'green',
-        Cancelled: 'red',
+        InProgress: 'purple',
+        Succeed: 'purple',
+        Done: 'green',
+        Cancel: 'red',
+
     };
     return colors[state] || 'blue';
 };
@@ -321,11 +329,32 @@ const closeDrawer = () => {
 const cancelOrder = async (orderId: string) => {
     try {
         loading.value = true;
-        await HttpService.getAxiosClient().delete(`/Order/${orderId}`);
+
+        const existingOrder = order.value.find(order => order.Id === orderId);
+
+        if (!existingOrder) {
+            message.error('Order not found!');
+            return;
+        }
+
+        const payload = {
+            CustomerId: existingOrder.CustomerId,
+            EmployeeId: existingOrder.EmployeeId,
+            OrderDate: existingOrder.OrderDate,
+            TotalPrice: existingOrder.TotalPrice,
+            Address: existingOrder.Address,
+            State: 'Cancel',
+            OrderDetail: existingOrder.OrderDetail.map(detail => ({
+                ...detail,
+            }))
+        };
+
+        await HttpService.getAxiosClient().patch(`/Order/${orderId}`, payload);
+
         order.value = order.value.map(order =>
-            order.Id === orderId ? { ...order, State: 'Cancelled' } : order
+            order.Id === orderId ? { ...order, State: 'Cancel' } : order
         );
-        // แสดงข้อความสำเร็จ
+
         message.success('Order has been cancelled successfully!');
     } catch (error) {
         console.error('Error cancelling order:', error);
@@ -334,6 +363,7 @@ const cancelOrder = async (orderId: string) => {
         loading.value = false;
     }
 };
+
 
 onMounted(() => {
     fetchProducts();
