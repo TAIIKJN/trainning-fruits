@@ -6,7 +6,7 @@
                 <template #bodyCell="{ column, record }">
                     <template v-if="column.key === 'State'">
                         <a-tag :color="getStateColor(record.State)">
-                            {{ record.State }}
+                            {{ translateState(record.State) }}
                         </a-tag>
                     </template>
 
@@ -52,7 +52,7 @@
                             <div>
                                 <p class="text-gray-600 mb-1">Status:</p>
                                 <a-tag :color="getStateColor(selectedOrder.State)">
-                                    {{ selectedOrder.State }}
+                                    {{ translateState(selectedOrder.State) }}
                                 </a-tag>
                             </div>
                             <div>
@@ -307,6 +307,22 @@ const getButtonText = (state: string) => {
             return 'พร้อมเสริฟ';
         default:
             return '';
+    }
+};
+const translateState = (state: string): string => {
+    switch (state) {
+        case 'Pending':
+            return 'รอดำเนินการ';
+        case 'InProgress':
+            return 'กำลังดำเนินการ';
+        case 'Succeed':
+            return 'พร้อมเสริฟ';
+        case 'Done':
+            return 'เสร็จสิ้น';
+        case 'Cancel':
+            return 'ยกเลิก';
+        default:
+            return state;
     }
 };
 const handleOrderAction = async () => {
