@@ -64,7 +64,7 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "categoryId": {"dataType":"string","required":true},
-            "discontinued": {"dataType":"double","required":true},
+            "discontinued": {"dataType":"boolean","required":true},
             "productName": {"dataType":"string","required":true},
             "quantityPerUnit": {"dataType":"string","required":true},
             "reorderLevel": {"dataType":"double","required":true},

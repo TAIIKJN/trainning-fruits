@@ -18,7 +18,7 @@ const prisma = new PrismaClient();
 
 export interface Produucts {
   categoryId: string;
-  discontinued: number;
+  discontinued: boolean;
   productName: string;
   quantityPerUnit: string;
   reorderLevel: number;

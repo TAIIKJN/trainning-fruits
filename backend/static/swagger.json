@@ -97,8 +97,7 @@
 						"type": "string"
 					},
 					"discontinued": {
-						"type": "number",
-						"format": "double"
+						"type": "boolean"
 					},
 					"productName": {
 						"type": "string"
