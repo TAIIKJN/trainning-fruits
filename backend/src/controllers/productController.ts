@@ -31,13 +31,40 @@ export interface Produucts {
 @Route("Product")
 export class productController extends Controller {
   @Get()
-  public async getProductAll() {
-    const data = await prisma.product.findMany({
-      include: {
-        Category: true,
-      },
-    });
-    return data;
+  @Security("keycloak")
+  public async getProductAll(
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const roleUser = req.user.role;
+      console.log("45 roleUser", roleUser);
+
+      if (roleUser.includes("admin")) {
+        const data = await prisma.product.findMany({
+          include: {
+            Category: true,
+          },
+        });
+        return data;
+      } else {
+        const data = await prisma.product.findMany({
+          where: {
+            Discontinued: false,
+          },
+          include: {
+            Category: true,
+          },
+        });
+        return data;
+      }
+    } catch (e) {
+      return e;
+    }
   }
 
   @Get("{id}")

@@ -686,8 +686,7 @@
 																	"type": "string"
 																},
 																"Discontinued": {
-																	"type": "number",
-																	"format": "double"
+																	"type": "boolean"
 																},
 																"CategoryId": {
 																	"type": "string"
@@ -1258,96 +1257,16 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"items": {
-										"allOf": [
-											{
-												"properties": {
-													"Category": {
-														"properties": {
-															"Description": {
-																"type": "string"
-															},
-															"CategoryName": {
-																"type": "string"
-															},
-															"Id": {
-																"type": "string"
-															}
-														},
-														"required": [
-															"Description",
-															"CategoryName",
-															"Id"
-														],
-														"type": "object"
-													}
-												},
-												"required": [
-													"Category"
-												],
-												"type": "object"
-											},
-											{
-												"properties": {
-													"UnitsOnOrder": {
-														"type": "number",
-														"format": "double"
-													},
-													"UnitsInStock": {
-														"type": "number",
-														"format": "double"
-													},
-													"UnitPrice": {
-														"type": "string"
-													},
-													"SupplierId": {
-														"type": "string"
-													},
-													"ReorderLevel": {
-														"type": "number",
-														"format": "double"
-													},
-													"QuantityPerUnit": {
-														"type": "string"
-													},
-													"ProductName": {
-														"type": "string"
-													},
-													"Discontinued": {
-														"type": "number",
-														"format": "double"
-													},
-													"CategoryId": {
-														"type": "string"
-													},
-													"Id": {
-														"type": "string"
-													}
-												},
-												"required": [
-													"UnitsOnOrder",
-													"UnitsInStock",
-													"UnitPrice",
-													"SupplierId",
-													"ReorderLevel",
-													"QuantityPerUnit",
-													"ProductName",
-													"Discontinued",
-													"CategoryId",
-													"Id"
-												],
-												"type": "object"
-											}
-										]
-									},
-									"type": "array"
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": []
 			},
 			"post": {
@@ -1386,8 +1305,7 @@
 													"type": "string"
 												},
 												"Discontinued": {
-													"type": "number",
-													"format": "double"
+													"type": "boolean"
 												},
 												"CategoryId": {
 													"type": "string"

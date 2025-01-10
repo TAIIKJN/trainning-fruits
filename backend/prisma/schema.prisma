@@ -105,7 +105,7 @@ model Product {
   CategoryId String
   Category   Category @relation(fields: [CategoryId], references: [Id])
 
-  Discontinued    Boolean       @default(true)
+  Discontinued    Boolean       @default(false)
   Id              String        @id @default(uuid())
   ProductName     String?
   QuantityPerUnit String?
