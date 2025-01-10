@@ -1,23 +1,23 @@
 <template>
     <div class="mx-auto container py-16 px-2 min-h-screen">
-      
+
 
         <div>
             <div class="mx-auto justify-center px-2 md:flex md:space-x-6 xl:px-0 min-h-[calc(100vh-12rem)]">
 
                 <div class="rounded-lg md:w-2/3 overflow-y-auto no-scrollbar">
-                    <a-list :grid="{ xs: 2, sm: 2, md: 2, lg: 3, xl: 3, xxl: 3 }" :data-source="products"
-                        class="h-full">
-                        <template #renderItem="{ item }">
-                            <a-list-item>
-                                <div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
-                                    <div class="flex justify-between items-center p-3 sm:p-5 bg-gray-100">
-                                        <div class="flex flex-col">
-                                            <h3 class="text-gray-700 uppercase">{{ item.ProductName }}</h3>
+                    <div class="h-full">
+                        <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
 
-                                            <span class="text-gray-500 text-sm">฿{{ item.UnitPrice }}</span>
-                                        </div>
-                                        <!-- <div class="flex flex-col items-end">
+                            <div v-for="item in products" :key="item.Id"
+                                class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
+                                <div class="flex justify-between items-center p-3 sm:p-5 bg-gray-100">
+                                    <div class="flex flex-col">
+                                        <h3 class="text-gray-700 uppercase">{{ item.ProductName }}</h3>
+
+                                        <span class="text-gray-500 text-sm">฿{{ item.UnitPrice }}</span>
+                                    </div>
+                                    <!-- <div class="flex flex-col items-end">
                                             <button
                                                 class="p-2 rounded-full bg-blue-600 text-white mt-2 hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
                                                 <svg class="h-5 w-5" fill="none" stroke-linecap="round"
@@ -30,41 +30,40 @@
                                             </button>
                                         </div> -->
 
-                                    </div>
-                                    <div class="flex items-start justify-center mt-2">
-                                        <button
-                                            class="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
-                                            type="button" @click="decrementQuantity(item)">
-                                            <span class="sr-only">Decrease quantity</span>
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 18 2">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                                            </svg>
-                                        </button>
-                                        <div>
-                                            <input type="number" v-model.number="item.QuantityToOrder" min="0"
-                                                :max="item.UnitsInStock"
-                                                class="bg-gray-50 w-24 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"
-                                                placeholder="0" required />
-                                            <p class="text-xs text-gray-500 mt-1">(สินค้าคงเหลือ: {{ item.UnitsInStock
-                                                }})</p>
-                                        </div>
-                                        <button
-                                            class="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
-                                            type="button" @click="incrementQuantity(item)">
-                                            <span class="sr-only">Increase quantity</span>
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 18 18">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                                            </svg>
-                                        </button>
-                                    </div>
                                 </div>
-                            </a-list-item>
-                        </template>
-                    </a-list>
+                                <div class="flex items-start justify-center mt-2">
+                                    <button
+                                        class="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
+                                        type="button" @click="decrementQuantity(item)">
+                                        <span class="sr-only">Decrease quantity</span>
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 18 2">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M1 1h16" />
+                                        </svg>
+                                    </button>
+                                    <div>
+                                        <input type="number" v-model.number="item.QuantityToOrder" min="0"
+                                            :max="item.UnitsInStock"
+                                            class="bg-gray-50 w-24 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"
+                                            placeholder="0" required />
+                                        <p class="text-xs text-gray-500 mt-1">(สินค้าคงเหลือ: {{ item.UnitsInStock
+                                            }})</p>
+                                    </div>
+                                    <button
+                                        class="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200"
+                                        type="button" @click="incrementQuantity(item)">
+                                        <span class="sr-only">Increase quantity</span>
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 18 18">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M9 1v16M1 9h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <!-- Sub total -->
@@ -98,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted,  computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import HttpService from '../../services/HttpService'
 import KeycloakService from '../../services/KeycloakService'
@@ -258,8 +257,9 @@ const updateSubTotal = (item: Product) => {
 onMounted(fetchData)
 </script>
 
-<style >
+<style>
 ::v-deep .css-dev-only-do-not-override-1p3hq3p .ant-list .ant-list-item {
-  padding: 8px 16px; /* ลด padding */
+    padding: 8px 16px;
+    /* ลด padding */
 }
 </style>

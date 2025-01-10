@@ -364,8 +364,11 @@ const formatDate = (date: string) => {
 const getStateColor = (state: string) => {
     const colors: Record<string, string> = {
         Pending: 'orange',
-        Completed: 'green',
+        InProgress: 'purple',
+        Succeed: 'purple',
+        Done: 'green',
         Cancel: 'red',
+
     };
     return colors[state] || 'blue';
 };
