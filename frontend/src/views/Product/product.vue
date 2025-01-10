@@ -115,7 +115,7 @@ const columns = [
     { title: 'หน่วย', dataIndex: 'QuantityPerUnit', key: 'QuantityPerUnit' },
     { title: 'คงเหลือ', dataIndex: 'UnitsInStock', key: 'UnitsInStock' },
     { title: 'สั่งซื้อ', dataIndex: 'UnitsOnOrder', key: 'UnitsOnOrder' },
-    { title: 'Reorder', dataIndex: 'ReorderLevel', key: 'ReorderLevel' },
+    { title: 'จำนวนการซื้อซ้ำ', dataIndex: 'ReorderLevel', key: 'ReorderLevel' },
     { title: 'สถานะ', dataIndex: 'Discontinued', key: 'Discontinued' },
     { title: 'จัดการ', key: 'actions' }
 ];
