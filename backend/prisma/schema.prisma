@@ -109,7 +109,6 @@ model Product {
   Id              String        @id @default(uuid())
   ProductName     String?
   QuantityPerUnit String?
-  ReorderLevel    Int
   SupplierId      String?
   Supplier        Supplier?     @relation(fields: [SupplierId], references: [Id])
   UnitPrice       String

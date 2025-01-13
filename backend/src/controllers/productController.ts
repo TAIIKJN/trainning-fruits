@@ -21,7 +21,6 @@ export interface Produucts {
   discontinued: boolean;
   productName: string;
   quantityPerUnit: string;
-  reorderLevel: number;
   supplierId: string;
   unitPrice: string;
   unitsInStock: number;
@@ -136,7 +135,6 @@ export class productController extends Controller {
             Discontinued: requestBody.discontinued,
             ProductName: requestBody.productName,
             QuantityPerUnit: requestBody.quantityPerUnit,
-            ReorderLevel: requestBody.reorderLevel,
             SupplierId: dataSupplier?.Id,
             UnitPrice: requestBody.unitPrice,
             UnitsInStock: requestBody.unitsInStock,
@@ -228,7 +226,6 @@ export class productController extends Controller {
               Discontinued: requestBody.discontinued,
               ProductName: requestBody.productName,
               QuantityPerUnit: requestBody.quantityPerUnit,
-              ReorderLevel: requestBody.reorderLevel,
               SupplierId: dataSupplier?.Id,
               UnitPrice: requestBody.unitPrice,
               UnitsInStock: requestBody.unitsInStock,
