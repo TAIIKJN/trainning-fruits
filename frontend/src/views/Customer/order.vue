@@ -368,12 +368,14 @@ const translateState = (state: string): string => {
             return 'กำลังดำเนินการ';
         case 'Succeed':
             return 'พร้อมเสริฟ';
+        case 'done':
+            return 'เสร็จสิ้น';
         case 'Done':
             return 'เสร็จสิ้น';
         case 'Cancel':
             return 'ยกเลิก';
         default:
-            return state; 
+            return state;
     }
 };
 const getStateColor = (state: string) => {

@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="w-full flex justify-center items-center">
-                        <button v-if="selectedOrder?.State !== 'Cancel' && selectedOrder?.State !== 'Done'"
+                        <button v-if="selectedOrder?.State !== 'Cancel' && selectedOrder?.State !== 'Done' && selectedOrder?.State !== 'done'"
                             @click="handleOrderAction" :class="[
                                 'focus:outline-none focus:ring-2 focus:ring-offset-2 py-5 w-full text-base font-medium leading-4 text-white',
                                 selectedOrder?.State === 'Pending' ? 'bg-gray-800 focus:ring-gray-800 hover:bg-black ' : 'bg-green-600 focus:ring-green-600 hover:bg-green-700',
@@ -311,6 +311,8 @@ const translateState = (state: string): string => {
             return 'กำลังดำเนินการ';
         case 'Succeed':
             return 'พร้อมเสริฟ';
+        case 'done':
+            return 'เสร็จสิ้น';
         case 'Done':
             return 'เสร็จสิ้น';
         case 'Cancel':
