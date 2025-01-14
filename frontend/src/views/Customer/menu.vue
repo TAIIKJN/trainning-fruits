@@ -94,8 +94,8 @@
     </div>
 
     <!-- Table Selection Modal -->
-    <a-modal v-model:open="isTableModalVisible" title="เลือกโต๊ะ" @ok="handleTableSelection"
-        @cancel="handleModalCancel" okText="ยืนยัน" cancelText="ยกเลิก" :maskClosable="false">
+    <a-modal v-model:open="isTableModalVisible" title="เลือกโต๊ะ" @ok="handleTableSelection" @cancel="handleModalCancel"
+        okText="ยืนยัน" cancelText="ยกเลิก" :maskClosable="false">
         <div class="grid grid-cols-4 gap-4 p-4">
             <button v-for="table in tables" :key="table"
                 class="h-16 rounded-lg border-2 transition-all duration-200 ease-in-out" :class="[
@@ -148,17 +148,7 @@ interface Order {
     State: string;
     OrderDetail: OrderDetail[];
 }
-// interface Option {
-//     value: string;
-//     label: string;
-// }
 
-// const table = ref<Option[]>([
-//     { value: 'jack', label: 'Jack' },
-//     { value: 'lucy', label: 'Lucy' },
-//     { value: 'tom', label: 'Tom' },
-// ]);
-// const selectTable = ref<string | undefined>(undefined);
 const isTableModalVisible = ref(false)
 const selectedTable = ref<string>('')
 
@@ -175,10 +165,6 @@ const subTotalItems = ref<Product[]>([])
 const totalAmount = computed(() => {
     return subTotalItems.value.reduce((total, item) => total + (parseFloat(item.UnitPrice) * item.QuantityToOrder), 0)
 })
-
-// const filterOption = (input: string, option: any) => {
-//     return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-// };
 
 const showTableModal = () => {
     if (subTotalItems.value.length === 0) {
@@ -222,7 +208,6 @@ const fetchData = async () => {
     }
 }
 
-// เพิ่มฟังก์ชันสุ่ม employee
 const getRandomEmployee = (): string => {
     const randomIndex = Math.floor(Math.random() * employees.value.length)
     return employees.value[randomIndex].UserName
