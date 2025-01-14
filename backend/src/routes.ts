@@ -4,6 +4,8 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { tableController } from './controllers/tableController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { supplierController } from './controllers/supplierController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { productController } from './controllers/productController';
@@ -29,6 +31,16 @@ const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "TableDetail": {
+        "dataType": "refObject",
+        "properties": {
+            "Name": {"dataType":"string","required":true},
+            "Description": {"dataType":"string","required":true},
+            "State": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SearchSupplier": {
         "dataType": "refObject",
         "properties": {
@@ -67,7 +79,6 @@ const models: TsoaRoute.Models = {
             "discontinued": {"dataType":"boolean","required":true},
             "productName": {"dataType":"string","required":true},
             "quantityPerUnit": {"dataType":"string","required":true},
-            "reorderLevel": {"dataType":"double","required":true},
             "supplierId": {"dataType":"string","required":true},
             "unitPrice": {"dataType":"string","required":true},
             "unitsInStock": {"dataType":"double","required":true},
@@ -94,8 +105,9 @@ const models: TsoaRoute.Models = {
             "EmployeeUserName": {"dataType":"string","required":true},
             "OrderDate": {"dataType":"string","required":true},
             "TotalPrice": {"dataType":"double","required":true},
-            "Address": {"dataType":"string","required":true},
             "State": {"dataType":"string","required":true},
+            "TableId": {"dataType":"string"},
+            "TypeService": {"dataType":"string"},
             "OrderDetail": {"dataType":"array","array":{"dataType":"refObject","ref":"OrderDetail"},"required":true},
         },
         "additionalProperties": false,
@@ -121,8 +133,9 @@ const models: TsoaRoute.Models = {
             "EmployeeId": {"dataType":"string","required":true},
             "OrderDate": {"dataType":"string","required":true},
             "TotalPrice": {"dataType":"double","required":true},
-            "Address": {"dataType":"string","required":true},
             "State": {"dataType":"string","required":true},
+            "TableId": {"dataType":"string"},
+            "TypeService": {"dataType":"string"},
             "OrderDetail": {"dataType":"array","array":{"dataType":"refObject","ref":"OrderDetailUpdate"},"required":true},
         },
         "additionalProperties": false,
@@ -229,6 +242,162 @@ export function RegisterRoutes(app: Router) {
 
 
     
+        const argstableController_getTableAll: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/Table',
+            ...(fetchMiddlewares<RequestHandler>(tableController)),
+            ...(fetchMiddlewares<RequestHandler>(tableController.prototype.getTableAll)),
+
+            async function tableController_getTableAll(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argstableController_getTableAll, request, response });
+
+                const controller = new tableController();
+
+              await templateService.apiHandler({
+                methodName: 'getTableAll',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argstableController_getTableById: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+        };
+        app.get('/Table/:id',
+            ...(fetchMiddlewares<RequestHandler>(tableController)),
+            ...(fetchMiddlewares<RequestHandler>(tableController.prototype.getTableById)),
+
+            async function tableController_getTableById(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argstableController_getTableById, request, response });
+
+                const controller = new tableController();
+
+              await templateService.apiHandler({
+                methodName: 'getTableById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argstableController_createTable: Record<string, TsoaRoute.ParameterSchema> = {
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"TableDetail"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.post('/Table',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(tableController)),
+            ...(fetchMiddlewares<RequestHandler>(tableController.prototype.createTable)),
+
+            async function tableController_createTable(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argstableController_createTable, request, response });
+
+                const controller = new tableController();
+
+              await templateService.apiHandler({
+                methodName: 'createTable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argstableController_updateTable: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"TableDetail"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.patch('/Table/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(tableController)),
+            ...(fetchMiddlewares<RequestHandler>(tableController.prototype.updateTable)),
+
+            async function tableController_updateTable(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argstableController_updateTable, request, response });
+
+                const controller = new tableController();
+
+              await templateService.apiHandler({
+                methodName: 'updateTable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argstableController_deleteTable: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.delete('/Table/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(tableController)),
+            ...(fetchMiddlewares<RequestHandler>(tableController.prototype.deleteTable)),
+
+            async function tableController_deleteTable(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argstableController_deleteTable, request, response });
+
+                const controller = new tableController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteTable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_getSupplier: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchSupplier"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},

@@ -22,8 +22,9 @@ export interface Orders {
   EmployeeUserName: string;
   OrderDate: string;
   TotalPrice: number;
-  Address: string;
   State: string;
+  TableId?: string;
+  TypeService?: string;
   OrderDetail: OrderDetail[];
 }
 
@@ -39,8 +40,9 @@ export interface OrdersUpdate {
   EmployeeId: string;
   OrderDate: string;
   TotalPrice: number;
-  Address: string;
   State: string;
+  TableId?: string;
+  TypeService?: string;
   OrderDetail: OrderDetailUpdate[];
 }
 export interface OrderDetailUpdate extends OrderDetail {
@@ -56,6 +58,7 @@ export class orderController extends Controller {
         OrderDetail: true,
         Customer: true,
         Employee: true,
+        Table: true,
       },
     });
     return data;
@@ -69,6 +72,7 @@ export class orderController extends Controller {
       },
       include: {
         OrderDetail: true,
+        Table: true,
       },
     });
 
@@ -127,8 +131,9 @@ export class orderController extends Controller {
           EmployeeId: dataEmployee?.Id,
           OrderDate: requestBody?.OrderDate,
           TotalPrice: requestBody?.TotalPrice,
-          Address: requestBody?.Address,
           State: requestBody?.State,
+          TypeService: "Dine-in",
+          TableId: requestBody.TableId,
         },
       });
       console.log("dataOrder", dataOrder);
@@ -210,8 +215,9 @@ export class orderController extends Controller {
         const dataOrder = await prisma.order.update({
           data: {
             TotalPrice: requestBody?.TotalPrice,
-            Address: requestBody?.Address,
             State: requestBody?.State,
+            TypeService: "Dine-in",
+            TableId: requestBody.TableId,
           },
           where: {
             Id: id,

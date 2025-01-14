@@ -7,6 +7,25 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"TableDetail": {
+				"properties": {
+					"Name": {
+						"type": "string"
+					},
+					"Description": {
+						"type": "string"
+					},
+					"State": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Name",
+					"Description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"SearchSupplier": {
 				"properties": {
 					"FirstName": {
@@ -105,10 +124,6 @@
 					"quantityPerUnit": {
 						"type": "string"
 					},
-					"reorderLevel": {
-						"type": "number",
-						"format": "double"
-					},
 					"supplierId": {
 						"type": "string"
 					},
@@ -129,7 +144,6 @@
 					"discontinued",
 					"productName",
 					"quantityPerUnit",
-					"reorderLevel",
 					"supplierId",
 					"unitPrice",
 					"unitsInStock",
@@ -179,10 +193,13 @@
 						"type": "number",
 						"format": "double"
 					},
-					"Address": {
+					"State": {
 						"type": "string"
 					},
-					"State": {
+					"TableId": {
+						"type": "string"
+					},
+					"TypeService": {
 						"type": "string"
 					},
 					"OrderDetail": {
@@ -197,7 +214,6 @@
 					"EmployeeUserName",
 					"OrderDate",
 					"TotalPrice",
-					"Address",
 					"State",
 					"OrderDetail"
 				],
@@ -251,10 +267,13 @@
 						"type": "number",
 						"format": "double"
 					},
-					"Address": {
+					"State": {
 						"type": "string"
 					},
-					"State": {
+					"TableId": {
+						"type": "string"
+					},
+					"TypeService": {
 						"type": "string"
 					},
 					"OrderDetail": {
@@ -269,7 +288,6 @@
 					"EmployeeId",
 					"OrderDate",
 					"TotalPrice",
-					"Address",
 					"State",
 					"OrderDetail"
 				],
@@ -511,6 +529,256 @@
 		"contact": {}
 	},
 	"paths": {
+		"/Table": {
+			"get": {
+				"operationId": "GetTableAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"State": {
+												"type": "string"
+											},
+											"Description": {
+												"type": "string"
+											},
+											"Name": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"State",
+											"Description",
+											"Name",
+											"Id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateTable",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TableDetail"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/Table/{id}": {
+			"get": {
+				"operationId": "GetTableById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"allOf": [
+												{
+													"properties": {
+														"Order": {
+															"items": {
+																"properties": {
+																	"TableId": {
+																		"type": "string"
+																	},
+																	"TypeService": {
+																		"type": "string"
+																	},
+																	"TotalPrice": {
+																		"type": "number",
+																		"format": "double"
+																	},
+																	"OrderDate": {
+																		"type": "string"
+																	},
+																	"EmployeeId": {
+																		"type": "string"
+																	},
+																	"CustomerId": {
+																		"type": "string"
+																	},
+																	"State": {
+																		"type": "string"
+																	},
+																	"Id": {
+																		"type": "string"
+																	}
+																},
+																"required": [
+																	"TableId",
+																	"TypeService",
+																	"TotalPrice",
+																	"OrderDate",
+																	"EmployeeId",
+																	"CustomerId",
+																	"State",
+																	"Id"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														}
+													},
+													"required": [
+														"Order"
+													],
+													"type": "object"
+												},
+												{
+													"properties": {
+														"State": {
+															"type": "string"
+														},
+														"Description": {
+															"type": "string"
+														},
+														"Name": {
+															"type": "string"
+														},
+														"Id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"State",
+														"Description",
+														"Name",
+														"Id"
+													],
+													"type": "object"
+												}
+											]
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateTable",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TableDetail"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteTable",
+				"responses": {
+					"200": {
+						"description": "Delete",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/Supplier/chaeckSupplier": {
 			"post": {
 				"operationId": "GetSupplier",
@@ -675,10 +943,6 @@
 																"SupplierId": {
 																	"type": "string"
 																},
-																"ReorderLevel": {
-																	"type": "number",
-																	"format": "double"
-																},
 																"QuantityPerUnit": {
 																	"type": "string"
 																},
@@ -700,7 +964,6 @@
 																"UnitsInStock",
 																"UnitPrice",
 																"SupplierId",
-																"ReorderLevel",
 																"QuantityPerUnit",
 																"ProductName",
 																"Discontinued",
@@ -1294,10 +1557,6 @@
 												"SupplierId": {
 													"type": "string"
 												},
-												"ReorderLevel": {
-													"type": "number",
-													"format": "double"
-												},
 												"QuantityPerUnit": {
 													"type": "string"
 												},
@@ -1319,7 +1578,6 @@
 												"UnitsInStock",
 												"UnitPrice",
 												"SupplierId",
-												"ReorderLevel",
 												"QuantityPerUnit",
 												"ProductName",
 												"Discontinued",
@@ -1530,6 +1788,42 @@
 										"allOf": [
 											{
 												"properties": {
+													"OrderDetail": {
+														"items": {
+															"properties": {
+																"OrderId": {
+																	"type": "string"
+																},
+																"Quantity": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"ProductId": {
+																	"type": "string"
+																},
+																"Discount": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"UnitPrice": {
+																	"type": "string"
+																},
+																"Id": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"OrderId",
+																"Quantity",
+																"ProductId",
+																"Discount",
+																"UnitPrice",
+																"Id"
+															],
+															"type": "object"
+														},
+														"type": "array"
+													},
 													"Employee": {
 														"properties": {
 															"PhotoPath": {
@@ -1660,53 +1954,44 @@
 														],
 														"type": "object"
 													},
-													"OrderDetail": {
-														"items": {
-															"properties": {
-																"OrderId": {
-																	"type": "string"
-																},
-																"Quantity": {
-																	"type": "number",
-																	"format": "double"
-																},
-																"ProductId": {
-																	"type": "string"
-																},
-																"Discount": {
-																	"type": "number",
-																	"format": "double"
-																},
-																"UnitPrice": {
-																	"type": "string"
-																},
-																"Id": {
-																	"type": "string"
-																}
+													"Table": {
+														"properties": {
+															"State": {
+																"type": "string"
 															},
-															"required": [
-																"OrderId",
-																"Quantity",
-																"ProductId",
-																"Discount",
-																"UnitPrice",
-																"Id"
-															],
-															"type": "object"
+															"Description": {
+																"type": "string"
+															},
+															"Name": {
+																"type": "string"
+															},
+															"Id": {
+																"type": "string"
+															}
 														},
-														"type": "array"
+														"required": [
+															"State",
+															"Description",
+															"Name",
+															"Id"
+														],
+														"type": "object"
 													}
 												},
 												"required": [
+													"OrderDetail",
 													"Employee",
 													"Customer",
-													"OrderDetail"
+													"Table"
 												],
 												"type": "object"
 											},
 											{
 												"properties": {
-													"State": {
+													"TableId": {
+														"type": "string"
+													},
+													"TypeService": {
 														"type": "string"
 													},
 													"TotalPrice": {
@@ -1722,7 +2007,7 @@
 													"CustomerId": {
 														"type": "string"
 													},
-													"Address": {
+													"State": {
 														"type": "string"
 													},
 													"Id": {
@@ -1730,12 +2015,13 @@
 													}
 												},
 												"required": [
-													"State",
+													"TableId",
+													"TypeService",
 													"TotalPrice",
 													"OrderDate",
 													"EmployeeId",
 													"CustomerId",
-													"Address",
+													"State",
 													"Id"
 												],
 												"type": "object"
@@ -1803,7 +2089,10 @@
 												},
 												"order": {
 													"properties": {
-														"State": {
+														"TableId": {
+															"type": "string"
+														},
+														"TypeService": {
 															"type": "string"
 														},
 														"TotalPrice": {
@@ -1819,7 +2108,7 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Address": {
+														"State": {
 															"type": "string"
 														},
 														"Id": {
@@ -1827,12 +2116,13 @@
 														}
 													},
 													"required": [
-														"State",
+														"TableId",
+														"TypeService",
 														"TotalPrice",
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Address",
+														"State",
 														"Id"
 													],
 													"type": "object"
@@ -1963,16 +2253,43 @@
 																"type": "object"
 															},
 															"type": "array"
+														},
+														"Table": {
+															"properties": {
+																"State": {
+																	"type": "string"
+																},
+																"Description": {
+																	"type": "string"
+																},
+																"Name": {
+																	"type": "string"
+																},
+																"Id": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"State",
+																"Description",
+																"Name",
+																"Id"
+															],
+															"type": "object"
 														}
 													},
 													"required": [
-														"OrderDetail"
+														"OrderDetail",
+														"Table"
 													],
 													"type": "object"
 												},
 												{
 													"properties": {
-														"State": {
+														"TableId": {
+															"type": "string"
+														},
+														"TypeService": {
 															"type": "string"
 														},
 														"TotalPrice": {
@@ -1988,7 +2305,7 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Address": {
+														"State": {
 															"type": "string"
 														},
 														"Id": {
@@ -1996,12 +2313,13 @@
 														}
 													},
 													"required": [
-														"State",
+														"TableId",
+														"TypeService",
 														"TotalPrice",
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Address",
+														"State",
 														"Id"
 													],
 													"type": "object"
@@ -2084,7 +2402,10 @@
 												},
 												"order": {
 													"properties": {
-														"State": {
+														"TableId": {
+															"type": "string"
+														},
+														"TypeService": {
 															"type": "string"
 														},
 														"TotalPrice": {
@@ -2100,7 +2421,7 @@
 														"CustomerId": {
 															"type": "string"
 														},
-														"Address": {
+														"State": {
 															"type": "string"
 														},
 														"Id": {
@@ -2108,12 +2429,13 @@
 														}
 													},
 													"required": [
-														"State",
+														"TableId",
+														"TypeService",
 														"TotalPrice",
 														"OrderDate",
 														"EmployeeId",
 														"CustomerId",
-														"Address",
+														"State",
 														"Id"
 													],
 													"type": "object"
@@ -3528,10 +3850,10 @@
 								"schema": {
 									"items": {
 										"properties": {
-											"Description": {
+											"CategoryName": {
 												"type": "string"
 											},
-											"CategoryName": {
+											"Description": {
 												"type": "string"
 											},
 											"Id": {
@@ -3539,8 +3861,8 @@
 											}
 										},
 										"required": [
-											"Description",
 											"CategoryName",
+											"Description",
 											"Id"
 										],
 										"type": "object"

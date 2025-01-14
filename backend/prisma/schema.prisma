@@ -88,17 +88,22 @@ model Supplier {
 }
 
 model Order {
+  Id         String    @id @default(uuid())
   Customer   Customer? @relation(fields: [CustomerId], references: [Id])
   CustomerId String?
 
-  Employee    Employee      @relation(fields: [EmployeeId], references: [Id])
-  EmployeeId  String
+  Employee   Employee @relation(fields: [EmployeeId], references: [Id])
+  EmployeeId String
+
   OrderDate   String
-  Id          String        @id @default(uuid())
   TotalPrice  Int?
-  Address     String?
-  State       String?
+  State       String? @default("Pending")
+  TypeService String  @default("Dine-in")
+
   OrderDetail OrderDetail[]
+
+  Table   Table?  @relation(fields: [TableId], references: [Id])
+  TableId String?
 }
 
 model Product {
@@ -156,4 +161,12 @@ model EmployeeTerritory {
   EmployeeId  String
   Id          String  @id @default(uuid())
   TerritoryId String?
+}
+
+model Table {
+  Id          String  @id @default(uuid())
+  Name        String
+  Description String?
+  State       String  @default("Available")
+  Order       Order[]
 }
