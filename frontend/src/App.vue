@@ -15,50 +15,11 @@
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import KeycloakService from './services/KeycloakService';
-import { onMounted } from 'vue';
-import HttpService from './services/HttpService'
 
 const logout = () => {
   KeycloakService.CallLogOut();
 }; 
-const checkAndPostCustomer = async () => {
-  const userRoles = KeycloakService.GetUserRoles(); 
-  if (userRoles.includes('customer')) {
-    const tokenData = KeycloakService.GetDecodeToken();
-    if (!tokenData || !tokenData.preferred_username) {
-      console.error('Token data is invalid or preferred_username is missing.');
-      return; 
-    }
 
-    const payload = {
-      Title: "",
-      FirstName: "",
-      LastName: "",
-      BirthDate: "",
-      Email: "",
-      UserName: tokenData.preferred_username,
-      Address: "",
-      City: "",
-      Country: "",
-      PostalCode: "",
-      Notes: "",
-      Photo: "",
-      PhotoPath: "",
-      Role: ""
-    };
-
-    try {
-      await HttpService.getAxiosClient().post('/Customer', payload);
-      console.log('Customer data posted successfully.');
-    } catch (error) {
-      console.error('Error posting customer data:', error);
-    }
-  }
-};
-
-onMounted(() => {
-  checkAndPostCustomer();
-});
 </script>
 
 <style scoped>

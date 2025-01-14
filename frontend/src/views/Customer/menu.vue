@@ -81,19 +81,32 @@
                             <p class="mb-1 text-lg font-bold">{{ totalAmount }} บาท</p>
                         </div>
                     </div>
+                    <!-- <a-select v-if="subTotalItems.length > 0" v-model:value="selectTable" show-search placeholder="Select a person" style="width: 100%"
+                        :options="table" :filter-option="filterOption" ></a-select> -->
                     <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
-                        @click="handleCheckout" :disabled="loading">
+                        @click="showTableModal" :disabled="loading">
                         {{ loading ? 'กำลังดำเนินการ...' : 'Check out' }}
                     </button>
                 </div>
 
             </div>
         </div>
-
-
-
-
     </div>
+
+    <!-- Table Selection Modal -->
+    <a-modal v-model:open="isTableModalVisible" title="เลือกโต๊ะ" @ok="handleTableSelection"
+        @cancel="handleModalCancel" okText="ยืนยัน" cancelText="ยกเลิก" :maskClosable="false">
+        <div class="grid grid-cols-4 gap-4 p-4">
+            <button v-for="table in tables" :key="table"
+                class="h-16 rounded-lg border-2 transition-all duration-200 ease-in-out" :class="[
+                    selectedTable === table
+                        ? 'border-blue-500 bg-blue-50 text-blue-700'
+                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                ]" @click="selectedTable = table">
+                <span class="text-lg font-medium">โต๊ะ {{ table }}</span>
+            </button>
+        </div>
+    </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -135,7 +148,24 @@ interface Order {
     State: string;
     OrderDetail: OrderDetail[];
 }
+// interface Option {
+//     value: string;
+//     label: string;
+// }
 
+// const table = ref<Option[]>([
+//     { value: 'jack', label: 'Jack' },
+//     { value: 'lucy', label: 'Lucy' },
+//     { value: 'tom', label: 'Tom' },
+// ]);
+// const selectTable = ref<string | undefined>(undefined);
+const isTableModalVisible = ref(false)
+const selectedTable = ref<string>('')
+
+const tables = ref([
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'
+])
 const loading = ref(false)
 
 const employees = ref<Employee[]>([])
@@ -146,6 +176,36 @@ const totalAmount = computed(() => {
     return subTotalItems.value.reduce((total, item) => total + (parseFloat(item.UnitPrice) * item.QuantityToOrder), 0)
 })
 
+// const filterOption = (input: string, option: any) => {
+//     return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+// };
+
+const showTableModal = () => {
+    if (subTotalItems.value.length === 0) {
+        message.warning('กรุณาเลือกสินค้าก่อนสั่งซื้อ')
+        return
+    }
+
+    if (!KeycloakService.IsLoggedIn()) {
+        message.error('กรุณาเข้าสู่ระบบก่อนสั่งซื้อ')
+        return
+    }
+
+    isTableModalVisible.value = true
+}
+const handleTableSelection = async () => {
+    if (!selectedTable.value) {
+        message.warning('กรุณาเลือกโต๊ะก่อนดำเนินการต่อ')
+        return
+    }
+
+    isTableModalVisible.value = false
+    await handleCheckout()
+}
+const handleModalCancel = () => {
+    selectedTable.value = ''
+    isTableModalVisible.value = false
+}
 const fetchData = async () => {
     loading.value = true
     try {
@@ -201,7 +261,7 @@ const handleCheckout = async () => {
             EmployeeUserName: getRandomEmployee(),
             OrderDate: new Date().toISOString(),
             TotalPrice: totalAmount.value,
-            Address: "12222",
+            Address: selectedTable.value,
             State: "Pending",
             OrderDetail: subTotalItems.value.map(item => ({
                 Discount: 0,
@@ -215,6 +275,7 @@ const handleCheckout = async () => {
 
         message.success('สั่งซื้อสำเร็จ')
         subTotalItems.value = []
+        selectedTable.value = ''
         products.value.forEach(product => {
             product.QuantityToOrder = 0
         })
