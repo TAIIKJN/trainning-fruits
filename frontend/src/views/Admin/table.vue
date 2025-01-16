@@ -11,6 +11,11 @@
       rowKey="Id"
     >
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'State'">
+          <a-tag :color="getStateColor(record.State)">
+            {{ translateState(record.State) }}
+          </a-tag>
+        </template>
         <template v-if="column.key === 'actions'">
           <a-space>
             <a-button type="link" @click="handleEdit(record)">แก้ไข</a-button>
@@ -32,7 +37,7 @@
     >
       <a-form
         :model="formState"
-        name="categoryForm"
+        name="TableForm"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         @finish="onFinish"
@@ -51,8 +56,9 @@
         </a-form-item>
         <a-form-item label="สถานะ" name="State">
           <a-radio-group v-model:value="formState.State">
-            <a-radio value="available">Available</a-radio>
-            <a-radio value="ready">Ready</a-radio>
+            <a-radio value="Available">ว่าง</a-radio>
+            <a-radio value="Occupied">ไม่ว่าง</a-radio>
+            <a-radio value="CleaningProgress">กำลังทําความสะอาด</a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>
@@ -69,24 +75,24 @@ import KeycloakService from "../../services/KeycloakService";
 const roles = KeycloakService.GetUserRoles();
 const isUserRole = roles.includes("admin");
 
-interface CategoryItem {
+interface TableItem {
   Id: string;
   Name: string;
   Description: string;
   State: string;
 }
-interface CategoryForm {
+interface TableForm {
   Id: string | null;
   Name: string;
   Description: string;
   State: string;
 }
 
-const formState = reactive<CategoryForm>({
+const formState = reactive<TableForm>({
   Id: null,
   Name: "",
   Description: "",
-  State: "available",
+  State: "Available",
 });
 const baseColumns = [
   {
@@ -114,7 +120,7 @@ const actionColumn = {
 const columns = computed(() => {
   return isUserRole ? [...baseColumns, actionColumn] : baseColumns;
 });
-const categories = ref<CategoryItem[]>([]);
+const categories = ref<TableItem[]>([]);
 const loading = ref(false);
 
 const modalVisible = ref(false);
@@ -137,7 +143,7 @@ const resetForm = () => {
     Id: null,
     Name: "",
     Description: "",
-    State: "available",
+    State: "Available",
   });
 };
 
@@ -164,7 +170,7 @@ const handleDelete = (id: string) => {
     },
   });
 };
-const handleEdit = (record: CategoryItem) => {
+const handleEdit = (record: TableItem) => {
   formState.Id = record.Id;
   formState.Name = record.Name;
   formState.Description = record.Description;
@@ -205,6 +211,28 @@ const handleOk = async () => {
 const handleCancel = () => {
   modalVisible.value = false;
   resetForm();
+};
+
+const getStateColor = (state: string) => {
+    const colors: Record<string, string> = {
+        CleaningProgress: 'orange',
+        Available: 'green',
+        Occupied: 'red',
+
+    };
+    return colors[state] || 'blue';
+};
+const translateState = (state: string): string => {
+    switch (state) {
+        case 'Available':
+            return 'ว่าง';
+        case 'Occupied':
+            return 'ไม่ว่าง';
+        case 'CleaningProgress':
+            return 'กำลังทําความสะอาด';
+        default:
+            return state;
+    }
 };
 
 const onFinish = (values: any) => {
