@@ -155,7 +155,6 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import countryData from '../../services/countries.json';
 
-// Interface and initial state
 interface CustomerData {
     Id?: string;
     Title: string | null;
@@ -216,18 +215,16 @@ const isEditing = ref(false);
 const emailWithoutDomain = computed({
     get: () => formState.Email.replace('@gmail.com', ''),
     set: (value: string) => {
-        // ตรวจสอบและตัด @gmail.com ออกหากผู้ใช้กรอกมาในช่อง input
         const sanitizedValue = value.replace('@gmail.com', '').trim();
         formState.Email = `${sanitizedValue}@gmail.com`;
     },
 });
 const filterNumericInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/\D/g, ''); // ลบค่าที่ไม่ใช่ตัวเลข
+    input.value = input.value.replace(/\D/g, ''); 
     formState.PostalCode = input.value;
 };
 
-// Table columns
 const columns = [
     { title: 'ชื่อ-นามสกุล', key: 'fullName', width: 150, fixed: 'left' },
     { title: 'ชื่อผู้ใช้', dataIndex: 'UserName', key: 'userName' },
@@ -245,7 +242,6 @@ const fetchProvinces = async () => {
     try {
         loadingProvinces.value = true;
         const response = await axios.get('https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json');
-        // console.log(response.data);
 
         provinceOptions.value = response.data.map((province: Province) => ({
             label: province.name_th, 
@@ -268,7 +264,6 @@ const fetchCountries = async () => {
             value: country.label,
         }));
 
-        // เลื่อน Thailand ไปยังตำแหน่งแรก
         const thailand = countries.find((country) => country.value === 'Thailand');
         if (thailand?.value === 'Thailand') {
             countryOptions.value = [thailand, ...countries.filter((country) => country.value !== 'Thailand')];
@@ -282,7 +277,6 @@ const fetchCountries = async () => {
         loadingCountries.value = false;
     }
 };
-// Form management functions
 const resetForm = () => {
     Object.assign(formState, initialFormState);
     birthDate.value = null;
@@ -387,7 +381,8 @@ const showModal = () => {
 
 const handleEdit = (record: CustomerData) => {
     Object.assign(formState, record);
-    birthDate.value = record.BirthDate ? dayjs(record.BirthDate) : null;
+    // แก้ไขตรงนี้ โดยระบุ format ให้ dayjs
+    birthDate.value = record.BirthDate ? dayjs(record.BirthDate, "DD-MM-YYYY") : null;
     isEditing.value = true;
     modalVisible.value = true;
 };

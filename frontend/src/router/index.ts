@@ -16,6 +16,7 @@ import employee from '../views/Employee/employee.vue'
 import customerAdmin from '../views/Admin/customer.vue'
 import supplierAdmin from '../views/Admin/supplier.vue'
 import MenuEmployee from '../views/Employee/menu.vue'
+import Table from '../views/Admin/table.vue'
 
 const routes = [
   { path: '/', component: Login },
@@ -43,6 +44,7 @@ const routes = [
   { path: '/customer-admin', component: customerAdmin, meta: { requiresAuth: true} },
   { path: '/supplier-admin', component: supplierAdmin, meta: { requiresAuth: true} },
   { path: '/employee-menu', component: MenuEmployee, meta: { requiresAuth: true} },
+  { path: '/table', component: Table, meta: { requiresAuth: true} },
 
 ]
 
