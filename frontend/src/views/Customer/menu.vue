@@ -160,7 +160,7 @@
       </div>
 
       <div
-        @click="handleServiceTypeSelection('Take-away')"
+        @click="handleServiceTypeSelection('Takeaway')"
         class="flex flex-col h-full max-w-lg mx-auto  rounded-lg cursor-pointer duration-150 hover:scale-105"
       >
         <img class="rounded-lg rounded-b-none" src="/Dinein.png" />
