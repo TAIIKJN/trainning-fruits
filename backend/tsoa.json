@@ -12,10 +12,12 @@
       }
     },
     "outputDirectory": "static",
-    "specVersion": 3
+    "specVersion": 3,
+    "basePath": "/api"
   },
   "routes": {
     "routesDir": "src",
-    "authenticationModule": "src/auth.ts"
+    "authenticationModule": "src/auth.ts",
+    "basePath": "/api"
   }
 }
