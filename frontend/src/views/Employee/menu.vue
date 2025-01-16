@@ -237,18 +237,6 @@ import HttpService from "../../services/HttpService";
 import KeycloakService from "../../services/KeycloakService";
 
 interface Product {
-<<<<<<< Updated upstream
-    Id: string
-    ProductName: string
-    CategoryId: string
-    UnitPrice: string
-    QuantityPerUnit: string
-    UnitsInStock: number
-    UnitsOnOrder: number
-    Discontinued: number
-    SupplierId: string
-    QuantityToOrder: number;
-=======
   Id: string;
   ProductName: string;
   CategoryId: string;
@@ -260,7 +248,6 @@ interface Product {
   Discontinued: number;
   SupplierId: string;
   QuantityToOrder: number;
->>>>>>> Stashed changes
 }
 
 interface Employee {
