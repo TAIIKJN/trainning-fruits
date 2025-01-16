@@ -308,7 +308,7 @@ const translateState = (state: string): string => {
         case 'Pending':
             return 'รอดำเนินการ';
         case 'InProgress':
-            return 'กำลังดำเนินการ';
+            return 'กำลังทำอาหาร';
         case 'Succeed':
             return 'พร้อมเสริฟ';
         case 'done':

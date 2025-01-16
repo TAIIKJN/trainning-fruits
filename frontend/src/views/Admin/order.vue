@@ -44,7 +44,7 @@
                 View Details
               </a-button>
               <a-button
-                v-if="record.State !== 'Cancel' && record?.State !== 'Done'"
+                v-if="record.State !== 'Cancel' && record?.State !== 'Done' && record?.State !== 'done'"
                 danger
                 size="small"
                 @click="cancelOrder(record.Id)"
@@ -92,6 +92,20 @@
                 <p class="text-gray-600 mb-1">Order Date:</p>
                 <p class="font-medium">
                   {{ formatDate(selectedOrder.OrderDate) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-600 mb-1">พนักงานรับออเดอร์</p>
+                <p class="font-medium">
+                  {{ selectedOrder.Employee.FirstName }}
+                  {{ selectedOrder.Employee.LastName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-600 mb-1">ลูกค้า</p>
+                <p class="font-medium">
+                  {{ selectedOrder.Customer.FirstName }}
+                  {{ selectedOrder.Customer.LastName }}
                 </p>
               </div>
               <div>
@@ -230,6 +244,14 @@ interface Order {
   Address: string;
   State: string;
   OrderDetail: OrderDetail[];
+  Customer: {
+    FirstName: string;
+    LastName: string;
+  };
+  Employee: {
+    FirstName: string;
+    LastName: string;
+  };
   Table?: {
     Name?: string;
   };
@@ -404,7 +426,7 @@ const translateState = (state: string): string => {
     case "Pending":
       return "รอดำเนินการ";
     case "InProgress":
-      return "กำลังดำเนินการ";
+      return "กำลังทำอาหาร";
     case "Succeed":
       return "พร้อมเสริฟ";
     case "Done":
