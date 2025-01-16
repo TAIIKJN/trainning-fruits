@@ -57,8 +57,8 @@
         <a-form-item label="สถานะ" name="State">
           <a-radio-group v-model:value="formState.State">
             <a-radio value="Available">ว่าง</a-radio>
-            <a-radio value="Occupied">ไม่ว่าง</a-radio>
             <a-radio value="CleaningProgress">กำลังทําความสะอาด</a-radio>
+            <a-radio value="Occupied">ไม่ว่าง</a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>
