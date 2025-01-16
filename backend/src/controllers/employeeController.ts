@@ -38,6 +38,7 @@ export interface Employees {
   PhotoPath: string;
   Password: string;
   RoleUser: string;
+  State?: string;
 }
 
 export interface SearchEmployees {
@@ -415,6 +416,7 @@ export class employeeController extends Controller {
               Notes: requestBody.Notes,
               Photo: requestBody.Photo,
               PhotoPath: requestBody.PhotoPath,
+              State: requestBody.State,
             },
             where: {
               Id: id,

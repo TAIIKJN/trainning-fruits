@@ -179,6 +179,7 @@ const models: TsoaRoute.Models = {
             "PhotoPath": {"dataType":"string","required":true},
             "Password": {"dataType":"string","required":true},
             "RoleUser": {"dataType":"string","required":true},
+            "State": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -244,7 +245,7 @@ export function RegisterRoutes(app: Router) {
     
         const argstableController_getTableAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Table',
+        app.get('/api/Table',
             ...(fetchMiddlewares<RequestHandler>(tableController)),
             ...(fetchMiddlewares<RequestHandler>(tableController.prototype.getTableAll)),
 
@@ -274,7 +275,7 @@ export function RegisterRoutes(app: Router) {
         const argstableController_getTableById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Table/:id',
+        app.get('/api/Table/:id',
             ...(fetchMiddlewares<RequestHandler>(tableController)),
             ...(fetchMiddlewares<RequestHandler>(tableController.prototype.getTableById)),
 
@@ -305,7 +306,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"TableDetail"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Table',
+        app.post('/api/Table',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(tableController)),
             ...(fetchMiddlewares<RequestHandler>(tableController.prototype.createTable)),
@@ -338,7 +339,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"TableDetail"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Table/:id',
+        app.patch('/api/Table/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(tableController)),
             ...(fetchMiddlewares<RequestHandler>(tableController.prototype.updateTable)),
@@ -370,7 +371,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Table/:id',
+        app.delete('/api/Table/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(tableController)),
             ...(fetchMiddlewares<RequestHandler>(tableController.prototype.deleteTable)),
@@ -402,7 +403,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchSupplier"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Supplier/chaeckSupplier',
+        app.post('/api/Supplier/chaeckSupplier',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.getSupplier)),
@@ -432,7 +433,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_getSupplierAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Supplier',
+        app.get('/api/Supplier',
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.getSupplierAll)),
 
@@ -462,7 +463,7 @@ export function RegisterRoutes(app: Router) {
         const argssupplierController_getSupplierById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Supplier/:id',
+        app.get('/api/Supplier/:id',
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.getSupplierById)),
 
@@ -493,7 +494,7 @@ export function RegisterRoutes(app: Router) {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Suppliers"},
         };
-        app.post('/Supplier',
+        app.post('/api/Supplier',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.createSupplier)),
@@ -526,7 +527,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Suppliers"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Supplier/:id',
+        app.patch('/api/Supplier/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.updateSupplier)),
@@ -558,7 +559,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Supplier/:id',
+        app.delete('/api/Supplier/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(supplierController)),
             ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.deleteSupplier)),
@@ -589,7 +590,7 @@ export function RegisterRoutes(app: Router) {
         const argsproductController_getProductAll: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.get('/Product',
+        app.get('/api/Product',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.getProductAll)),
@@ -620,7 +621,7 @@ export function RegisterRoutes(app: Router) {
         const argsproductController_getProductById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Product/:id',
+        app.get('/api/Product/:id',
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.getProductById)),
 
@@ -651,7 +652,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Produucts"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Product',
+        app.post('/api/Product',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.createProduuct)),
@@ -684,7 +685,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Produucts"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Product/:id',
+        app.patch('/api/Product/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.updataProduuct)),
@@ -716,7 +717,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Product/:id',
+        app.delete('/api/Product/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(productController)),
             ...(fetchMiddlewares<RequestHandler>(productController.prototype.deleteProduct)),
@@ -747,7 +748,7 @@ export function RegisterRoutes(app: Router) {
         const argsorderDetailContoller_deleteOrderDetail: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.delete('/OrderDetail/:id',
+        app.delete('/api/OrderDetail/:id',
             ...(fetchMiddlewares<RequestHandler>(orderDetailContoller)),
             ...(fetchMiddlewares<RequestHandler>(orderDetailContoller.prototype.deleteOrderDetail)),
 
@@ -776,7 +777,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsorderController_getOrderAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Order',
+        app.get('/api/Order',
             ...(fetchMiddlewares<RequestHandler>(orderController)),
             ...(fetchMiddlewares<RequestHandler>(orderController.prototype.getOrderAll)),
 
@@ -806,7 +807,7 @@ export function RegisterRoutes(app: Router) {
         const argsorderController_getOrderById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Order/:id',
+        app.get('/api/Order/:id',
             ...(fetchMiddlewares<RequestHandler>(orderController)),
             ...(fetchMiddlewares<RequestHandler>(orderController.prototype.getOrderById)),
 
@@ -837,7 +838,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Orders"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Order',
+        app.post('/api/Order',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(orderController)),
             ...(fetchMiddlewares<RequestHandler>(orderController.prototype.createOrder)),
@@ -869,7 +870,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"OrdersUpdate"},
         };
-        app.patch('/Order/:id',
+        app.patch('/api/Order/:id',
             ...(fetchMiddlewares<RequestHandler>(orderController)),
             ...(fetchMiddlewares<RequestHandler>(orderController.prototype.updateOrder)),
 
@@ -898,7 +899,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsfruitController_getFruit: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/fruits',
+        app.get('/api/fruits',
             ...(fetchMiddlewares<RequestHandler>(fruitController)),
             ...(fetchMiddlewares<RequestHandler>(fruitController.prototype.getFruit)),
 
@@ -928,7 +929,7 @@ export function RegisterRoutes(app: Router) {
         const argsfruitController_getFruitById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/fruits/:id',
+        app.get('/api/fruits/:id',
             ...(fetchMiddlewares<RequestHandler>(fruitController)),
             ...(fetchMiddlewares<RequestHandler>(fruitController.prototype.getFruitById)),
 
@@ -959,7 +960,7 @@ export function RegisterRoutes(app: Router) {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Fruits"},
         };
-        app.post('/fruits',
+        app.post('/api/fruits',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(fruitController)),
             ...(fetchMiddlewares<RequestHandler>(fruitController.prototype.createFruit)),
@@ -992,7 +993,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Fruits"},
         };
-        app.patch('/fruits/:id',
+        app.patch('/api/fruits/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(fruitController)),
             ...(fetchMiddlewares<RequestHandler>(fruitController.prototype.updateFruit)),
@@ -1024,7 +1025,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/fruits/:id',
+        app.delete('/api/fruits/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(fruitController)),
             ...(fetchMiddlewares<RequestHandler>(fruitController.prototype.deleteFruit)),
@@ -1056,7 +1057,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchEmployees"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Employee/chaeckEmployee',
+        app.post('/api/Employee/chaeckEmployee',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.getEmployee)),
@@ -1086,7 +1087,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsemployeeController_getEmployeeAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Employee',
+        app.get('/api/Employee',
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.getEmployeeAll)),
 
@@ -1116,7 +1117,7 @@ export function RegisterRoutes(app: Router) {
         const argsemployeeController_getEmployeeById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Employee/:id',
+        app.get('/api/Employee/:id',
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.getEmployeeById)),
 
@@ -1147,7 +1148,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Employees"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Employee',
+        app.post('/api/Employee',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.createEmployee)),
@@ -1180,7 +1181,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Employees"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Employee/:id',
+        app.patch('/api/Employee/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.updateEmployee)),
@@ -1212,7 +1213,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Employee/:id',
+        app.delete('/api/Employee/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(employeeController)),
             ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.deleteEmployee)),
@@ -1244,7 +1245,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SearchCustomers"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Customer/chaeckCustomer',
+        app.post('/api/Customer/chaeckCustomer',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.getCustomer)),
@@ -1274,7 +1275,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscustomerController_getCustomerAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Customer',
+        app.get('/api/Customer',
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.getCustomerAll)),
 
@@ -1304,7 +1305,7 @@ export function RegisterRoutes(app: Router) {
         const argscustomerController_getCustomerById: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/Customer/:id',
+        app.get('/api/Customer/:id',
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.getCustomerById)),
 
@@ -1335,7 +1336,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Customers"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Customer',
+        app.post('/api/Customer',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.createCustomer)),
@@ -1368,7 +1369,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Customers"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Customer/:id',
+        app.patch('/api/Customer/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.updateCustomer)),
@@ -1400,7 +1401,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Customer/:id',
+        app.delete('/api/Customer/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(customerController)),
             ...(fetchMiddlewares<RequestHandler>(customerController.prototype.deleteCustomer)),
@@ -1430,7 +1431,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscategoryController_getCategoryAll: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/Category',
+        app.get('/api/Category',
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.getCategoryAll)),
 
@@ -1461,7 +1462,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Categorys"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.post('/Category',
+        app.post('/api/Category',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.createCategory)),
@@ -1494,7 +1495,7 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Categorys"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.patch('/Category/:id',
+        app.patch('/api/Category/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.updataCategory)),
@@ -1526,7 +1527,7 @@ export function RegisterRoutes(app: Router) {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
-        app.delete('/Category/:id',
+        app.delete('/api/Category/:id',
             authenticateMiddleware([{"keycloak":[]}]),
             ...(fetchMiddlewares<RequestHandler>(categoryController)),
             ...(fetchMiddlewares<RequestHandler>(categoryController.prototype.deleteCategory)),

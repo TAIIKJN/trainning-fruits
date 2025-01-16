@@ -33,6 +33,7 @@ model Employee {
   Notes     String?
   Photo     String?
   PhotoPath String?
+  State     String? @default("Checked-Out")
   Order     Order[]
 }
 

@@ -380,6 +380,9 @@
 					},
 					"RoleUser": {
 						"type": "string"
+					},
+					"State": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -1865,6 +1868,9 @@
 															"Title": {
 																"type": "string"
 															},
+															"State": {
+																"type": "string"
+															},
 															"Id": {
 																"type": "string"
 															}
@@ -1883,6 +1889,7 @@
 															"LastName",
 															"FirstName",
 															"Title",
+															"State",
 															"Id"
 														],
 														"type": "object"
@@ -2813,6 +2820,9 @@
 												"Title": {
 													"type": "string"
 												},
+												"State": {
+													"type": "string"
+												},
 												"Id": {
 													"type": "string"
 												}
@@ -2831,6 +2841,7 @@
 												"LastName",
 												"FirstName",
 												"Title",
+												"State",
 												"Id"
 											],
 											"type": "object"
@@ -3040,6 +3051,9 @@
 														"Title": {
 															"type": "string"
 														},
+														"State": {
+															"type": "string"
+														},
 														"Id": {
 															"type": "string"
 														}
@@ -3058,6 +3072,7 @@
 														"LastName",
 														"FirstName",
 														"Title",
+														"State",
 														"Id"
 													],
 													"type": "object"
@@ -3188,6 +3203,9 @@
 												"Title": {
 													"type": "string"
 												},
+												"State": {
+													"type": "string"
+												},
 												"Id": {
 													"type": "string"
 												}
@@ -3206,6 +3224,7 @@
 												"LastName",
 												"FirstName",
 												"Title",
+												"State",
 												"Id"
 											],
 											"type": "object"
@@ -3977,7 +3996,7 @@
 	},
 	"servers": [
 		{
-			"url": "/"
+			"url": "/api"
 		}
 	]
 }
