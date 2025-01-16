@@ -241,7 +241,6 @@ interface Order {
   EmployeeId: string;
   OrderDate: string;
   TotalPrice: number;
-  Address: string;
   State: string;
   OrderDetail: OrderDetail[];
   Table?: {
@@ -526,7 +525,6 @@ const saveChanges = async () => {
       EmployeeId: selectedOrder.value.EmployeeId,
       OrderDate: selectedOrder.value.OrderDate,
       TotalPrice: calculateTotalPrice(),
-      Address: selectedOrder.value.Address,
       State: selectedOrder.value.State,
       OrderDetail: editableOrderDetails.value.map((detail) => ({
         ...detail,
@@ -590,7 +588,6 @@ const cancelOrder = async (orderId: string) => {
       EmployeeId: existingOrder.EmployeeId,
       OrderDate: existingOrder.OrderDate,
       TotalPrice: existingOrder.TotalPrice,
-      Address: existingOrder.Address,
       State: "Cancel",
       OrderDetail: existingOrder.OrderDetail.map((detail) => ({
         ...detail,

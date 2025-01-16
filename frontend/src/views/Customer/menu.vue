@@ -149,7 +149,9 @@
         class="flex flex-col h-full max-w-lg mx-auto rounded-lg cursor-pointer duration-150 hover:scale-105"
       >
         <img class="rounded-lg rounded-b-none" src="/Takeaway.png" />
-        <div class="py-2 px-4 flex flex-col bg-gray-800  items-center justify-center rounded-b-lg">
+        <div
+          class="py-2 px-4 flex flex-col bg-gray-800 items-center justify-center rounded-b-lg"
+        >
           <h1
             class="text-xl font-medium text-gray-300 hover:text-blue-500 cursor-pointer"
           >
@@ -161,11 +163,13 @@
 
       <div
         @click="handleServiceTypeSelection('Takeaway')"
-        class="flex flex-col h-full max-w-lg mx-auto  rounded-lg cursor-pointer duration-150 hover:scale-105"
+        class="flex flex-col h-full max-w-lg mx-auto rounded-lg cursor-pointer duration-150 hover:scale-105"
       >
         <img class="rounded-lg rounded-b-none" src="/Dinein.png" />
-        <div class="py-2 px-4 flex flex-col bg-gray-800  items-center justify-center rounded-b-lg">
-            <h1
+        <div
+          class="py-2 px-4 flex flex-col bg-gray-800 items-center justify-center rounded-b-lg"
+        >
+          <h1
             class="text-xl font-medium text-gray-300 hover:text-blue-500 cursor-pointer"
           >
             สั่งกลับบ้าน
@@ -233,20 +237,21 @@ import HttpService from "../../services/HttpService";
 import KeycloakService from "../../services/KeycloakService";
 
 interface Product {
-    Id: string
-    ProductName: string
-    CategoryId: string
-    UnitPrice: string
-    QuantityPerUnit: string
-    UnitsInStock: number
-    UnitsOnOrder: number
-    Discontinued: number
-    SupplierId: string
-    QuantityToOrder: number;
+  Id: string;
+  ProductName: string;
+  CategoryId: string;
+  UnitPrice: string;
+  QuantityPerUnit: string;
+  UnitsInStock: number;
+  UnitsOnOrder: number;
+  Discontinued: number;
+  SupplierId: string;
+  QuantityToOrder: number;
 }
 
 interface Employee {
   UserName: string;
+  State: string;
 }
 interface OrderDetail {
   Discount: number;
@@ -346,7 +351,7 @@ const handleServiceTypeSelection = (type: string) => {
     isTableModalVisible.value = true;
     fetchTables();
   } else {
-    handleCheckout(); // สำหรับ Take-away
+    handleCheckout();
   }
 };
 const fetchData = async () => {
@@ -360,7 +365,9 @@ const fetchData = async () => {
       ...product,
       QuantityToOrder: 0,
     }));
-    employees.value = employeesRes.data;
+    employees.value = employeesRes.data.filter(
+      (employee: Employee) => employee.State === "Checked-Int"
+    );
   } catch (error) {
     message.error("ไม่สามารถโหลดข้อมูลได้");
   } finally {
