@@ -100,7 +100,6 @@ interface Product {
     QuantityPerUnit: string
     UnitsInStock: number
     UnitsOnOrder: number
-    ReorderLevel: number
     Discontinued: number
     SupplierId: string
     QuantityToOrder: number;

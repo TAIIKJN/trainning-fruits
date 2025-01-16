@@ -48,9 +48,6 @@
                     <a-input-number v-model:value="formState.unitsInStock" :min="0" style="width: 100%" />
                 </a-form-item>
 
-                <a-form-item label="ระดับการสั่งซื้อซ้ำ">
-                    <a-input-number v-model:value="formState.reorderLevel" :min="0" style="width: 100%" />
-                </a-form-item>
                 <a-form-item label="ผู้จำหน่าย" required>
                     <a-select v-model:value="formState.supplierId" :loading="loading" placeholder="เลือกรายการ">
                         <a-select-option v-for="supplier in suppliers" :key="supplier.Id" :value="supplier.Id">
@@ -82,7 +79,6 @@ interface Product {
     QuantityPerUnit: string;
     UnitsInStock: number;
     UnitsOnOrder: number;
-    ReorderLevel: number;
     Discontinued: boolean;
     SupplierId: string;
 }
@@ -103,7 +99,6 @@ const formState = reactive({
     quantityPerUnit: '',
     unitsInStock: 0,
     unitsOnOrder: 0,
-    reorderLevel: 0,
     discontinued: false,
     supplierId: null
 });
@@ -115,7 +110,6 @@ const columns = [
     { title: 'หน่วย', dataIndex: 'QuantityPerUnit', key: 'QuantityPerUnit' },
     { title: 'คงเหลือ', dataIndex: 'UnitsInStock', key: 'UnitsInStock' },
     { title: 'สั่งซื้อ', dataIndex: 'UnitsOnOrder', key: 'UnitsOnOrder' },
-    { title: 'จำนวนการซื้อซ้ำ', dataIndex: 'ReorderLevel', key: 'ReorderLevel' },
     { title: 'สถานะ', dataIndex: 'Discontinued', key: 'Discontinued' },
     { title: 'จัดการ', key: 'actions' }
 ];
@@ -151,7 +145,6 @@ const showModal = () => {
         quantityPerUnit: '',
         unitsInStock: 0,
         unitsOnOrder: 0,
-        reorderLevel: 0,
         discontinued: false,
         supplierId: null
     });
@@ -167,7 +160,6 @@ const handleEdit = (record: Product) => {
         quantityPerUnit: record.QuantityPerUnit,
         unitsInStock: record.UnitsInStock,
         unitsOnOrder: record.UnitsOnOrder,
-        reorderLevel: record.ReorderLevel,
         discontinued: record.Discontinued,
         supplierId: record.SupplierId
     });
@@ -184,7 +176,6 @@ const handleSubmit = async () => {
             quantityPerUnit: formState.quantityPerUnit,
             unitsInStock: formState.unitsInStock,
             unitsOnOrder: formState.unitsOnOrder,
-            reorderLevel: formState.reorderLevel,
             discontinued: formState.discontinued,
             supplierId: formState.supplierId
         };

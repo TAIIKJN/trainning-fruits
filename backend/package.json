@@ -13,7 +13,8 @@
     "dev": "nodemon src/app.ts",
     "build:docker": "npm run build && docker build -t docker.frappet.com/training/training-fruits:$TAII_EX_VER -t docker.frappet.com/training/training-fruits:latest .",
     "push:docker": "npm run build:docker && docker push docker.frappet.com/training/training-fruits:$TAII_EX_VER && docker push docker.frappet.com/training/training-fruits:latest",
-    "reload:docker": "docker compose pull && docker compose up -d"
+    "reload:docker": "docker compose pull && docker compose up -d",
+    "buildx:docker": "npm run push:docker && docker buildx build --platform linux/amd64,linux/arm64 -t docker.frappet.com/training/training-fruits:latest --push ."
   },
   "keywords": [],
   "author": "",

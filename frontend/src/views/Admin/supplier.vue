@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 p-4">
         <div class="mb-4">
-            <a-button type="primary" @click="showModal">เพิ่ม Supplier</a-button>
+            <a-button type="primary" @click="showModal">เพิ่มพนักงานห้องครัว</a-button>
         </div>
 
         <a-table :columns="columns" :loading="loading" :dataSource="supplier" rowKey="Id"
@@ -19,7 +19,7 @@
             </template>
         </a-table>
 
-        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไข Supplier' : 'เพิ่ม Supplier'" @ok="handleOk"
+        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไขพนักงานห้องครัว' : 'เพิ่มพนักงานห้องครัว'" @ok="handleOk"
             @cancel="handleCancel" :width="820" :confirmLoading="confirmLoading" centered>
             <a-form :model="formState" name="supplierForm" @finish="onFinish" @finishFailed="onFinishFailed">
 
@@ -58,9 +58,9 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
-                                Username
+                                ชื่อผู้ใช้งาน
                             </label>
-                            <a-input v-model:value="formState.UserName" placeholder="กรอกUsername"
+                            <a-input v-model:value="formState.UserName" placeholder="กรอกชื่อผู้ใช้งาน"
                                 :disabled="isEditing" />
 
                         </div>
@@ -68,9 +68,9 @@
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
                             <label class="mb-2 block text-base font-medium text-[#07074D]">
-                                Email
+                                อีเมล
                             </label>
-                            <a-input v-model:value="emailWithoutDomain" placeholder="กรอก Email"
+                            <a-input v-model:value="emailWithoutDomain" placeholder="กรอกอีเมล"
                                 addon-after="@gmail.com" />
                         </div>
                     </div>
@@ -125,14 +125,14 @@
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
-                            <label class="mb-2 block text-base font-medium text-[#07074D]">Password</label>
-                            <a-input v-model:value="formState.Password" placeholder="กรอกPassword" />
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">รหัสผ่าน</label>
+                            <a-input v-model:value="formState.Password" placeholder="กรอกรหัสผ่าน" />
                         </div>
                     </div>
                     <div class="w-full px-3 sm:w-1/2">
                         <div class="mb-2">
-                            <label class="mb-2 block text-base font-medium text-[#07074D]">ยืนยัน Password</label>
-                            <a-input v-model:value="formState.ConfirmPassword" placeholder="กรอกยืนยัน Password" />
+                            <label class="mb-2 block text-base font-medium text-[#07074D]">ยืนยันรหัสผ่าน</label>
+                            <a-input v-model:value="formState.ConfirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" />
                         </div>
                     </div>
                 </div>

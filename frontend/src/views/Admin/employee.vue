@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 p-4">
         <div class="mb-4">
-            <a-button type="primary" @click="showModal">เพิ่ม Employee</a-button>
+            <a-button type="primary" @click="showModal">เพิ่มพนักงานหน้าร้าน</a-button>
         </div>
 
         <a-table :columns="columns" :loading="loading" :dataSource="employee" rowKey="Id"
@@ -19,7 +19,7 @@
             </template>
         </a-table>
 
-        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไขพนักงาน' : 'เพิ่มพนักงาน'" @ok="handleOk"
+        <a-modal v-model:open="modalVisible" :title="isEditing ? 'แก้ไขพนักงานหน้าร้าน' : 'เพิ่มพนักงานหน้าร้าน'" @ok="handleOk"
             @cancel="handleCancel" :width="820" :confirmLoading="confirmLoading" centered>
             <a-form :model="formState" name="employeeForm" @finish="onFinish" @finishFailed="onFinishFailed">
 

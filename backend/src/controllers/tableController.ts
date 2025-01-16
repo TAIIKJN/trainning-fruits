@@ -67,10 +67,10 @@ export class tableController extends Controller {
   ) {
     try {
       const isUser = req.user.role.some(
-        (item) => item === "admin" || item === "employee"
+        (item) => item === "admin" || item === "supplier"
       );
 
-      if (isUser) {
+      if (!isUser) {
         throw new HttpError(
           HttpStatus.UNAUTHORIZED,
           "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
@@ -107,7 +107,7 @@ export class tableController extends Controller {
         (item) => item === "admin" || item === "employee"
       );
 
-      if (isUser) {
+      if (!isUser) {
         throw new HttpError(
           HttpStatus.UNAUTHORIZED,
           "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"

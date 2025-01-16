@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 p-4">
         <div class="mb-4">
-            <a-button type="primary" @click="showModal">เพิ่ม Customer</a-button>
+            <a-button type="primary" @click="showModal">เพิ่มลูกค้า</a-button>
         </div>
 
         <a-table :columns="columns" :loading="loading" :dataSource="customer" rowKey="Id"

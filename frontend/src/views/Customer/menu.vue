@@ -233,17 +233,16 @@ import HttpService from "../../services/HttpService";
 import KeycloakService from "../../services/KeycloakService";
 
 interface Product {
-  Id: string;
-  ProductName: string;
-  CategoryId: string;
-  UnitPrice: string;
-  QuantityPerUnit: string;
-  UnitsInStock: number;
-  UnitsOnOrder: number;
-  ReorderLevel: number;
-  Discontinued: number;
-  SupplierId: string;
-  QuantityToOrder: number;
+    Id: string
+    ProductName: string
+    CategoryId: string
+    UnitPrice: string
+    QuantityPerUnit: string
+    UnitsInStock: number
+    UnitsOnOrder: number
+    Discontinued: number
+    SupplierId: string
+    QuantityToOrder: number;
 }
 
 interface Employee {
