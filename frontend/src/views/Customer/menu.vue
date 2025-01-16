@@ -142,15 +142,14 @@
     v-model:open="isServiceTypeModalVisible"
     title="เลือกประเภทการสั่งอาหาร"
     :footer="null"
-    :maskClosable="false"
   >
     <div class="grid grid-cols-2 gap-4 p-4">
       <div
         @click="handleServiceTypeSelection('Dine-in')"
-        class="flex flex-col h-full max-w-lg mx-auto bg-gray-800 rounded-lg cursor-pointer duration-150 hover:scale-105"
+        class="flex flex-col h-full max-w-lg mx-auto rounded-lg cursor-pointer duration-150 hover:scale-105"
       >
         <img class="rounded-lg rounded-b-none" src="/Takeaway.png" />
-        <div class="py-2 px-4 flex flex-col items-center justify-center">
+        <div class="py-2 px-4 flex flex-col bg-gray-800  items-center justify-center rounded-b-lg">
           <h1
             class="text-xl font-medium text-gray-300 hover:text-blue-500 cursor-pointer"
           >
@@ -162,11 +161,11 @@
 
       <div
         @click="handleServiceTypeSelection('Take-away')"
-        class="flex flex-col h-full max-w-lg mx-auto bg-gray-800 rounded-lg cursor-pointer duration-150 hover:scale-105"
+        class="flex flex-col h-full max-w-lg mx-auto  rounded-lg cursor-pointer duration-150 hover:scale-105"
       >
         <img class="rounded-lg rounded-b-none" src="/Dinein.png" />
-        <div class="py-2 px-4 flex flex-col items-center justify-center">
-          <h1
+        <div class="py-2 px-4 flex flex-col bg-gray-800  items-center justify-center rounded-b-lg">
+            <h1
             class="text-xl font-medium text-gray-300 hover:text-blue-500 cursor-pointer"
           >
             สั่งกลับบ้าน
@@ -436,7 +435,6 @@ const handleCheckout = async () => {
     loading.value = false;
   }
 };
-
 
 const incrementQuantity = (item: Product) => {
   if (item.QuantityToOrder < item.UnitsInStock) {
