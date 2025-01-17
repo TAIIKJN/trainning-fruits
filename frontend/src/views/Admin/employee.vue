@@ -1,10 +1,25 @@
 <template>
   <div class="px-6 p-4">
-    <div class="mb-4">
+    <div class="mb-4 flex space-x-4">
       <a-button type="primary" @click="showModal"
         >เพิ่มพนักงานหน้าร้าน</a-button
       >
+      <a-button
+        v-if="currentTab?.showAddButton"
+        style="background-color: #ff6600; border-color: #ff6600; color: white"
+        @click="showLeaveModal"
+      >
+        เพิ่มพนักงาน{{ currentTab.label }}
+      </a-button>
     </div>
+
+    <LeaveModal
+      v-model="leaveModalVisible"
+      :employees="employee"
+      :leaveType="getLeaveType"
+      :confirmLoading="confirmLoading"
+      @update="handleLeaveUpdate"
+    />
 
     <a-tabs v-model:activeKey="activeTab" class="custom-tabs">
       <a-tab-pane v-for="tab in tabs" :key="tab.key">
@@ -12,10 +27,10 @@
           <span class="flex items-center gap-2">
             <component :is="tab.icon" />
             {{ tab.label }}
-            <a-badge 
-              :count="getCount(tab.key)" 
-              :offset="[10, 0]" 
-              :color="tab.badgeColor" 
+            <a-badge
+              :count="getCount(tab.key)"
+              :offset="[10, 0]"
+              :color="tab.badgeColor"
             />
           </span>
         </template>
@@ -29,9 +44,6 @@
         />
       </a-tab-pane>
     </a-tabs>
-
-
-
 
     <a-modal
       v-model:open="modalVisible"
@@ -314,8 +326,18 @@ import HttpService from "../../services/HttpService";
 import dayjs from "dayjs";
 import axios from "axios";
 import countryData from "../../services/countries.json";
-import { TeamOutlined, LoginOutlined, LogoutOutlined, CalendarOutlined } from '@ant-design/icons-vue';
-import EmployeeTable from './EmployeeTable.vue';
+import {
+  TeamOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  CalendarOutlined,
+  MedicineBoxOutlined,
+  HeartOutlined,
+  CoffeeOutlined,
+  FieldTimeOutlined,
+} from "@ant-design/icons-vue";
+import EmployeeTable from "./employee/EmployeeTable.vue";
+import LeaveModal from "./employee/Leave.vue";
 
 // Interface and initial state
 interface EmployeeData {
@@ -376,14 +398,94 @@ interface FormValidationError {
   }[];
   outOfDate: boolean;
 }
+const EMPLOYEE_STATES = {
+  CHECKED_IN: "Checked-In",
+  CHECKED_OUT: "Checked-Out",
+  BREAK: "Break",
+  OVERTIME: "OverTime",
+  ABSENT: "Absent",
+  PERSONAL_LEAVE: "PersonalLeave",
+  SICK_LEAVE: "SickLeave",
+  ORDINATION_LEAVE: "OrdinationLeave",
+  VACATION: "Vacation",
+} as const;
+
 const tabs = [
-  { key: 'all', label: 'พนักงานทั้งหมด', icon: TeamOutlined, badgeColor: '' },
-  { key: 'checked-in', label: 'เข้างาน', icon: LoginOutlined, badgeColor: '#52c41a', state: 'Checked-In' },
-  { key: 'checked-out', label: 'ออกงาน', icon: LogoutOutlined, badgeColor: '#ff4d4f', state: 'Checked-Out' },
-  { key: 'on-leave', label: 'ลางาน', icon: CalendarOutlined, badgeColor: '#faad14', state: 'On-Leave' }
+  {
+    key: "all",
+    label: "ทั้งหมด",
+    icon: TeamOutlined,
+    badgeColor: "",
+    showAddButton: false,
+  },
+  {
+    key: "checked-in",
+    label: "เข้างาน",
+    icon: LoginOutlined,
+    badgeColor: "#52c41a",
+    state: EMPLOYEE_STATES.CHECKED_IN,
+    showAddButton: false,
+  },
+  {
+    key: "checked-out",
+    label: "ออกงาน",
+    icon: LogoutOutlined,
+    badgeColor: "#ff4d4f",
+    state: EMPLOYEE_STATES.CHECKED_OUT,
+    showAddButton: false,
+  },
+  {
+    key: "break",
+    label: "พักเบรก",
+    icon: CoffeeOutlined,
+    badgeColor: "#36cfc9",
+    state: EMPLOYEE_STATES.BREAK,
+    showAddButton: true,
+  },
+  {
+    key: "overtime",
+    label: "OT",
+    icon: FieldTimeOutlined,
+    badgeColor: "#16C47F",
+    state: EMPLOYEE_STATES.OVERTIME,
+    showAddButton: true,
+  },
+  {
+    key: "absent",
+    label: "ขาดงาน",
+    icon: CalendarOutlined,
+    badgeColor: "#B8001F",
+    state: EMPLOYEE_STATES.ABSENT,
+    showAddButton: true,
+  },
+  {
+    key: "personal-leave",
+    label: "ลากิจ",
+    icon: CalendarOutlined,
+    badgeColor: "#faad14",
+    state: EMPLOYEE_STATES.PERSONAL_LEAVE,
+    showAddButton: true,
+  },
+  {
+    key: "sick-leave",
+    label: "ลาป่วย",
+    icon: MedicineBoxOutlined,
+    badgeColor: "#faad14",
+    state: EMPLOYEE_STATES.SICK_LEAVE,
+    showAddButton: true,
+  },
+  {
+    key: "ordination-leave",
+    label: "ลาบวช",
+    icon: HeartOutlined,
+    badgeColor: "#722ed1",
+    state: EMPLOYEE_STATES.ORDINATION_LEAVE,
+    showAddButton: true,
+  },
 ];
 
-const activeTab = ref('all');
+const activeTab = ref("all");
+const leaveModalVisible = ref(false);
 
 const passwordModalVisible = ref(false);
 const passwordConfirmLoading = ref(false);
@@ -406,6 +508,54 @@ const modalVisible = ref(false);
 const confirmLoading = ref(false);
 const isEditing = ref(false);
 
+const currentTab = computed(() =>
+  tabs.find((tab) => tab.key === activeTab.value)
+);
+const getLeaveType = computed(
+  () => currentTab.value?.state || EMPLOYEE_STATES.PERSONAL_LEAVE
+);
+
+const showLeaveModal = () => {
+  leaveModalVisible.value = true;
+};
+
+const handleLeaveUpdate = async (updatedEmployee: EmployeeData) => {
+  try {
+    confirmLoading.value = true;
+    const response = await HttpService.getAxiosClient().patch(
+      `/Employee/${updatedEmployee.Id}`,
+      updatedEmployee
+    );
+
+    if (response.data && response.data.message) {
+      message.error(response.data.message);
+    } else {
+      message.success("อัพเดทสถานะสำเร็จ");
+      leaveModalVisible.value = false;
+
+      fetchEmployee();
+    }
+  } catch (error) {
+    console.error("Error updating employee leave status:", error);
+    message.error("ไม่สามารถอัพเดทสถานะได้");
+  } finally {
+    confirmLoading.value = false;
+  }
+};
+
+const getCount = (tabKey: string) => {
+  const tab = tabs.find((t) => t.key === tabKey);
+  return tabKey === "all"
+    ? employee.value.length
+    : employee.value.filter((emp) => emp.State === tab?.state).length;
+};
+const getDataSource = (tabKey: string) => {
+  const tab = tabs.find((t) => t.key === tabKey);
+  return tabKey === "all"
+    ? employee.value
+    : employee.value.filter((emp) => emp.State === tab?.state);
+};
+
 const emailWithoutDomain = computed({
   get: () => formState.Email.replace("@gmail.com", ""),
   set: (value: string) => {
@@ -414,18 +564,6 @@ const emailWithoutDomain = computed({
     formState.Email = `${sanitizedValue}@gmail.com`;
   },
 });
-
-const getCount = (tabKey: string) => {
-  const tab = tabs.find(t => t.key === tabKey);
-  return tabKey === 'all' ? employee.value.length : 
-    employee.value.filter(emp => emp.State === tab?.state).length;
-};
-
-const getDataSource = (tabKey: string) => {
-  const tab = tabs.find(t => t.key === tabKey);
-  return tabKey === 'all' ? employee.value : 
-    employee.value.filter(emp => emp.State === tab?.state);
-};
 
 const filterNumericInput = (event: Event) => {
   const input = event.target as HTMLInputElement;
