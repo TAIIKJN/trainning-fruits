@@ -99,10 +99,7 @@ export class orderController extends Controller {
       const isSupplier = req.user.role.some((item) => item === "supplier");
 
       if (isSupplier) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const dataCustomer = await prisma.customer.findFirst({
@@ -132,7 +129,7 @@ export class orderController extends Controller {
           OrderDate: requestBody?.OrderDate,
           TotalPrice: requestBody?.TotalPrice,
           State: requestBody?.State,
-          TypeService: "Dine-in",
+          TypeService: requestBody.TypeService,
           TableId: requestBody.TableId,
         },
       });
@@ -216,7 +213,7 @@ export class orderController extends Controller {
           data: {
             TotalPrice: requestBody?.TotalPrice,
             State: requestBody?.State,
-            TypeService: "Dine-in",
+            TypeService: requestBody.TypeService,
             TableId: requestBody.TableId,
           },
           where: {

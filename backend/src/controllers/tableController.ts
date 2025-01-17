@@ -71,10 +71,7 @@ export class tableController extends Controller {
       );
 
       if (!isUser) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const data = await prisma.table.create({
@@ -108,10 +105,7 @@ export class tableController extends Controller {
       );
 
       if (!isUser) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const dataTable = await prisma.table.findFirst({
@@ -153,10 +147,7 @@ export class tableController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้";
       }
 
       const dataTable = await prisma.table.findFirst({

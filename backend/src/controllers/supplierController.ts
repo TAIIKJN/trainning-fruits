@@ -35,6 +35,13 @@ export interface Suppliers {
   PostalCode: string;
   Notes: string;
   Photo: string;
+}
+
+export interface createSuppliers extends Suppliers {
+  Password: string;
+}
+
+export interface updatePassWordSupplier {
   Password: string;
 }
 
@@ -62,10 +69,7 @@ export class supplierController extends Controller {
       const isCreate = req.user.role.some((item) => item === "supplier");
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้";
       }
 
       if (requestBody) {
@@ -145,7 +149,7 @@ export class supplierController extends Controller {
         role: string[];
       };
     },
-    @Body() requestBody: Suppliers
+    @Body() requestBody: createSuppliers
   ) {
     try {
       const isCreate = req.user.role.some(
@@ -153,10 +157,7 @@ export class supplierController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const whereData = {
@@ -284,10 +285,7 @@ export class supplierController extends Controller {
         (v) => v === "admin" || v === "supplier"
       );
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้";
       }
       const dataSupplier = await prisma.supplier.findFirst({
         where: {
@@ -358,12 +356,6 @@ export class supplierController extends Controller {
             lastName: requestBody.LastName,
           };
 
-          const dataPasswordKeyCloak = {
-            type: "password",
-            value: requestBody.Password,
-            temporary: false,
-          };
-
           const dataUpdataUser = await axios.put(
             `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}`,
             dataUserKeyCloak,
@@ -375,17 +367,6 @@ export class supplierController extends Controller {
             }
           );
 
-          const dataUpdataPassword = await axios.put(
-            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
-            dataPasswordKeyCloak,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log("dataUser", dataUpdataUser, dataUpdataPassword);
           const data = await prisma.supplier.update({
             data: {
               Title: requestBody.Title,
@@ -420,6 +401,93 @@ export class supplierController extends Controller {
     }
   }
 
+  @Patch("UpdatePassword/{id}")
+  @Security("keycloak")
+  @SuccessResponse("200", "Update")
+  public async updateSupplierPassWord(
+    @Path() id: string,
+    @Body() requestBody: updatePassWordSupplier,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (v) => v === "admin" || v === "supplier"
+      );
+      console.log("isCreate", isCreate);
+
+      if (!isCreate) {
+        return "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้";
+      }
+      console.log("requestBody", requestBody);
+
+      const dataEmployee = await prisma.supplier.findFirst({
+        where: { Id: id },
+      });
+
+      if (dataEmployee) {
+        if (dataEmployee) {
+          const dataToken = {
+            client_id: "admin-cli",
+            username: "admin",
+            password: "admin",
+            grant_type: "password",
+          };
+
+          const tokenKeyCloak = await axios.post(
+            `${host}/realms/master/protocol/openid-connect/token`,
+            qs.stringify(dataToken),
+            {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          );
+
+          token = tokenKeyCloak.data.access_token;
+          console.log("token", token);
+
+          const dataKeyCloak = await axios.get(
+            `${host}/admin/realms/${realm}/users/?username=${dataEmployee.UserName}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const dataPasswordKeyCloak = {
+            type: "password",
+            value: requestBody.Password,
+            temporary: false,
+          };
+
+          const dataUpdataPassword = await axios.put(
+            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
+            dataPasswordKeyCloak,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("dataUser", dataUpdataPassword);
+          return "อัพเดทรหัสผ่านสำเร็จ";
+        } else {
+          return "ไม่พบข้อมูลผู้ใช้งาน";
+        }
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   @Delete("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Delete")
@@ -436,10 +504,7 @@ export class supplierController extends Controller {
       (v) => v === "admin" || v === "supplier"
     );
     if (!isCreate) {
-      throw new HttpError(
-        HttpStatus.UNAUTHORIZED,
-        "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
-      );
+      return "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้";
     }
 
     const dataSupplier = await prisma.supplier.findFirst({

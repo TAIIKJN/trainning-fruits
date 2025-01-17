@@ -52,6 +52,26 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "createSuppliers": {
+        "dataType": "refObject",
+        "properties": {
+            "Title": {"dataType":"string","required":true},
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "UserName": {"dataType":"string","required":true},
+            "Phone": {"dataType":"string","required":true},
+            "Address": {"dataType":"string","required":true},
+            "City": {"dataType":"string","required":true},
+            "Country": {"dataType":"string","required":true},
+            "PostalCode": {"dataType":"string","required":true},
+            "Notes": {"dataType":"string","required":true},
+            "Photo": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Suppliers": {
         "dataType": "refObject",
         "properties": {
@@ -67,6 +87,13 @@ const models: TsoaRoute.Models = {
             "PostalCode": {"dataType":"string","required":true},
             "Notes": {"dataType":"string","required":true},
             "Photo": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "updatePassWordSupplier": {
+        "dataType": "refObject",
+        "properties": {
             "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -161,6 +188,29 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "createEmployee": {
+        "dataType": "refObject",
+        "properties": {
+            "Title": {"dataType":"string","required":true},
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+            "BirthDate": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "UserName": {"dataType":"string","required":true},
+            "Address": {"dataType":"string","required":true},
+            "City": {"dataType":"string","required":true},
+            "Country": {"dataType":"string","required":true},
+            "PostalCode": {"dataType":"string","required":true},
+            "Notes": {"dataType":"string","required":true},
+            "Photo": {"dataType":"string","required":true},
+            "PhotoPath": {"dataType":"string","required":true},
+            "State": {"dataType":"string"},
+            "RoleUser": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Employees": {
         "dataType": "refObject",
         "properties": {
@@ -177,9 +227,15 @@ const models: TsoaRoute.Models = {
             "Notes": {"dataType":"string","required":true},
             "Photo": {"dataType":"string","required":true},
             "PhotoPath": {"dataType":"string","required":true},
-            "Password": {"dataType":"string","required":true},
-            "RoleUser": {"dataType":"string","required":true},
             "State": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "updatePassWordEmployee": {
+        "dataType": "refObject",
+        "properties": {
+            "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -191,6 +247,28 @@ const models: TsoaRoute.Models = {
             "Email": {"dataType":"string","required":true},
             "FirstName": {"dataType":"string","required":true},
             "LastName": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "createCustomers": {
+        "dataType": "refObject",
+        "properties": {
+            "Title": {"dataType":"string","required":true},
+            "FirstName": {"dataType":"string","required":true},
+            "LastName": {"dataType":"string","required":true},
+            "BirthDate": {"dataType":"string","required":true},
+            "Email": {"dataType":"string","required":true},
+            "UserName": {"dataType":"string","required":true},
+            "Address": {"dataType":"string","required":true},
+            "City": {"dataType":"string","required":true},
+            "Country": {"dataType":"string","required":true},
+            "PostalCode": {"dataType":"string","required":true},
+            "Notes": {"dataType":"string","required":true},
+            "Photo": {"dataType":"string","required":true},
+            "PhotoPath": {"dataType":"string","required":true},
+            "Role": {"dataType":"string","required":true},
+            "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -212,6 +290,13 @@ const models: TsoaRoute.Models = {
             "Photo": {"dataType":"string","required":true},
             "PhotoPath": {"dataType":"string","required":true},
             "Role": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "updatePassWordCustomers": {
+        "dataType": "refObject",
+        "properties": {
             "Password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -492,7 +577,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argssupplierController_createSupplier: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
-                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Suppliers"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"createSuppliers"},
         };
         app.post('/api/Supplier',
             authenticateMiddleware([{"keycloak":[]}]),
@@ -544,6 +629,39 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updateSupplier',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argssupplierController_updateSupplierPassWord: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"updatePassWordSupplier"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.patch('/api/Supplier/UpdatePassword/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(supplierController)),
+            ...(fetchMiddlewares<RequestHandler>(supplierController.prototype.updateSupplierPassWord)),
+
+            async function supplierController_updateSupplierPassWord(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argssupplierController_updateSupplierPassWord, request, response });
+
+                const controller = new supplierController();
+
+              await templateService.apiHandler({
+                methodName: 'updateSupplierPassWord',
                 controller,
                 response,
                 next,
@@ -1145,7 +1263,7 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsemployeeController_createEmployee: Record<string, TsoaRoute.ParameterSchema> = {
-                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Employees"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"createEmployee"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/api/Employee',
@@ -1198,6 +1316,39 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updateEmployee',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsemployeeController_updateEmployeePassWord: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"updatePassWordEmployee"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.patch('/api/Employee/UpdatePassword/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(employeeController)),
+            ...(fetchMiddlewares<RequestHandler>(employeeController.prototype.updateEmployeePassWord)),
+
+            async function employeeController_updateEmployeePassWord(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsemployeeController_updateEmployeePassWord, request, response });
+
+                const controller = new employeeController();
+
+              await templateService.apiHandler({
+                methodName: 'updateEmployeePassWord',
                 controller,
                 response,
                 next,
@@ -1333,7 +1484,7 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argscustomerController_createCustomer: Record<string, TsoaRoute.ParameterSchema> = {
-                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Customers"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"createCustomers"},
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.post('/api/Customer',
@@ -1386,6 +1537,39 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updateCustomer',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argscustomerController_updateCustomerPassWord: Record<string, TsoaRoute.ParameterSchema> = {
+                id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"updatePassWordCustomers"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
+        app.patch('/api/Customer/UpdatePassword/:id',
+            authenticateMiddleware([{"keycloak":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(customerController)),
+            ...(fetchMiddlewares<RequestHandler>(customerController.prototype.updateCustomerPassWord)),
+
+            async function customerController_updateCustomerPassWord(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argscustomerController_updateCustomerPassWord, request, response });
+
+                const controller = new customerController();
+
+              await templateService.apiHandler({
+                methodName: 'updateCustomerPassWord',
                 controller,
                 response,
                 next,

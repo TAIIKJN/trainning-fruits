@@ -65,12 +65,6 @@ model Customer {
   Order     Order[]
 }
 
-model Shipper {
-  CompanyName String?
-  Id          String  @id @default(uuid())
-  Phone       String?
-}
-
 model Supplier {
   Id         String    @id @default(uuid())
   Title      String    @default("นาย")
@@ -135,33 +129,6 @@ model OrderDetail {
 
   Order   Order  @relation(fields: [OrderId], references: [Id])
   OrderId String
-}
-
-model CustomerCustomerDemo {
-  CustomerTypeId String?
-  Id             String  @id @default(uuid())
-}
-
-model CustomerDemographic {
-  CustomerDesc String?
-  Id           String  @id @default(uuid())
-}
-
-model Region {
-  Id                String  @id @default(uuid())
-  RegionDescription String?
-}
-
-model Territory {
-  Id                   String  @id @default(uuid())
-  RegionId             String
-  TerritoryDescription String?
-}
-
-model EmployeeTerritory {
-  EmployeeId  String
-  Id          String  @id @default(uuid())
-  TerritoryId String?
 }
 
 model Table {

@@ -37,7 +37,6 @@ export interface Customers {
   Photo: string;
   PhotoPath: string;
   Role: string;
-  Password: string;
 }
 
 export interface SearchCustomers {
@@ -46,6 +45,15 @@ export interface SearchCustomers {
   FirstName: string;
   LastName: string;
 }
+
+export interface createCustomers extends Customers {
+  Password: string;
+}
+
+export interface updatePassWordCustomers {
+  Password: string;
+}
+
 @Route("Customer")
 export class customerController extends Controller {
   @Post("chaeckCustomer")
@@ -63,10 +71,7 @@ export class customerController extends Controller {
       const isCustomer = req.user.role.some((item) => item === "customer");
 
       if (!isCustomer) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้";
       }
       if (requestBody) {
         const dataCustomer = await prisma.customer.findUnique({
@@ -141,7 +146,7 @@ export class customerController extends Controller {
   @Security("keycloak")
   @SuccessResponse("201", "Created")
   public async createCustomer(
-    @Body() requestBody: Customers,
+    @Body() requestBody: createCustomers,
     @Request()
     req: Express.Request & {
       user: {
@@ -156,10 +161,7 @@ export class customerController extends Controller {
       console.log("isCreate", isCreate);
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const whereData = {
@@ -300,10 +302,7 @@ export class customerController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้";
       }
 
       const dataCustomer = await prisma.customer.findFirst({
@@ -368,12 +367,6 @@ export class customerController extends Controller {
             lastName: requestBody.LastName,
           };
 
-          const dataPasswordKeyCloak = {
-            type: "password",
-            value: requestBody.Password,
-            temporary: false,
-          };
-
           const dataUpdataUser = await axios.put(
             `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}`,
             dataUserKeyCloak,
@@ -384,18 +377,6 @@ export class customerController extends Controller {
               },
             }
           );
-
-          const dataUpdataPassword = await axios.put(
-            `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
-            dataPasswordKeyCloak,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log("dataUser", dataUpdataUser, dataUpdataPassword);
 
           const data = await prisma.customer.update({
             data: {
@@ -433,6 +414,90 @@ export class customerController extends Controller {
     }
   }
 
+  @Patch("UpdatePassword/{id}")
+  @Security("keycloak")
+  @SuccessResponse("200", "Update")
+  public async updateCustomerPassWord(
+    @Path() id: string,
+    @Body() requestBody: updatePassWordCustomers,
+    @Request()
+    req: Express.Request & {
+      user: {
+        role: string[];
+      };
+    }
+  ) {
+    try {
+      const isCreate = req.user.role.some(
+        (item) => item === "admin" || item === "customer"
+      );
+
+      if (!isCreate) {
+        return "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้";
+      }
+      console.log("requestBody", requestBody);
+
+      const dataEmployee = await prisma.customer.findFirst({
+        where: { Id: id },
+      });
+
+      if (dataEmployee) {
+        const dataToken = {
+          client_id: "admin-cli",
+          username: "admin",
+          password: "admin",
+          grant_type: "password",
+        };
+
+        const tokenKeyCloak = await axios.post(
+          `${host}/realms/master/protocol/openid-connect/token`,
+          qs.stringify(dataToken),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
+
+        token = tokenKeyCloak.data.access_token;
+        console.log("token", token);
+
+        const dataKeyCloak = await axios.get(
+          `${host}/admin/realms/${realm}/users/?username=${dataEmployee.UserName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const dataPasswordKeyCloak = {
+          type: "password",
+          value: requestBody.Password,
+          temporary: false,
+        };
+
+        const dataUpdataPassword = await axios.put(
+          `${host}/admin/realms/${realm}/users/${dataKeyCloak.data[0].id}/reset-password`,
+          dataPasswordKeyCloak,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("dataUser", dataUpdataPassword);
+        return "อัพเดทรหัสผ่านสำเร็จ";
+      } else {
+        return "ไม่พบข้อมูลผู้ใช้งาน";
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   @Delete("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Delete")
@@ -451,10 +516,7 @@ export class customerController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้";
       }
 
       const dataCustomer = await prisma.customer.findFirst({

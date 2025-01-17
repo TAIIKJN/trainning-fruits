@@ -62,10 +62,7 @@ export class fruitController extends Controller {
   ) {
     const isAdmin = req.user.role.some((v) => v === "admin");
     if (!isAdmin) {
-      throw new HttpError(
-        HttpStatus.UNAUTHORIZED,
-        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-      );
+      return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
     }
     const _fruits = await prisma.fruit.create({
       data: {
@@ -92,10 +89,7 @@ export class fruitController extends Controller {
   ) {
     const isAdmin = req.user.role.some((v) => v === "admin");
     if (!isAdmin) {
-      throw new HttpError(
-        HttpStatus.UNAUTHORIZED,
-        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-      );
+      return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
     }
     const afruit = await prisma.fruit.findFirst({
       where: {
@@ -137,10 +131,7 @@ export class fruitController extends Controller {
   ) {
     const isAdmin = req.user.role.some((v) => v === "admin");
     if (!isAdmin) {
-      throw new HttpError(
-        HttpStatus.UNAUTHORIZED,
-        "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-      );
+      return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
     }
     const afruit = await prisma.fruit.findFirst({
       where: {

@@ -50,7 +50,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Suppliers": {
+			"createSuppliers": {
 				"properties": {
 					"Title": {
 						"type": "string"
@@ -105,6 +105,74 @@
 					"PostalCode",
 					"Notes",
 					"Photo",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Suppliers": {
+				"properties": {
+					"Title": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Phone": {
+						"type": "string"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"City": {
+						"type": "string"
+					},
+					"Country": {
+						"type": "string"
+					},
+					"PostalCode": {
+						"type": "string"
+					},
+					"Notes": {
+						"type": "string"
+					},
+					"Photo": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title",
+					"FirstName",
+					"LastName",
+					"Email",
+					"UserName",
+					"Phone",
+					"Address",
+					"City",
+					"Country",
+					"PostalCode",
+					"Notes",
+					"Photo"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"updatePassWordSupplier": {
+				"properties": {
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
 					"Password"
 				],
 				"type": "object",
@@ -334,6 +402,77 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"createEmployee": {
+				"properties": {
+					"Title": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"BirthDate": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"City": {
+						"type": "string"
+					},
+					"Country": {
+						"type": "string"
+					},
+					"PostalCode": {
+						"type": "string"
+					},
+					"Notes": {
+						"type": "string"
+					},
+					"Photo": {
+						"type": "string"
+					},
+					"PhotoPath": {
+						"type": "string"
+					},
+					"State": {
+						"type": "string"
+					},
+					"RoleUser": {
+						"type": "string"
+					},
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title",
+					"FirstName",
+					"LastName",
+					"BirthDate",
+					"Email",
+					"UserName",
+					"Address",
+					"City",
+					"Country",
+					"PostalCode",
+					"Notes",
+					"Photo",
+					"PhotoPath",
+					"RoleUser",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Employees": {
 				"properties": {
 					"Title": {
@@ -375,12 +514,6 @@
 					"PhotoPath": {
 						"type": "string"
 					},
-					"Password": {
-						"type": "string"
-					},
-					"RoleUser": {
-						"type": "string"
-					},
 					"State": {
 						"type": "string"
 					}
@@ -398,9 +531,19 @@
 					"PostalCode",
 					"Notes",
 					"Photo",
-					"PhotoPath",
-					"Password",
-					"RoleUser"
+					"PhotoPath"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"updatePassWordEmployee": {
+				"properties": {
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Password"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -429,7 +572,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Customers": {
+			"createCustomers": {
 				"properties": {
 					"Title": {
 						"type": "string"
@@ -492,6 +635,82 @@
 					"Photo",
 					"PhotoPath",
 					"Role",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Customers": {
+				"properties": {
+					"Title": {
+						"type": "string"
+					},
+					"FirstName": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"BirthDate": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Address": {
+						"type": "string"
+					},
+					"City": {
+						"type": "string"
+					},
+					"Country": {
+						"type": "string"
+					},
+					"PostalCode": {
+						"type": "string"
+					},
+					"Notes": {
+						"type": "string"
+					},
+					"Photo": {
+						"type": "string"
+					},
+					"PhotoPath": {
+						"type": "string"
+					},
+					"Role": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title",
+					"FirstName",
+					"LastName",
+					"BirthDate",
+					"Email",
+					"UserName",
+					"Address",
+					"City",
+					"Country",
+					"PostalCode",
+					"Notes",
+					"Photo",
+					"PhotoPath",
+					"Role"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"updatePassWordCustomers": {
+				"properties": {
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
 					"Password"
 				],
 				"type": "object",
@@ -889,6 +1108,7 @@
 										{
 											"type": "string",
 											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้",
 												"ส่งข้อมูลการเรียกดูไม่ครบ"
 											]
 										}
@@ -1221,6 +1441,12 @@
 												"status"
 											],
 											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+											]
 										}
 									]
 								}
@@ -1239,7 +1465,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Suppliers"
+								"$ref": "#/components/schemas/createSuppliers"
 							}
 						}
 					}
@@ -1445,7 +1671,8 @@
 										{
 											"type": "string",
 											"enum": [
-												"ไม่พบข้อมูล"
+												"ไม่พบข้อมูล",
+												"ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
 											]
 										}
 									]
@@ -1491,6 +1718,7 @@
 									"type": "string",
 									"enum": [
 										"ไม่พบข้อมูล",
+										"ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้",
 										"ลบข้อมูลสำเร็จ"
 									]
 								}
@@ -1513,6 +1741,46 @@
 						}
 					}
 				]
+			}
+		},
+		"/Supplier/UpdatePassword/{id}": {
+			"patch": {
+				"operationId": "UpdateSupplierPassWord",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/updatePassWordSupplier"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/Product": {
@@ -1627,6 +1895,7 @@
 										{
 											"type": "string",
 											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้",
 												"ไม่่พบข้อมุลประเภท"
 											]
 										}
@@ -2183,6 +2452,7 @@
 										{
 											"type": "string",
 											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้",
 												"ไม่พบข้อมูลลูกค้า",
 												"ไม่พบข้อมูลพนักงาน"
 											]
@@ -2575,23 +2845,33 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"color": {
-											"type": "string"
+									"anyOf": [
+										{
+											"properties": {
+												"color": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"color",
+												"id",
+												"name"
+											],
+											"type": "object"
 										},
-										"id": {
-											"type": "string"
-										},
-										"name": {
-											"type": "string"
+										{
+											"type": "string",
+											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+											]
 										}
-									},
-									"required": [
-										"color",
-										"id",
-										"name"
-									],
-									"type": "object"
+									]
 								}
 							}
 						}
@@ -2699,7 +2979,8 @@
 										{
 											"type": "string",
 											"enum": [
-												"ไม่พบข้อมูล"
+												"ไม่พบข้อมูล",
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
 											]
 										}
 									]
@@ -2745,6 +3026,7 @@
 									"type": "string",
 									"enum": [
 										"ไม่พบข้อมูล",
+										"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้",
 										"ลบข้อมูลสำเร็จ"
 									]
 								}
@@ -2884,6 +3166,7 @@
 										{
 											"type": "string",
 											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลหรือเรียกดูข้อมูลได้",
 												"ส่งข้อมูลการเรียกดูไม่ครบ"
 											]
 										}
@@ -3103,6 +3386,12 @@
 												"status"
 											],
 											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+											]
 										}
 									]
 								}
@@ -3121,7 +3410,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Employees"
+								"$ref": "#/components/schemas/createEmployee"
 							}
 						}
 					}
@@ -3267,7 +3556,8 @@
 										{
 											"type": "string",
 											"enum": [
-												"ไม่พบข้อมูล"
+												"ไม่พบข้อมูล",
+												"ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
 											]
 										}
 									]
@@ -3329,6 +3619,46 @@
 						}
 					}
 				]
+			}
+		},
+		"/Employee/UpdatePassword/{id}": {
+			"patch": {
+				"operationId": "UpdateEmployeePassWord",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/updatePassWordEmployee"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/Customer/chaeckCustomer": {
@@ -3554,6 +3884,12 @@
 												"status"
 											],
 											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
+											]
 										}
 									]
 								}
@@ -3572,7 +3908,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Customers"
+								"$ref": "#/components/schemas/createCustomers"
 							}
 						}
 					}
@@ -3794,7 +4130,8 @@
 										{
 											"type": "string",
 											"enum": [
-												"ไม่พบข้อมูล"
+												"ไม่พบข้อมูล",
+												"ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
 											]
 										}
 									]
@@ -3856,6 +4193,46 @@
 						}
 					}
 				]
+			}
+		},
+		"/Customer/UpdatePassword/{id}": {
+			"patch": {
+				"operationId": "UpdateCustomerPassWord",
+				"responses": {
+					"200": {
+						"description": "Update",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/updatePassWordCustomers"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/Category": {

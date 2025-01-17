@@ -107,10 +107,7 @@ export class productController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถเพิ่มข้อมูลได้";
       }
 
       const dataCategory = await prisma.category.findFirst({
@@ -176,10 +173,7 @@ export class productController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถแก้ไขข้อมูลได้";
       }
 
       const dataProduct = await prisma.product.findFirst({
@@ -275,10 +269,7 @@ export class productController extends Controller {
       );
 
       if (!isCreate) {
-        throw new HttpError(
-          HttpStatus.UNAUTHORIZED,
-          "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้"
-        );
+        return "ผู้ใช้งานนี้ไม่สามารถลบข้อมูลได้";
       }
 
       const dataProduuct = await prisma.product.findFirst({
