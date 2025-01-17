@@ -217,7 +217,7 @@
                 >สถานะ</label
               >
               <a-radio-group v-model:value="formState.State">
-                <a-radio value="Checked-Int">เข้างาน</a-radio>
+                <a-radio value="Checked-In">เข้างาน</a-radio>
                 <a-radio value="Checked-Out">ออกงาน</a-radio>
               </a-radio-group>
             </div>
@@ -729,7 +729,7 @@ const handleCancel = () => {
 };
 const translateState = (state: string): string => {
   switch (state.trim()) {
-    case "Checked-Int":
+    case "Checked-In":
       return "เข้างาน";
     case "Checked-Out":
       return "ออกงาน";
@@ -739,7 +739,7 @@ const translateState = (state: string): string => {
 };
 const getStateColor = (state: string) => {
   const colors: Record<string, string> = {
-    "Checked-Int": "green",
+    "Checked-In": "green",
     "Checked-Out": "red",
   };
   return colors[state.trim()] || "blue";

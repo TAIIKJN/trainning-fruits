@@ -366,7 +366,7 @@ const fetchData = async () => {
       QuantityToOrder: 0,
     }));
     employees.value = employeesRes.data.filter(
-      (employee: Employee) => employee.State === "Checked-Int"
+      (employee: Employee) => employee.State === "Checked-In"
     );
   } catch (error) {
     message.error("ไม่สามารถโหลดข้อมูลได้");
@@ -377,7 +377,7 @@ const fetchData = async () => {
 
 const getRandomEmployee = (): string => {
   const availableEmployees = employees.value.filter(
-    (employee: Employee) => employee.State === "Checked-Int"
+    (employee: Employee) => employee.State === "Checked-In"
   );
 
   if (availableEmployees.length === 0) {
@@ -440,7 +440,14 @@ const handleCheckout = async () => {
       orderData.TableId = selectedTable.value;
     }
 
-    await HttpService.getAxiosClient().post("/Order", orderData);
+    const response = await HttpService.getAxiosClient().post("/Order", orderData);
+    
+    if (response.data && response.data.status === 500) {
+      const errorMessage = response.data.message || "เกิดข้อผิดพลาดภายในระบบ";
+      message.error(errorMessage);
+      return;
+    }
+
 
     message.success("สั่งซื้อสำเร็จ");
     subTotalItems.value = [];
