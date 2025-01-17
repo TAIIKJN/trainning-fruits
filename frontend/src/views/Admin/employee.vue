@@ -6,36 +6,32 @@
       >
     </div>
 
-    <a-table
-      :columns="columns"
-      :loading="loading"
-      :dataSource="employee"
-      rowKey="Id"
-      :scroll="{ x: 1300, y: 1000 }"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'State'">
-          <a-tag :color="getStateColor(record.State)">
-            {{ translateState(record.State) }}
-          </a-tag>
+    <a-tabs v-model:activeKey="activeTab" class="custom-tabs">
+      <a-tab-pane v-for="tab in tabs" :key="tab.key">
+        <template #tab>
+          <span class="flex items-center gap-2">
+            <component :is="tab.icon" />
+            {{ tab.label }}
+            <a-badge 
+              :count="getCount(tab.key)" 
+              :offset="[10, 0]" 
+              :color="tab.badgeColor" 
+            />
+          </span>
         </template>
+        <employee-table
+          :loading="loading"
+          :dataSource="getDataSource(tab.key)"
+          :columns="columns"
+          @edit="handleEdit"
+          @password-change="handlePasswordChange"
+          @delete="handleDelete"
+        />
+      </a-tab-pane>
+    </a-tabs>
 
-        <template v-if="column.key === 'actions'">
-          <a-space>
-            <a-button type="link" @click="handleEdit(record)">แก้ไข</a-button>
-            <a-button type="link" @click="handlePasswordChange(record)"
-              >เปลี่ยนรหัสผ่าน</a-button
-            >
-            <a-button type="link" danger @click="handleDelete(record.Id)"
-              >ลบ</a-button
-            >
-          </a-space>
-        </template>
-        <template v-else-if="column.key === 'fullName'">
-          {{ record.Title }} {{ record.FirstName }} {{ record.LastName }}
-        </template>
-      </template>
-    </a-table>
+
+
 
     <a-modal
       v-model:open="modalVisible"
@@ -318,6 +314,8 @@ import HttpService from "../../services/HttpService";
 import dayjs from "dayjs";
 import axios from "axios";
 import countryData from "../../services/countries.json";
+import { TeamOutlined, LoginOutlined, LogoutOutlined, CalendarOutlined } from '@ant-design/icons-vue';
+import EmployeeTable from './EmployeeTable.vue';
 
 // Interface and initial state
 interface EmployeeData {
@@ -378,6 +376,14 @@ interface FormValidationError {
   }[];
   outOfDate: boolean;
 }
+const tabs = [
+  { key: 'all', label: 'พนักงานทั้งหมด', icon: TeamOutlined, badgeColor: '' },
+  { key: 'checked-in', label: 'เข้างาน', icon: LoginOutlined, badgeColor: '#52c41a', state: 'Checked-In' },
+  { key: 'checked-out', label: 'ออกงาน', icon: LogoutOutlined, badgeColor: '#ff4d4f', state: 'Checked-Out' },
+  { key: 'on-leave', label: 'ลางาน', icon: CalendarOutlined, badgeColor: '#faad14', state: 'On-Leave' }
+];
+
+const activeTab = ref('all');
 
 const passwordModalVisible = ref(false);
 const passwordConfirmLoading = ref(false);
@@ -408,6 +414,18 @@ const emailWithoutDomain = computed({
     formState.Email = `${sanitizedValue}@gmail.com`;
   },
 });
+
+const getCount = (tabKey: string) => {
+  const tab = tabs.find(t => t.key === tabKey);
+  return tabKey === 'all' ? employee.value.length : 
+    employee.value.filter(emp => emp.State === tab?.state).length;
+};
+
+const getDataSource = (tabKey: string) => {
+  const tab = tabs.find(t => t.key === tabKey);
+  return tabKey === 'all' ? employee.value : 
+    employee.value.filter(emp => emp.State === tab?.state);
+};
 
 const filterNumericInput = (event: Event) => {
   const input = event.target as HTMLInputElement;
@@ -727,23 +745,6 @@ const handleCancel = () => {
   modalVisible.value = false;
   resetForm();
 };
-const translateState = (state: string): string => {
-  switch (state.trim()) {
-    case "Checked-In":
-      return "เข้างาน";
-    case "Checked-Out":
-      return "ออกงาน";
-    default:
-      return state;
-  }
-};
-const getStateColor = (state: string) => {
-  const colors: Record<string, string> = {
-    "Checked-In": "green",
-    "Checked-Out": "red",
-  };
-  return colors[state.trim()] || "blue";
-};
 
 const onFinish = (values: any) => console.log("Success:", values);
 const onFinishFailed = (errorInfo: any) => console.log("Failed:", errorInfo);
@@ -754,3 +755,27 @@ onMounted(() => {
   fetchEmployee();
 });
 </script>
+
+<style scoped>
+.custom-tabs {
+  margin-bottom: 24px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+:deep(.ant-tabs-tab) {
+  padding: 12px 16px;
+  margin: 0 16px 0 0;
+}
+
+:deep(.ant-tabs-tab-active) {
+  background: #f0f5ff;
+  border-radius: 6px;
+}
+
+:deep(.ant-tabs-ink-bar) {
+  background: #1890ff;
+}
+</style>
