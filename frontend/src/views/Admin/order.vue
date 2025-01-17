@@ -225,6 +225,7 @@
 import { ref, onMounted } from "vue";
 import HttpService from "../../services/HttpService";
 import { message } from "ant-design-vue";
+import dayjs from "dayjs";
 
 interface OrderDetail {
   Id: string;
@@ -394,11 +395,7 @@ const getProductName = (ProductId: string) => {
 };
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString("th-TH", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return dayjs(date).format("DD-MM-YYYY");
 };
 
 const getStateColor = (state: string) => {

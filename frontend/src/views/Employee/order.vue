@@ -16,13 +16,13 @@
           </template>
           <!-- Table Column  -->
           <template v-if="column.key === 'Table'">
-            <a-tag
-              :color="record.Table ? 'green' : 'volcano'"
-              style="border-radius: 4px; padding: 5px 10px; font-weight: bold"
-            >
-              {{ record.Table ? record.Table.Name : "สั่งกลับบ้าน" }}
-            </a-tag>
-          </template>
+      <a-tag
+        :color="record.TypeService === 'Dine-in' ? 'green' : 'volcano'"
+        style="border-radius: 4px; padding: 5px 10px; font-weight: bold"
+      >
+        {{ record.TypeService === 'Dine-in' ? record.Table?.Name : "สั่งกลับบ้าน" }}
+      </a-tag>
+    </template>
           <!-- OrderDate Column -->
           <template v-if="column.key === 'OrderDate'">
             {{ formatDate(record.OrderDate) }}
@@ -44,7 +44,7 @@
                 View Details
               </a-button>
               <a-button
-                v-if="record.State !== 'Cancel' && record?.State !== 'Done'"
+                v-if="record.State !== 'Cancel' && record?.State !== 'Done' && record?.State !== 'done'"
                 danger
                 size="small"
                 @click="cancelOrder(record.Id)"
@@ -211,6 +211,7 @@
 import { ref, onMounted } from "vue";
 import HttpService from "../../services/HttpService";
 import { message } from "ant-design-vue";
+import dayjs from "dayjs";
 
 interface OrderDetail {
   Id: string;
@@ -229,6 +230,7 @@ interface Order {
   TotalPrice: number;
   State: string;
   OrderDetail: OrderDetail[];
+  TypeService: string;
   Table?: {
     Name?: string;
   };
@@ -371,11 +373,7 @@ const getProductName = (ProductId: string) => {
 };
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString("th-TH", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return dayjs(date).format("DD-MM-YYYY");
 };
 
 const getStateColor = (state: string) => {
