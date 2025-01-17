@@ -69,9 +69,10 @@
           <div class="space-y-6">
             <div class="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg">
               <div>
-                <p class="text-gray-600 mb-1">Order ID:</p>
-                <p class="font-medium">{{ selectedOrder.Id }}</p>
+                <p class="text-gray-600 mb-1">รหัสคำสั่งซื้อ :</p>
+                <p class="font-medium">{{ selectedOrder.OrderCode }}</p>
                 <div>
+                 <div class="text-gray-600 mb-1"> หมายเลขโต๊ะ :  
                   <a-tag
                     :color="selectedOrder.Table ? 'green' : 'volcano'"
                     style="
@@ -88,34 +89,35 @@
                   </a-tag>
                 </div>
               </div>
+              </div>
               <div>
-                <p class="text-gray-600 mb-1">Order Date:</p>
+                <p class="text-gray-600 mb-1">วันที่สั่งอาหาร :</p>
                 <p class="font-medium">
                   {{ formatDate(selectedOrder.OrderDate) }}
                 </p>
               </div>
               <div>
-                <p class="text-gray-600 mb-1">พนักงานรับออเดอร์</p>
+                <p class="text-gray-600 mb-1">พนักงานรับออเดอร์ : </p>
                 <p class="font-medium">
                   {{ selectedOrder.Employee.FirstName }}
                   {{ selectedOrder.Employee.LastName }}
                 </p>
               </div>
               <div>
-                <p class="text-gray-600 mb-1">ลูกค้า</p>
+                <p class="text-gray-600 mb-1">ชื่อลูกค้า : </p>
                 <p class="font-medium">
                   {{ selectedOrder.Customer.FirstName }}
                   {{ selectedOrder.Customer.LastName }}
                 </p>
               </div>
               <div>
-                <p class="text-gray-600 mb-1">Status:</p>
+                <p class="text-gray-600 mb-1">สถานะ : </p>
                 <a-tag :color="getStateColor(selectedOrder.State)">
                   {{ translateState(selectedOrder.State) }}
                 </a-tag>
               </div>
               <div>
-                <p class="text-gray-600 mb-1">Total Price:</p>
+                <p class="text-gray-600 mb-1">ราคารวม :</p>
                 <p class="font-medium text-lg">
                   ฿{{ selectedOrder.TotalPrice.toLocaleString() }}
                 </p>
@@ -138,7 +140,7 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-medium mb-4">Order Items</h3>
+              <h3 class="text-lg font-medium mb-4">รายละเอียดคำสั่งซื้อ</h3>
               <template v-if="isEditing">
                 <a-table
                   :dataSource="editableOrderDetails"
@@ -222,10 +224,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, toRaw } from "vue";
 import HttpService from "../../services/HttpService";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
+import "dayjs/locale/th";
 
 interface OrderDetail {
   Id: string;
@@ -238,6 +241,7 @@ interface OrderDetail {
 
 interface Order {
   Id: string;
+  OrderCode:string;
   CustomerId: string;
   EmployeeId: string;
   OrderDate: string;
@@ -263,7 +267,7 @@ const loading = ref(true);
 const detailsVisible = ref(false);
 const selectedOrder = ref<Order | null>(null);
 
-const products = ref<{ Id: string; ProductName: string }[]>([]);
+const products = ref<{ Id: string; ProductName: string;UnitPrice:string }[]>([]);
 const isEditing = ref(false);
 const editableOrderDetails = ref<OrderDetail[]>([]);
 const newProduct = ref({
@@ -272,37 +276,37 @@ const newProduct = ref({
 });
 const columns = [
   {
-    title: "Order ID",
-    dataIndex: "Id",
-    key: "Id",
-    width: "220px",
+    title: "รหัสคำสั่งซื้อ",
+    dataIndex: "OrderCode",
+    key: "OrderCode",
+    width: "200px",
   },
   {
     title: "หมายเลขโต๊ะ",
     dataIndex: "Table",
     key: "Table",
-    width: "150px",
+    width: "180px",
   },
   {
-    title: "Order Date",
+    title: "วันที่สั่งอาหาร",
     dataIndex: "OrderDate",
     key: "OrderDate",
     width: "150px",
   },
   {
-    title: "Status",
+    title: "สถานะ",
     dataIndex: "State",
     key: "State",
     width: "120px",
   },
   {
-    title: "Total Price",
+    title: "ราคารวม",
     dataIndex: "TotalPrice",
     key: "TotalPrice",
     width: "150px",
   },
   {
-    title: "Actions",
+    title: "การจัดการ",
     key: "actions",
     width: "120px",
   },
@@ -310,27 +314,33 @@ const columns = [
 
 const detailColumns = [
   {
-    title: "Product Name",
+    title: "ชื่อสินค้า",
     dataIndex: "ProductId",
     key: "ProductId",
     customRender: ({ text }: { text: string }) => getProductName(text),
   },
   {
-    title: "Quantity",
+    title: "จำนวน",
     dataIndex: "Quantity",
     key: "Quantity",
     width: "100px",
   },
   {
-    title: "Unit Price",
+    title: "ราคา",
     dataIndex: "UnitPrice",
     key: "UnitPrice",
-    width: "150px",
+    width: "100px",
     customRender: ({ text }: { text: string }) =>
       `฿${Number(text).toLocaleString()}`,
   },
   {
-    title: "Total",
+    title:"ส่วนลด",
+    dataIndex: "Discount",
+    key: "Discount",
+    width: "100px",
+  },
+  {
+    title: "ยอดรวม",
     key: "total",
     width: "150px",
   },
@@ -338,32 +348,40 @@ const detailColumns = [
 
 const editableColumns = [
   {
-    title: "Product Name",
+    title: "ชื่อสินค้า",
     dataIndex: "ProductId",
     key: "ProductId",
     customRender: ({ text }: { text: string }) => getProductName(text),
   },
   {
-    title: "Quantity",
+    title: "จำนวน",
     dataIndex: "Quantity",
     key: "quantity",
     width: "150px",
   },
   {
-    title: "Unit Price",
+    title: "ราคา",
     dataIndex: "UnitPrice",
     key: "UnitPrice",
-    width: "150px",
+    width: "100px",
     customRender: ({ text }: { text: string }) =>
       `฿${Number(text).toLocaleString()}`,
   },
   {
-    title: "Total",
-    key: "total",
-    width: "150px",
+    title:"ส่วนลด",
+    dataIndex: "Discount",
+    key: "Discount",
+    width: "100px",
+    customRender: ({ text }: { text: string }) =>
+      `฿${Number(text).toLocaleString()}`,
   },
   {
-    title: "Actions",
+    title: "ยอดรวม",
+    key: "total",
+    width: "100px",
+  },
+  {
+    title: "การจัดการ",
     key: "actions",
     width: "100px",
   },
@@ -390,23 +408,26 @@ const fetchOrders = async () => {
 };
 
 const getProductName = (ProductId: string) => {
-  const product = products.value.find((p) => p.Id === ProductId);
-  return product ? product.ProductName : "Unknown Product";
+  const product = products.value.find((p) => p.Id === ProductId);  
+  return product?product.ProductName:"ไม่พบสินค้า";
 };
 
 const formatDate = (date: string) => {
-  return dayjs(date).format("DD-MM-YYYY");
+  dayjs.locale("th");
+ const thaiDate = dayjs(date).add(543, "year").format("D MMMM YYYY");
+  return thaiDate;
 };
 
 const getStateColor = (state: string) => {
+  const stateToLower = state.toLocaleLowerCase()
   const colors: Record<string, string> = {
-    Pending: "orange",
-    InProgress: "purple",
-    Succeed: "purple",
-    Done: "green",
-    Cancel: "red",
+    pending: "orange",
+    inProgress: "purple",
+    succeed: "purple",
+    done: "green",
+    cancel: "red",
   };
-  return colors[state] || "blue";
+  return colors[stateToLower] || "blue";
 };
 const getButtonText = (state: string) => {
   switch (state) {
@@ -419,18 +440,17 @@ const getButtonText = (state: string) => {
   }
 };
 const translateState = (state: string): string => {
-  switch (state) {
-    case "Pending":
+  const stateToLower = state.toLocaleLowerCase()
+  switch (stateToLower) {
+    case "pending":
       return "รอดำเนินการ";
-    case "InProgress":
+    case "inProgress":
       return "กำลังทำอาหาร";
-    case "Succeed":
+    case "succeed":
       return "พร้อมเสริฟ";
-    case "Done":
-      return "เสร็จสิ้น";
     case "done":
       return "เสร็จสิ้น";
-    case "Cancel":
+    case "cancel":
       return "ยกเลิก";
     default:
       return state;
