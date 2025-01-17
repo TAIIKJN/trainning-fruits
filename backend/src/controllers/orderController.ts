@@ -120,6 +120,7 @@ export class orderController extends Controller {
       const dataEmployee = await prisma.employee.findFirst({
         where: {
           UserName: requestBody.EmployeeUserName,
+          State: "Checked-In",
         },
       });
 
@@ -127,10 +128,33 @@ export class orderController extends Controller {
         return "ไม่พบข้อมูลพนักงาน";
       }
 
+      const dataTable = await prisma.table.findFirst({
+        where: {
+          Id: requestBody.TableId,
+          State: "Available",
+        },
+      });
+      console.log("dataTable", dataTable, requestBody.TableId);
+
+      if (dataTable) {
+        await prisma.table.update({
+          where: {
+            Id: requestBody.TableId,
+            State: "Available",
+          },
+          data: {
+            State: "Occupied",
+          },
+        });
+      } else {
+        return "โต๊ะที่ท่านเลือกมีการใช้งานอยู่";
+      }
+
       const code =
         requestBody.TypeService === "Dine-in"
-          ? `D-${new Date()}`
-          : `T-${new Date()}`;
+          ? `D-${Date.now()}`
+          : `T-${Date.now()}`;
+
       const dataOrder = await prisma.order.create({
         data: {
           OrderCode: code,
