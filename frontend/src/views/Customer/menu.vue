@@ -344,7 +344,6 @@ const showServiceTypeModal = () => {
 };
 
 const handleServiceTypeSelection = (type: string) => {
-  console.log("Service type selected:", type);
   selectedServiceType.value = type;
   isServiceTypeModalVisible.value = false;
 
@@ -396,7 +395,7 @@ const getCustomerId = (): string => {
 
     if (!decodedToken?.preferred_username) {
       message.warning("ไม่พบข้อมูลผู้ใช้ ใช้ชื่อผู้ใช้เริ่มต้น");
-      return "GuestUser"; 
+      return "GuestUser";
     }
     return decodedToken.preferred_username;
   } catch (error) {
@@ -406,7 +405,6 @@ const getCustomerId = (): string => {
 };
 
 const handleCheckout = async () => {
-
   if (!KeycloakService.IsLoggedIn()) {
     message.error("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ");
     return;
@@ -421,7 +419,7 @@ const handleCheckout = async () => {
     loading.value = true;
 
     const customerUserName = getCustomerId();
-    const employeeUserName = getRandomEmployee(); 
+    const employeeUserName = getRandomEmployee();
 
     const orderData: Order = {
       CustomerUserName: customerUserName,
@@ -451,12 +449,12 @@ const handleCheckout = async () => {
       product.QuantityToOrder = 0;
     });
   } catch (error) {
+    console.error("API call failed:", error);
     message.error("ไม่สามารถสั่งซื้อได้");
   } finally {
     loading.value = false;
   }
 };
-
 
 const incrementQuantity = (item: Product) => {
   if (item.QuantityToOrder < item.UnitsInStock) {

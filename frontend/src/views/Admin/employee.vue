@@ -23,6 +23,9 @@
         <template v-if="column.key === 'actions'">
           <a-space>
             <a-button type="link" @click="handleEdit(record)">แก้ไข</a-button>
+            <a-button type="link" @click="handlePasswordChange(record)"
+              >เปลี่ยนรหัสผ่าน</a-button
+            >
             <a-button type="link" danger @click="handleDelete(record.Id)"
               >ลบ</a-button
             >
@@ -232,7 +235,7 @@
             </div>
           </div>
 
-          <div class="w-full px-3 sm:w-1/2">
+          <div v-if="!isEditing" class="w-full px-3 sm:w-1/2">
             <div class="mb-2">
               <label class="mb-2 block text-base font-medium text-[#07074D]"
                 >Password</label
@@ -243,7 +246,7 @@
               />
             </div>
           </div>
-          <div class="w-full px-3 sm:w-1/2">
+          <div v-if="!isEditing" class="w-full px-3 sm:w-1/2">
             <div class="mb-2">
               <label class="mb-2 block text-base font-medium text-[#07074D]"
                 >ยืนยัน Password</label
@@ -258,6 +261,54 @@
       </a-form>
     </a-modal>
   </div>
+
+  <!-- Password Change Modal -->
+  <a-modal
+    v-model:open="passwordModalVisible"
+    title="เปลี่ยนรหัสผ่าน"
+    @ok="handlePasswordOk"
+    @cancel="handlePasswordCancel"
+    :confirmLoading="passwordConfirmLoading"
+    centered
+  >
+    <a-form
+      :model="passwordForm"
+      name="passwordForm"
+      @finish="onPasswordFinish"
+      @finishFailed="onPasswordFinishFailed"
+      :rules="passwordFormRules"
+    >
+      <a-form-item
+        name="Password"
+        label="รหัสผ่านใหม่"
+        :rules="[
+          { required: true, message: 'กรุณากรอกรหัสผ่านใหม่' },
+          { min: 4, message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร' },
+        ]"
+      >
+        <a-input
+          v-model:value="passwordForm.Password"
+          placeholder="กรอกรหัสผ่านใหม่"
+          type="password"
+        />
+      </a-form-item>
+
+      <a-form-item
+        name="confirmNewPassword"
+        label="ยืนยันรหัสผ่านใหม่"
+        :rules="[
+          { required: true, message: 'กรุณายืนยันรหัสผ่านใหม่' },
+          { validator: validateConfirmPassword },
+        ]"
+      >
+        <a-input
+          v-model:value="passwordForm.confirmNewPassword"
+          placeholder="กรอกยืนยันรหัสผ่านใหม่"
+          type="password"
+        />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -313,6 +364,28 @@ const initialFormState: EmployeeData = {
 interface Province {
   name_th: string | null;
 }
+
+interface PasswordForm {
+  Password: string;
+  confirmNewPassword: string;
+  employeeId?: string;
+}
+interface FormValidationError {
+  values: any;
+  errorFields: {
+    name: (string | number)[];
+    errors: string[];
+  }[];
+  outOfDate: boolean;
+}
+
+const passwordModalVisible = ref(false);
+const passwordConfirmLoading = ref(false);
+const passwordForm = reactive<PasswordForm>({
+  Password: "",
+  confirmNewPassword: "",
+  employeeId: undefined,
+});
 
 const provinceOptions = ref([]);
 const countryOptions = ref<{ label: string; value: string }[]>([]);
@@ -432,16 +505,22 @@ const handleOk = async () => {
 const saveEmployee = async () => {
   try {
     confirmLoading.value = true;
-    const { ConfirmPassword, Id, ...payload } = formState;
+    const { ConfirmPassword, Id, ...payloadBase } = formState;
+
+    const finalPayload = isEditing.value
+      ? (({ Password, RoleUser, ...rest }) => rest)(payloadBase)
+      : payloadBase;
 
     const method = isEditing.value && Id ? "patch" : "post";
     const url = isEditing.value && Id ? `/Employee/${Id}` : "/Employee";
 
-    const response = await HttpService.getAxiosClient()[method](url, payload);
+    const response = await HttpService.getAxiosClient()[method](
+      url,
+      finalPayload
+    );
 
-    // ตรวจสอบว่า response มีข้อความ error หรือไม่
     if (response.data && response.data.message) {
-      message.error(response.data.message); // แสดงข้อความ error จาก API
+      message.error(response.data.message);
     } else {
       message.success(isEditing.value ? "แก้ไขสำเร็จ" : "เพิ่มสำเร็จ");
       modalVisible.value = false;
@@ -468,25 +547,36 @@ const validateForm = async () => {
     return false;
   }
 
-  if (
-    !formState.FirstName ||
-    !formState.LastName ||
-    !formState.UserName ||
-    !formState.Email ||
-    !formState.Password ||
-    !formState.ConfirmPassword ||
-    !formState.BirthDate
-  ) {
+  // แยกการตรวจสอบข้อมูลระหว่างการเพิ่มและแก้ไข
+  const requiredFields: (keyof EmployeeData)[] = [
+    "FirstName",
+    "LastName",
+    "UserName",
+    "Email",
+    "BirthDate",
+  ];
+  // เพิ่มการตรวจสอบรหัสผ่านเฉพาะตอนเพิ่มพนักงานใหม่
+  if (!isEditing.value) {
+    requiredFields.push("Password", "ConfirmPassword");
+  }
+
+  // ตรวจสอบว่าข้อมูลที่จำเป็นถูกกรอกครบ
+  const missingFields = requiredFields.filter((field) => !formState[field]);
+  if (missingFields.length > 0) {
     message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
     return false;
   }
+
+  // จัดการรูปแบบอีเมล
   formState.Email =
     formState.Email.replace("@gmail.com", "").trim() + "@gmail.com";
 
-  if (formState.Password !== formState.ConfirmPassword) {
+  // ตรวจสอบรหัสผ่านเฉพาะตอนเพิ่มพนักงานใหม่
+  if (!isEditing.value && formState.Password !== formState.ConfirmPassword) {
     message.error("รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน");
     return false;
   }
+
   return !(await checkDuplicate(
     formState.UserName,
     formState.Email,
@@ -494,6 +584,88 @@ const validateForm = async () => {
   ));
 };
 
+const handlePasswordChange = (record: EmployeeData) => {
+  passwordForm.employeeId = record.Id;
+  passwordForm.Password = "";
+  passwordForm.confirmNewPassword = "";
+  passwordModalVisible.value = true;
+};
+
+const handlePasswordOk = async () => {
+  if (await validatePasswordForm()) {
+    await updatePassword();
+  }
+};
+
+const validatePasswordForm = async (): Promise<boolean> => {
+  if (!passwordForm.Password || !passwordForm.confirmNewPassword) {
+    message.error("กรุณากรอกรหัสผ่านให้ครบ");
+    return false;
+  }
+  if (passwordForm.Password !== passwordForm.confirmNewPassword) {
+    message.error("รหัสผ่านไม่ตรงกัน");
+    return false;
+  }
+  return true;
+};
+const validateConfirmPassword = async (_rule: any, value: string) => {
+  if (value && value !== passwordForm.Password) {
+    throw new Error("รหัสผ่านไม่ตรงกัน");
+  }
+};
+
+const passwordFormRules = {
+  Password: [
+    { required: true, message: "กรุณากรอกรหัสผ่านใหม่" },
+    { min: 4, message: "รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร" },
+  ],
+  confirmNewPassword: [
+    { required: true, message: "กรุณายืนยันรหัสผ่านใหม่" },
+    { validator: validateConfirmPassword },
+  ],
+};
+const updatePassword = async () => {
+  try {
+    passwordConfirmLoading.value = true;
+    const response = await HttpService.getAxiosClient().patch(
+      `/Employee/UpdatePassword/${passwordForm.employeeId}`,
+      { Password: passwordForm.Password }
+    );
+
+    if (response.data && response.data.message) {
+      message.error(response.data.message);
+    } else {
+      message.success("เปลี่ยนรหัสผ่านสำเร็จ");
+      passwordModalVisible.value = false;
+      resetPasswordForm();
+    }
+  } catch (error) {
+    console.error("Error updating password:", error);
+    message.error("ไม่สามารถเปลี่ยนรหัสผ่านได้");
+  } finally {
+    passwordConfirmLoading.value = false;
+  }
+};
+
+const handlePasswordCancel = () => {
+  passwordModalVisible.value = false;
+  resetPasswordForm();
+};
+
+const resetPasswordForm = () => {
+  passwordForm.Password = "";
+  passwordForm.confirmNewPassword = "";
+  passwordForm.employeeId = undefined;
+};
+
+const onPasswordFinish = () => {
+  handlePasswordOk();
+};
+
+const onPasswordFinishFailed = (errorInfo: FormValidationError) => {
+  console.error("Password form validation failed:", errorInfo);
+  message.error("กรุณากรอกข้อมูลให้ถูกต้องครบถ้วน");
+};
 const handleDelete = (id: string) => {
   Modal.confirm({
     title: "ยืนยันการลบ",
@@ -516,13 +688,15 @@ const handleDelete = (id: string) => {
 const showModal = () => {
   isEditing.value = false;
   resetForm();
-  formState.State = "Checked-Out"; 
+  formState.State = "Checked-Out";
   modalVisible.value = true;
 };
 
 const handleEdit = (record: EmployeeData) => {
   Object.assign(formState, record);
-  birthDate.value = record.BirthDate ? dayjs(record.BirthDate) : null;
+  birthDate.value = record.BirthDate
+    ? dayjs(record.BirthDate, "DD-MM-YYYY")
+    : null;
   isEditing.value = true;
   modalVisible.value = true;
 };
@@ -554,9 +728,7 @@ const handleCancel = () => {
   resetForm();
 };
 const translateState = (state: string): string => {
-  switch (
-    state.trim() 
-  ) {
+  switch (state.trim()) {
     case "Checked-Int":
       return "เข้างาน";
     case "Checked-Out":

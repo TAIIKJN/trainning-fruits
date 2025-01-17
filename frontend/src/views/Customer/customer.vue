@@ -16,8 +16,6 @@ import { ref,  onMounted } from 'vue';
 import { message } from 'ant-design-vue';
 import HttpService from '../../services/HttpService';
 
-
-// Interface and initial state
 interface CustomerData {
     Id?: string;
     Title: string | null;
@@ -41,7 +39,6 @@ interface CustomerData {
 const customer = ref<CustomerData[]>([]);
 const loading = ref(false);
 
-// Table columns
 const columns = [
     { title: 'ชื่อ-นามสกุล', key: 'fullName', width: 150, fixed: 'left' },
     { title: 'ชื่อผู้ใช้', dataIndex: 'UserName', key: 'userName' },
