@@ -344,6 +344,7 @@ const showServiceTypeModal = () => {
 };
 
 const handleServiceTypeSelection = (type: string) => {
+  console.log("Service type selected:", type);
   selectedServiceType.value = type;
   isServiceTypeModalVisible.value = false;
 
@@ -376,15 +377,26 @@ const fetchData = async () => {
 };
 
 const getRandomEmployee = (): string => {
-  const randomIndex = Math.floor(Math.random() * employees.value.length);
-  return employees.value[randomIndex].UserName;
+  const availableEmployees = employees.value.filter(
+    (employee: Employee) => employee.State === "Checked-Int"
+  );
+
+  if (availableEmployees.length === 0) {
+    message.warning("ไม่มีพนักงานที่พร้อมรับออเดอร์ในขณะนี้");
+    throw new Error("ไม่พบพนักงานที่พร้อมรับออเดอร์");
+  }
+
+  const randomIndex = Math.floor(Math.random() * availableEmployees.length);
+  return availableEmployees[randomIndex].UserName;
 };
 
 const getCustomerId = (): string => {
   try {
     const decodedToken = KeycloakService.GetDecodeToken();
+
     if (!decodedToken?.preferred_username) {
-      throw new Error("ไม่พบข้อมูลผู้ใช้");
+      message.warning("ไม่พบข้อมูลผู้ใช้ ใช้ชื่อผู้ใช้เริ่มต้น");
+      return "GuestUser"; 
     }
     return decodedToken.preferred_username;
   } catch (error) {
@@ -394,6 +406,12 @@ const getCustomerId = (): string => {
 };
 
 const handleCheckout = async () => {
+
+  if (!KeycloakService.IsLoggedIn()) {
+    message.error("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ");
+    return;
+  }
+
   if (subTotalItems.value.length === 0) {
     message.warning("กรุณาเลือกสินค้าก่อนสั่งซื้อ");
     return;
@@ -402,14 +420,12 @@ const handleCheckout = async () => {
   try {
     loading.value = true;
 
-    if (!KeycloakService.IsLoggedIn()) {
-      message.error("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ");
-      return;
-    }
+    const customerUserName = getCustomerId();
+    const employeeUserName = getRandomEmployee(); 
 
     const orderData: Order = {
-      CustomerUserName: getCustomerId(),
-      EmployeeUserName: getRandomEmployee(),
+      CustomerUserName: customerUserName,
+      EmployeeUserName: employeeUserName,
       OrderDate: new Date().toISOString(),
       TotalPrice: totalAmount.value,
       TypeService: selectedServiceType.value,
@@ -422,7 +438,6 @@ const handleCheckout = async () => {
       })),
     };
 
-    // เพิ่ม `TableId` เฉพาะเมื่อเลือก "Dine-in"
     if (selectedServiceType.value === "Dine-in") {
       orderData.TableId = selectedTable.value;
     }
@@ -441,6 +456,7 @@ const handleCheckout = async () => {
     loading.value = false;
   }
 };
+
 
 const incrementQuantity = (item: Product) => {
   if (item.QuantityToOrder < item.UnitsInStock) {
