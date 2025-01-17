@@ -18,6 +18,7 @@ import HttpStatus from "../interfaces/http-status";
 const prisma = new PrismaClient();
 
 export interface Orders {
+  OrderCode: string;
   CustomerUserName: string;
   EmployeeUserName: string;
   OrderDate: string;
@@ -55,7 +56,11 @@ export class orderController extends Controller {
   public async getOrderAll() {
     const data = prisma.order.findMany({
       include: {
-        OrderDetail: true,
+        OrderDetail: {
+          include: {
+            Product: true,
+          },
+        },
         Customer: true,
         Employee: true,
         Table: true,
@@ -122,8 +127,13 @@ export class orderController extends Controller {
         return "ไม่พบข้อมูลพนักงาน";
       }
 
+      const code =
+        requestBody.TypeService === "Dine-in"
+          ? `D-${new Date()}`
+          : `T-${new Date()}`;
       const dataOrder = await prisma.order.create({
         data: {
+          OrderCode: code,
           CustomerId: dataCustomer?.Id,
           EmployeeId: dataEmployee?.Id,
           OrderDate: requestBody?.OrderDate,

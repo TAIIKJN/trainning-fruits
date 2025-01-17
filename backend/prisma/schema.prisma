@@ -84,6 +84,7 @@ model Supplier {
 
 model Order {
   Id         String    @id @default(uuid())
+  OrderCode  String    @default("D-000000000")
   Customer   Customer? @relation(fields: [CustomerId], references: [Id])
   CustomerId String?
 
