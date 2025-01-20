@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <a-card title="Orders" class="w-full">
+    <a-card title="คำสั่งซื้อ" class="w-full">
       <a-table
         :dataSource="orders"
         :columns="columns"
@@ -41,7 +41,7 @@
                 size="small"
                 @click="viewDetails(record)"
               >
-                View Details
+                รายละเอียดคำสั่งซื้อ
               </a-button>
               <a-button
                 v-if="record.State !== 'Cancel' && record?.State !== 'Done' && record?.State !== 'done'"
@@ -49,7 +49,7 @@
                 size="small"
                 @click="cancelOrder(record.Id)"
               >
-                Cancel Order
+                ยกเลิกคำสั่งซื้อ
               </a-button>
             </a-space>
           </template>
@@ -59,7 +59,7 @@
       <!-- Order Details Drawer -->
       <a-drawer
         v-model:open="detailsVisible"
-        title="Order Details"
+        title="รายละเอียดคำสั่งซื้อ"
         placement="right"
         width="800"
         :closable="true"
