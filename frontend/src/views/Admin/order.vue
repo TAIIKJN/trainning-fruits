@@ -66,7 +66,7 @@
         @close="closeDrawer"
       >
         <template v-if="selectedOrder">
-          <div class="space-y-6">
+          <div class="space-y-2">
             <div class="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg">
               <div>
                 <p class="text-gray-600 mb-1">รหัสคำสั่งซื้อ :</p>
@@ -224,7 +224,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, toRaw } from "vue";
+import { ref, onMounted } from "vue";
 import HttpService from "../../services/HttpService";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
